@@ -1,0 +1,280 @@
+<style>
+
+.modal-addperson {
+width: 600px;
+}
+
+.modal-addissue {
+width: 1200px;
+}
+
+</style>
+
+<div class="container widerbox">
+  <div class="col-sm-12">
+    <%= link_to 'Return to Structures', structures_path %><br>
+
+
+  </div>
+
+  <div class="row">
+
+      <div class="col-sm-10">
+
+        <div class="col-sm-6">
+          <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">General</h3>
+            <%= link_to 'Edit', edit_structure_path(@structure), :class => "btn btn-small btn-primary pull-right"   %>
+          </div>
+          <div class="panel-body">
+            <div class="form-horizontal">
+
+              <h1><span style="color: #999">Structure: </span><%= @structure.name %></h1>
+
+            <div class="form-group">
+            <label class="col-sm-3">Type (Level)</label>
+            <div class="col-sm-9">
+            <strong> <%= @structure.structuretype.name if @structure.structuretype_id %></strong>
+            </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-sm-3">County</label>
+            <div class="col-sm-9">
+            <strong> <%= @structure.county.name if @structure.county_id %></strong>
+            </div>
+            </div>
+            <div class="form-group">
+            <label class="col-sm-3">District</label>
+            <div class="col-sm-9">
+            <strong> <%= @structure.district.name if @structure.district_id %></strong>
+            </div>
+            </div>
+
+              <div class="form-group">
+                <label class="col-sm-3">Parent Structure</label>
+                <div class="col-sm-9">
+                  <strong> <%= @parent.name if @structure.parent_id %></strong>
+                </div>
+              </div>
+
+              <div class="form-group">
+
+              <label class="col-sm-2">Default Meeting Location</label>
+            <div class="col-sm-9">
+            <strong> <%= @structure.default_location  %></strong>
+            </div>
+            </div>
+
+          </div>
+          </div>
+        </div>
+        </div>
+
+
+      <div class="col-sm-6">
+
+
+        <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Management (Users)</h3>
+          <%= link_to 'Add Mgmt', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+        </div>
+          <div class="panel-body">
+
+        <% @assignments.each do |a| %>
+                <%= link_to a.userrole.user.name, a.userrole.user %>  - <%= a.userrole.role.name %><br>
+          <% end %>
+
+
+        </div>
+
+
+        </div>
+
+
+
+
+        <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">People (non Users linked to Structure)</h3>
+        <%= link_to 'Add Person', '#new_person_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+      </div>
+      <div class="panel-body">
+
+            <table class="table">
+              <thead>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Email</th>
+              <th>Phone</th>
+              </thead>
+              <tbody>
+              <% @members.each do |p| %>
+                <tr>
+                  <td>  <%= link_to p.person.fullname, p.person %> </td>
+                  <td><%= p.person.title %></td>
+                  <td><%= p.person.email %></td>
+                  <td><%= p.person.phone %></td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+
+
+      </div>
+
+      </div>
+      </div>
+      </div>
+
+
+      <div class="col-sm-2">
+
+
+
+
+
+      <%= link_to 'New Issue (M)', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+      <%= link_to 'New Meeting', '#new_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br><br><br>
+
+
+      <%= link_to 'Delete', @structure, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+
+      </div>
+
+
+
+   </div>
+
+
+
+  <%= render partial: 'issues/issues_table' %>
+
+
+  <% @tabhead = 'Meetings' %>
+  <%= render partial: 'meetings/meetings_table' %>
+
+
+</div>
+
+
+
+
+
+  <div class="modal fade" id="new_person_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-addperson">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <small>Add Person to Structure</small><br>
+          <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
+        </div>
+        <div class="modal-body">
+          <%= render 'addperson', modal: true %>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<div class="modal fade" id="new_mgmt_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-addperson">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Add Management to Structure</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'addmanager', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="modal fade" id="new_issue_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-addissue">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <small>Add New Issue to Structure</small><br>
+          <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
+        </div>
+        <div class="modal-body">
+          <%= render 'addstructureissue', modal: true %>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="modal fade" id="new_meeting_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-addissue">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <small>Add New Structure Meeting</small><br>
+          <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
+        </div>
+        <div class="modal-body">
+          <%= render 'addstructuremeeting', modal: true %>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+  <script>
+
+    $('#new_person_modal').on('submit', function() {
+      $('#new_report_model').modal('hide');
+    })
+
+     $('#new_issue_modal').on('submit', function() {
+      $('#new_report_model').modal('hide');
+    })
+
+    $('#new_meeting_modal').on('submit', function() {
+      $('#new_report_model').modal('hide');
+    })
+
+
+  </script>
+
+
+
+

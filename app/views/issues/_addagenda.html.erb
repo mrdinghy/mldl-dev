@@ -1,0 +1,35 @@
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'new_note_form'}) do |f| %>
+    <% if @issue.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@location.errors.count, "error") %> prohibited this location from being saved:</h2>
+
+          <ul>
+            <% @issue.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <%= hidden_field_tag(:issue_id, @issue.id) %>
+    <%= hidden_field_tag(:fromissue, true) %>
+    <%= hidden_field_tag(:actiontype_id, 2) %>
+<% xmeetings = Meeting.where('structure_id = ?', @issue.id) %>
+    <div class="form-group">
+      <%= f.label 'Meetings', :class => "col-sm-2" %>
+      <div class="col-sm-10">
+        <%#= f.select :meeting_id, options_for_select(@mymeetings.map{ |c| [c.name, c.real_start.to_s]}),  :include_blank => true %>
+        <%#= f.collection_select(:meeting_id, @mymeetings, :id, :real_start.to_s , include_blank: true, :class => "form-control") %>
+        <%= f.select :meeting_id, options_for_select(@mymeetings.collect{|m| [m.real_start, m.id]}), {:include_blank => true,:class=>'user-id-widget', size: 5} %>
+
+      </div>
+<%# Added Bootstrap classes, and help-block container for error messages %>
+    <div class="field">
+      <%= f.label 'Note:' %>
+      <%= f.text_area :actionbody %>
+    </div>
+    <div class="actions">
+      <%= f.submit 'Submit', :class => "btn btn-small btn-primary" %>
+    </div>
+<% end %>

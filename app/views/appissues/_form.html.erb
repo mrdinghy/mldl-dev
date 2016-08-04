@@ -1,0 +1,141 @@
+<%= form_for(@appissue) do |f| %>
+  <% if @appissue.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@appissue.errors.count, "error") %> prohibited this appissue from being saved:</h2>
+
+      <ul>
+      <% @appissue.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :uuid %><br>
+    <%= f.text_field :uuid %>
+  </div>
+  <div class="field">
+    <%= f.label :yourname %><br>
+    <%= f.text_field :yourname %>
+  </div>
+  <div class="field">
+    <%= f.label :originalmeet %><br>
+    <%= f.date_select :originalmeet %>
+  </div>
+  <div class="field">
+    <%= f.label :issueid %><br>
+    <%= f.number_field :issueid %>
+  </div>
+  <div class="field">
+    <%= f.label :meetingname %><br>
+    <%= f.text_field :meetingname %>
+  </div>
+  <div class="field">
+    <%= f.label :structurecode %><br>
+    <%= f.text_field :structurecode %>
+  </div>
+  <div class="field">
+    <%= f.label :county %><br>
+    <%= f.text_field :county %>
+  </div>
+  <div class="field">
+    <%= f.label :district %><br>
+    <%= f.text_field :district %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :issuedistrict %><br>
+    <%= f.text_field :issuedistrict %>
+  </div>
+  <div class="field">
+    <%= f.label :community %><br>
+    <%= f.text_field :community %>
+  </div>
+  <div class="field">
+    <%= f.label :category %><br>
+    <%= f.text_field :category %>
+  </div>
+  <div class="field">
+    <%= f.label :raisedby %><br>
+    <%= f.text_field :raisedby %>
+  </div>
+  <div class="field">
+    <%= f.label :disputant %><br>
+    <%= f.text_field :disputant %>
+  </div>
+  <div class="field">
+    <%= f.label :duration %><br>
+    <%= f.number_field :duration %>
+  </div>
+  <div class="field">
+    <%= f.label :actioncommittee %><br>
+    <%= f.text_area :actioncommittee %>
+  </div>
+  <div class="field">
+    <%= f.label :actiondescription %><br>
+    <%= f.text_area :actiondescription %>
+  </div>
+  <div class="field">
+    <%= f.label :actionnote %><br>
+    <%= f.text_area :actionnote %>
+  </div>
+  <div class="field">
+    <%= f.label :resolved %><br>
+    <%= f.text_field :resolved %>
+  </div>
+  <div class="field">
+    <%= f.label :resolutiondate %><br>
+    <%= f.date_select :resolutiondate %>
+  </div>
+  <div class="field">
+    <%= f.label :docslink %><br>
+    <%= f.text_area :docslink %>
+  </div>
+  <div class="field">
+    <%= f.label :updatetype %><br>
+    <%= f.text_field :updatetype %>
+  </div>
+  <div class="field">
+    <%= f.label :resolutiontype %><br>
+    <%= f.text_field :resolutiontype %>
+  </div>
+  <div class="field">
+    <%= f.label :updated_on %><br>
+    <%= f.date_select :updated_on %>
+  </div>
+  <div class="field">
+    <%= f.label :updatedesc %><br>
+    <%= f.text_area :updatedesc %>
+  </div>
+  <div class="field">
+    <%= f.label :mediationdate %><br>
+    <%= f.date_select :mediationdate %>
+  </div>
+  <div class="field">
+    <%= f.label :mediationoutcome %><br>
+    <%= f.text_field :mediationoutcome %>
+  </div>
+  <div class="field">
+    <%= f.label :issuedesc %><br>
+    <%= f.text_area :issuedesc %>
+  </div>
+  <div class="field">
+    <%= f.label :issuename %><br>
+    <%= f.text_field :issuename %>
+  </div>
+  <div class="field">
+    <%= f.label :issuenote %><br>
+    <%= f.text_area :issuenote %>
+  </div>
+  <div class="field">
+    <%= f.label :statusnote %><br>
+    <%= f.text_area :statusnote %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

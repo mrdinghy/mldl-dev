@@ -1,0 +1,45 @@
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+
+
+
+<%= form_for(@assignment) do |f| %>
+    <% if @assignment.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@assignment.errors.count, "error") %> prohibited this assignment from being saved:</h2>
+
+          <ul>
+            <% @assignment.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label 'Add Administrator' %><br>
+      <%= f.collection_select(:userrole_id, @alladmins.all, :id, :user, include_blank: true, :class => "form-control") %>
+
+    </div>
+
+    <div class="field">
+      <%= f.label 'Add Manager' %><br>
+      <%= f.collection_select(:userrole_id, @allmanagers.all, :id, :user, include_blank: true, :class => "form-control") %>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <%= hidden_field_tag(:structure_id, @structure.id) %>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
+

@@ -1,0 +1,52 @@
+<div class="col-sm-12  <%= I18n.locale.to_s %>">
+  <div class="panel panel-default">
+
+
+    <h2 class="pagetitle">Search Maktabat Resources</h2>
+
+    <div class="panel-body">
+
+
+
+    <%= form_for(resources_path) do |f| %>
+          <%= hidden_field_tag :locale, I18n.locale %>
+  <% if @search.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@search.errors.count, "error") %> prohibited this search from being saved:</h2>
+
+      <ul>
+      <% @search.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :search_term %><br>
+    <%= f.text_field :search_term, :size => 75 %>
+  </div>
+
+    <br><br>
+
+    Technical Areas<br>
+    <%= f.collection_select(:technicalarea_ids, Technicalarea.all, :id, :name, {:include_blank => "Select"}, { :multiple => true })%><br><br>
+
+    Target Groups<br>
+    <%= f.collection_select(:targetgroup_ids, Targetgroup.all, :id, :name, {:include_blank => "Select"}, { :multiple => true })%><br><br>
+    Organization<br>
+    <%=  f.collection_select(:organization_ids, Organization.all, :id, :name, {:include_blank => "Select"}, { :multiple => true })%><br><br>
+
+    Series<br>
+    <%=  f.collection_select(:series_ids, Series.all, :id, :name, {:include_blank => "Select"}, { :multiple => true })%><br><br>
+
+
+
+
+
+    <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+</div>
+      </div></div>

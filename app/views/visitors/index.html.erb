@@ -1,0 +1,208 @@
+<div class="container">
+  <h2>Dashboard Framework</h2>
+
+
+
+
+  <div class="col-md-6">
+    <div class="panel panel-default">
+
+      <div class="panel-heading">County Status</div>
+
+      <div class="panel-body">
+        <table class="table">
+          <thead><tr>
+
+          <th rowspan="2">Structure</th>
+
+            <th colspan="5" style="background-color: #b3d271; color: #fff; text-align: center; border: 2px solid #fff;">Current Month</th>
+          <th colspan="4" style="background-color: #ccc; color: #fff; text-align: center; center; border: 2px solid #fff;"">Total</th>
+          </tr>
+
+
+
+          <tr>
+          <th>Meetings Held</th>
+            <th>Total Issues</th>
+          <th>Open</th>
+          <th>Resolved</th>
+          <th>Percent Resolved</th>
+          </tr>
+          </thead>
+          <% @structures.each do |s| %>
+
+
+
+
+              <tr>
+                <td>
+                  <% if s.structuretype_id == 4 %>
+                      <strong><%= link_to s.name, s  %></strong>
+                <% elsif s.structuretype_id == 3 %>
+                  <strong><%= link_to s.name, s  %></strong>
+                <% elsif s.structuretype_id == 2  %>
+
+                      &nbsp;&nbsp;<%= link_to s.name, s  %>
+                  <% elsif s.structuretype_id == 1  %>
+                      &nbsp;&nbsp;&nbsp;&nbsp;<em><%= link_to s.name, s  %></em>
+                  <% end %>
+
+                </td>
+                <td><%= s.current_meetings_held(s.id) %></td>
+                <td><%= s.total_issues(s.id) %></td>
+
+                <td><%= s.open_issues(s.id) %></td>
+                <td><%= s.resolved_issues(s.id) %></td>
+
+                <td><%=  number_to_percentage(s.percent_resolved(s.id), precision: 1) %></td>
+              </tr>
+
+
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  <div class="col-md-6">
+  <div class="panel panel-default">
+
+    <div class="panel-heading">Latest Issues</div>
+
+    <div class="panel-body">
+
+
+
+  <table class="table">
+    <% @latestissues.each do |i| %>
+        <tr>
+          <td><%= i.created_at.strftime("%F") %></td>
+          <td width="50%"><%= link_to i.name, i %></td>
+          <td><%= i.structure.name  if i.structure_id %></td>
+        </tr>
+    <% end %>
+  </table>
+
+
+
+
+    </div></div>
+</div>
+
+ <div class="col-md-6">
+    <div class="panel panel-default">
+
+      <div class="panel-heading">Upcoming Meetings</div>
+
+      <div class="panel-body">
+
+
+
+  <table class="table">
+
+    <thead>
+    <th>Structure</th>
+    <th>Date Time</th>
+    <th>Location</th>
+    <th>Issues</th>
+
+    </thead>
+
+
+
+
+
+    <% @upcoming.each do |m| %>
+        <% numissues=Consideration.where('meeting_id = ?', m.id)  %>
+        <tr>
+          <td><%= link_to m.structure.name, m  if m.structure_id %></td>
+          <td><%= m.real_start.strftime("%F") %>  <strong><%= m.real_start.strftime("%H:%M") %></strong></td>
+          <td><%= m.location %></td>
+          <td><%= numissues.count %></td>
+        </tr>
+    <% end %>
+  </table>
+
+
+
+</div></div>
+ </div>
+
+
+  <div class="col-md-6">
+    <div class="panel panel-default">
+
+      <div class="panel-heading">County Status</div>
+
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th>County</th>
+            <th>District</th>
+            <th>Issues</th>
+            <th>Open</th>
+            <th>Resolved</th>
+            <th>Percent Resolved</th>
+          </thead>
+          <% @counties.each do |c| %>
+
+              <% districts=District.where('county_id = ?', c.id)  %>
+              <% districts.each do |d| %>
+                  <% dtotal= Issue.where('district_id =?', d.id).count %>
+                  <% dopen= Issue.where('district_id =? and status_id = ?', d.id, 1).count %>
+                  <% otherz = [1,2] %>
+                  <% dresolved= Issue.where('district_id =? and status_id = ?', d.id, 2 ).count %>
+                  <% pctresolved= (dresolved.to_f / dtotal.to_f ) * 100  if dresolved > 0 %>
+                  <% if dtotal > 0 %>
+
+                  <tr>
+                    <td><%= c.name %></td>
+                    <td><%= d.name %></td>
+                    <td><%= dtotal %></td>
+                    <td><%= dopen %></td>
+                    <td><%= dresolved %></td>
+                    <td><%= number_to_percentage(pctresolved, precision: 1)  if dresolved > 0 %>
+                      <%#= dnumber_to_percentage(pctresolved, precision: 1) %></td>
+                  </tr>
+<% end %>
+              <% end %>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="col-md-6">
+  <div class="panel panel-default">
+
+    <div class="panel-heading">Import Issues from Google</div>
+
+    <div class="panel-body">
+
+  <%= form_tag uploadcsv_appissues_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import" %>
+  <% end %>
+</div>
+
+
+
+</div>
+
+
+</div>
+
+</div>

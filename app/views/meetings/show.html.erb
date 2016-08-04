@@ -1,0 +1,309 @@
+<style>
+
+  .modal-addperson {
+    width: 600px;
+  }
+
+  .modal-addissue {
+    width: 1200px;
+  }
+
+</style>
+
+<div class="container">
+
+  <div class="row">
+
+    <%= link_to 'Back to Meetings', meetings_path %><br><br>
+        <div class="col-sm-5">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">General</h3>
+              <%= link_to 'Edit', edit_meeting_path(@meeting), :class => "btn btn-primary pull-right" %>
+            </div>
+            <div class="panel-body">
+
+                  <h1>
+                  <%= @meeting.status %>
+
+                  Meeting: <%= @meeting.meetingid %></h1>
+
+
+                  <p>
+                  <strong>Meeting Start:</strong>
+                  <%#=  @meeting.real_start.strftime("%m/%d/%y") %>
+                  <%=  @meeting.real_start %>
+                  </p>
+
+
+
+                  <p>
+                  <strong>Meeting End:</strong>
+                  <%=  @meeting.real_end %>
+                  </p>
+
+
+                  <p>
+                  <strong>Location:</strong>
+                  <%=  @meeting.location %>
+                  </p>
+
+
+
+                  <p>
+                  <strong>Name:</strong>
+                  <%= @meeting.name %>
+                  </p>
+
+                  <p>
+                  <strong>Structure:</strong>
+                  <%= link_to @meeting.structure do %><%= @meeting.structure.name %><% end %>
+                  <%= @meeting.structure.structuretype.name %>
+
+                  </p>
+
+            </div>
+          </div>
+
+
+
+
+
+        <div class="panel panel-default">
+          <div class="panel-heading">Attachments</div>
+          <div class="panel-body">
+            <% @meetingdocs.each do |doc| %>
+                <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
+                <%= doc.document_updated_at %><br>
+            <% end %>
+            <%= simple_form_for @new_site_document do |form| %>
+                <%= form.hidden_field :documentable_id, :value => @meeting.id %>
+                <%= form.hidden_field :documentable_type, :value => 'meeting' %>
+                <%= form.input :document, as: :file %>
+                <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+            <% end %>
+          </div>
+          </div>
+
+
+
+
+
+
+
+
+            </div>
+
+
+      <div class="col-sm-5">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Participants</h3>
+          <%= link_to 'Add Participant', '#new_participant_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+        </div>
+        <div class="panel-body">
+
+          <table class="table">
+            <thead>
+            <th>Name</th>
+            <th>Title</th>
+            <th>Organization</th>
+
+            </thead>
+            <tbody>
+            <% @participants.each do |p| %>
+                <tr>
+                  <td>  <%= link_to p.person.fullname, p.person %> </td>
+                  <td><%= p.person.title %></td>
+                  <td><%= p.person.email %></td>
+                  <td><%= p.person.phone %></td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+
+
+        </div>
+
+      </div>
+      </div>
+
+
+
+      <div class="col-sm-2">
+
+      <div class="btn-group-vertical" role="group" aria-label="...">
+
+
+
+
+
+
+      <%= link_to 'New Issue (M)', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+
+      <button class="btn btn-default">Print Attendance Sheet</button><br>
+      <button class="btn btn-default">Print Meeting Form</button><br>
+      <button class="btn btn-default">Print Issue Forms</button><br>
+
+
+      <%= link_to 'Delete', @meeting, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+
+      </div>
+
+
+
+
+
+
+
+      </div>
+  </div>
+
+<div class="row">
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">Agenda Issues</div>
+  <div class="panel-body">
+
+    <table id="agendatable"  class="hover" cellspacing="0" width="100%">>
+      <thead>
+      <tr>
+
+        <th>Issue</th>
+        <th>Disputant</th>
+        <th>Community</th>
+
+        <th>District</th>
+        <th>Report</th>
+
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @meetingactions.each do |agenda| %>
+          <% issue = Issue.find(agenda.issue_id) %>
+          <% modalid = '#meetingreport-' + agenda.id.to_s %>
+          <tr>
+
+            <td><%= link_to issue.name, issue %></td>
+            <td><%= issue.disputant %></td>
+            <td><%= issue.community %></td>
+            <td><%= issue.district.name if issue.district_id %></td>
+            <td><%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %></td>
+
+
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+<div>
+
+
+</div>
+
+
+
+
+  <div class="modal fade" id="new_meetingissue_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-addissue">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <small>Add New Issue to Meeting Agenda</small><br>
+          <h4 class="modal-title" id="myModalLabel"><%= @meeting.id %></h4>
+        </div>
+        <div class="modal-body">
+          <%= render 'addmeetingissues', modal: true %>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="modal fade" id="new_participant_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-addissue">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <small>Add New Attendee to Meeting Agenda</small><br>
+          <h4 class="modal-title" id="myModalLabel"><%= @meeting.id %></h4>
+        </div>
+        <div class="modal-body">
+          <%= render 'addparticipant', modal: true %>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <% @meetingactions.each do |agenda| %>
+      <% modalid = '#meetingreport-' + agenda.id.to_s %>
+      <div class="modal fade" id="<%= modalid %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-addissue">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <small>Report out from meeting</small><br>
+              <h4 class="modal-title" id="myModalLabel"><%= @meeting.id %></h4>
+            </div>
+            <div class="modal-body">
+              <%= render 'addmeetingissues', modal: true %>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    <% end %>
+
+
+
+
+
+
+
+
+<script>
+
+  $('#new_meetingissue_modal').on('submit', function() {
+    $('#new_report_model').modal('hide');
+  })
+
+
+
+  $(document).ready(function() {
+    $('#agendatable').DataTable();
+  } );
+</script>
+
+
+
+
+
+
+
+
+

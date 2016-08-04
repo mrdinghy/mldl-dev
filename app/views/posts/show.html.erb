@@ -1,0 +1,212 @@
+<p id="notice"><%= notice %></p>
+
+
+
+
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <!-- Page Heading/Breadcrumbs -->
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header"><%= @post.title %>
+        <small></small>
+      </h1>
+    </div>
+  </div>
+  <!-- /.row -->
+
+  <!-- Content Row -->
+  <div class="row">
+
+    <!-- Blog Post Content Column -->
+    <div class="col-lg-8">
+      Teaser:
+      <p>
+        <strong>Name:</strong>
+        <%= @post.title %>
+      </p>
+      <% if @post.is_featured == true %>
+          <button type="button" class="btn btn-primary">Featured</button>
+      <% end %>
+      <p>
+        <strong>Description (text):</strong>
+        <%= @post.description %>
+      </p>
+      <p>
+        <strong>Published:</strong>
+        <% if !@post.published_at.nil? %>
+            <%= @post.published_at.strftime("%F")    %>
+        <% end %>
+
+
+
+
+      <%= link_to 'Edit', edit_post_path(@post) %> |
+      <%= link_to 'Back', posts_path %>
+
+
+      <hr>
+
+      <!-- Blog Comments -->
+
+
+      <!-- Posted Comments -->
+
+
+
+      <div class="col-sm-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Attachments</div>
+          <div class="panel-body">
+            <% @postdocuments.each do |doc| %>
+                <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
+                <%= doc.document_updated_at %><br>
+            <% end %>
+            <%= simple_form_for @new_site_document do |form| %>
+                <%= form.hidden_field :documentable_id, :value => @post.id %>
+                <%= form.hidden_field :documentable_type, :value => 'post' %>
+                <%= form.input :document, as: :file %>
+                <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Images -->
+
+      <div class="col-sm-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Images</div>
+          <div class="panel-body">
+
+
+
+
+
+            <%= form_tag updatepostlogos_path, method: :put do %>
+                <%= hidden_field_tag :post_id, @post.id %>
+                <table border="1">
+                  <% @postimages.each do |doc| %>
+                      <%= fields_for "site_images[]", doc do |f| %>
+
+                          <tr>
+                            <td>
+
+
+                              <%# if doc.is_logo == true %>
+
+                              <%= f.check_box :is_logo %>
+                              <%#= f.check_box_tag "site_image_ids[]", doc.id, {:checked => "checked"}  %>
+                              <%# else %>
+                              <%#= f.check_box_tag "site_image_ids[]", doc.id %>
+                              <%# end %>
+
+                            </td>
+                            <td><%= image_tag doc.image.url, :width => "50", :class => "pull-right" %></td>
+                            <td><%= link_to doc.image_file_name , doc.image.url(:original, false) %></td>
+                            <td><%= doc.image_updated_at %></td>
+                          </tr>
+                      <% end %>
+                  <% end %>
+                </table>
+                <%= submit_tag "Update logos" %>
+            <% end %>
+
+
+
+
+
+
+            <%= simple_form_for @new_site_image do |form| %>
+                <%= form.hidden_field :imageable_id, :value => @post.id %>
+                <%= form.hidden_field :imageable_type, :value => 'post' %>
+                <%= form.input :image, as: :file %>
+                <%= form.button :submit, :value => 'Upload Image', :class => "mb-sm btn btn-primary" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <!-- End images -->
+
+
+
+
+      <h3>Comments and Ratings</h3>
+
+      <% @comments.each do |comment| %>
+          <div class="people-say margin-bottom-20">
+            <div class="overflow-h">
+              <span><a href="#"> <%= comment.user.email %></a></span>
+              <small class="hex pull-right"><%= comment.created_at %></small>
+
+              <p><%= comment.body %></p>
+              <%#= comment.commentable_type %>
+
+            </div>
+          </div>
+      <% end %> <!-- end show comments -->
+
+
+
+      <div class="alert alert-info fade in">
+
+        <% if current_user %>
+
+
+
+                <%= simple_form_for @new_comment do |f| %>
+                    <%= f.hidden_field :commentable_id, :value => @post.id %>
+                    <%= f.hidden_field :commentable_type, :value => 'post' %>
+                    <%= f.text_area :body, :class => "form-control", :rows => "7" %>
+                    <%= f.submit 'Submit' %>
+                <% end %>
+
+
+        <% end %>
+      </div>
+
+
+
+
+
+
+
+
+    </div>
+
+    <!-- Blog Sidebar Widgets Column -->
+    <div class="col-md-4">
+
+
+
+
+
+      <div class="imagepanel">
+        <% @postimages.each do |img| %>
+            <%= image_tag(img.image.url(:original, false), :class => "img-responsive") %>
+        <% end %>
+
+      </div>
+
+
+
+      <!-- Blog Search Well -->
+      <div class="well">
+
+      </div>
+
+      <!-- Blog Categories Well -->
+
+
+    </div>
+
+  </div>
+  <!-- /.row -->
+
+  <hr>
+
+</div>
+<!-- /.container -->
+
+

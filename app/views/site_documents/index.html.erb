@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Site Documents</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @site_documents.each do |site_document| %>
+      <tr>
+        <td><%= site_document.name %></td>
+        <td><%= link_to 'Show', site_document %></td>
+        <td><%= link_to 'Edit', edit_site_document_path(site_document) %></td>
+        <td><%= link_to 'Destroy', site_document, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Site document', new_site_document_path %>

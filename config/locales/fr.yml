@@ -1,0 +1,24 @@
+fr:
+   tagline: "Ressources de formation pour la société civile au Moyen-Orient"
+   hello_world: "Hello world!"
+   hello_flash: "Hello flash!"
+   latest_resources: "Latest Uploaded Resources"
+   search_library: "Search the Library"
+   home: "Accueil"
+   about: "À propos"
+   find: "Rechercher"
+   survey: "Enquête"
+   submit: "Soumettre supports"
+   contact: "Contact"
+   faq: "QFP"
+   news: "Nouvelles"
+   terms_use: "Conditions d'utilisation"
+   trainer_db: "Ressources pour formateurs"
+   date:
+       order:
+         - :day
+         - :month
+         - :year
+   special: "Audience spéciale"
+   on_women: "Programmes pour les femmes"
+   on_youth: "Programmes pour les jeunes"

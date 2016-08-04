@@ -1,0 +1,13 @@
+<td><%= link_to user.name, user %></td>
+<td><%= link_to user.email, user %></td>
+
+<td>
+
+<% if user.structure_admin %><%= 'Structure Admin' %><br><% end %>
+<% if user.structure_manager %><%= 'Structure Manger' %><br><% end %>
+<% if user.system_admin %><%= 'System Admin' %><br><% end %>
+<% if user.system_manager %><%= 'System Manager' %><br><% end %>
+
+</td>
+
+<td><%= link_to 'Edit Roles', adjustroles_path(:user_id => user.id) %></td>

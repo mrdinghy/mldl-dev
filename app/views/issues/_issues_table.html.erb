@@ -1,0 +1,78 @@
+
+
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+    <h3 class="panel-title">Issues</h3>
+  </div>
+
+
+
+  <div class="panel-body">
+
+
+
+  <table id="issuestable"  class="hover" cellspacing="0" width="100%">>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Old ID</th>
+    <th></th>
+    <th>Name</th>
+    <% if @structure.nil? %><th>Structure</th> <% end %>
+    <th>Status</th>
+    <th>Category</th>
+
+    <th>District</th>
+    <th>Disputants</th>
+
+
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @issues.each do |issue| %>
+      <tr>
+        <td><%= link_to issue.id, issue %></td>
+        <td><%= link_to issue.old_id, issue %></td>
+        <td>
+
+
+          <strong>
+            <% if issue.resolution_date %>
+                <span style="color: darkslategrey">Resolved</span>
+            <% else %>
+                <span style="color: lightseagreen">Open</span>
+            <% end %>
+          </strong>
+              </td>
+        <td><%= issue.name %></td>
+        <% if @structure.nil? %><td><%= issue.structure.name  if issue.structure_id %></td><% end %>
+        <td><%= issue.status.name if issue.status_id %></td>
+        <td><%= issue.category.name if issue.category_id %></td>
+        <td><%= issue.district.name if issue.district_id %></td>
+        <td><%= issue.disputant %></td>
+
+
+
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+<script>
+  $(document).ready(function() {
+    $('#issuestable').DataTable();
+  } );
+</script>
+
+

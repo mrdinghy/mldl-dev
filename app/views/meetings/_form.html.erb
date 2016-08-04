@@ -1,0 +1,178 @@
+<div class="container">
+
+  <div class="panel panel-default">
+
+    <div class="panel-heading"><h2><%= @panelheader %></h2>
+      <%if params[:action] == "edit" %><h2><strong><%= @meeting.name %></strong></h2><% end %></div>
+
+    <div class="panel-body">
+
+
+
+    <%= simple_form_for @meeting do |f| %>
+          <div class="form-horizontal">
+    <% if @meeting.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@meeting.errors.count, "error") %> prohibited this meeting from being saved:</h2>
+
+          <ul>
+            <% @meeting.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+
+
+
+    <div class="form-group">
+      <%= f.label :name, :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10">
+        <%= f.text_field :name, :size => 100, :class => "form-control" %>
+     </div>
+    </div>
+
+
+            <div class="form-group">
+              <%= f.label :location, :class => "col-sm-2 control-label" %>
+              <div class="col-sm-10">
+                <%= f.text_field :location, :size => 50, :class => "form-control" %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :structure_id, :class => "col-sm-2 control-label" %>
+              <div class="col-sm-10">
+                <% if params[:structure_id] %>
+                    <%= f.hidden_field :structure_id, :value => params[:structure_id] %>
+
+                    <%= @meeting.structure.name %>
+                <% else %>
+
+                    <%= f.collection_select(:structure_id, Structure.all, :id, :name, include_blank: true, :class => "form-control") %>
+                <% end %>
+
+
+              </div>
+            </div>
+
+
+
+            <p>From Date: < <input type="text" style="width: 88px;" class="datepicker" id="dataStart" size="10" name="dataStart" /></p>
+            <p>To Date:  <input type="text" style="width: 88px;" class="end_date" id="dataEnd" size="10" name="dataEnd" value="" readonly /></p>
+
+
+
+
+
+
+
+                  <div class="form-group">
+                    <%= f.label 'Meeting Start', :class => "col-sm-2 control-label" %>
+                    <div class='col-sm-1 input-group date' id='meetingstart'>
+                      <%= f.input :real_start, :as => :datetime_picker, :class => "form-control", :label => false %>
+                      <%#= f.input :real_start, as: :date_time_picker %>
+                    </div>
+                  </div>
+
+                <script type="text/javascript">
+                    $(function () {
+                        $('#meetingstart').datetimepicker();
+                    });
+                </script>
+
+
+                  <div class="form-group">
+                    <%= f.label 'Meeting End', :class => "col-sm-2 control-label" %>
+                    <div class='col-sm-1 input-group date' id='meetingend'>
+                      <%= f.input :real_end, :as => :datetime_picker, :class => "form-control", :label => false %>
+
+                    </div>
+                  </div>
+                <script type="text/javascript">
+                    $(function () {
+                        $('#meetingend').datetimepicker();
+                    });
+                </script>
+
+
+
+
+<div class="row">
+  <div class="col-sm-10"></div>
+</div>
+    <div class="form-group">
+      <%= hidden_field_tag "meeting[issue_ids][]", nil %>
+<h3><%= @meeting.structure.name %> Open Issues</h3>
+      <table class="table table-striped">
+        <thead>
+
+        <th>Add to Agenda</th>
+        <th>Name</th>
+        <th></th>
+        </thead>
+        <tbody>
+
+
+            <% @openissues.all.each do |issue| %>
+                <td>  <%= check_box_tag "meeting[issue_ids][]", issue.id, @meeting.issue_ids.include?(issue.id), id: dom_id(issue) %></td>
+                <td>
+                  <%= label_tag dom_id(issue), issue.name %></td>
+                </tr>
+            <% end %>
+
+
+
+        </tbody>
+</table>
+
+
+
+    </div>
+
+      <div class="form-group">
+        <div class = "col-sm-2 control-label"></div>
+        <div class="col-sm-10">
+          <%= f.submit :class => "btn btn-primary" %>
+
+        </div>
+      </div>
+
+
+</div>
+
+<% end %>
+
+</div>
+        </div>
+      </div>
+
+<script>
+    $(document).ready(function() {
+        $("#dataStart").datepicker({
+            minDate: '+1d',
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'mm/dd/yy',
+            onSelect: function(date){
+                var dates = date.split('/');
+                var lastDate = new Date(dates[2], dates[0], 0);
+                var y = lastDate.getFullYear(), m = lastDate.getMonth(), d = lastDate.getDate();
+                m = ('0'+ (m+1)).slice(-2);
+
+                $('#dataEnd').val(m+'/'+d+'/'+y);
+
+                var start = $('#dataStart').datepicker('getDate');
+                $('#dataEnd').datepicker({dateFormat: 'mm/dd/yy'}).datepicker('setDate', m+'/'+d+'/'+y);
+                var end = $('#dataEnd').datepicker('getDate');
+                var days   = ((end - start)/1000/60/60/24)+1;
+
+                $('#calculated').text(days);
+            }
+        });
+
+
+    });
+
+</script>

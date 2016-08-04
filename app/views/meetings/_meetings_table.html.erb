@@ -1,0 +1,64 @@
+
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= @tabhead %></h3>
+    </div>
+    <div class="panel-body">
+
+
+
+
+      <table id="meetingstable"  class="hover" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Meeting Date</th>
+          <th>Time Start</th>
+          <th>Name</th>
+          <% if @structure.nil? %><th>Structure</th> <% end %>
+          <th>Agenda Issues</th>
+
+
+        </tr>
+        </thead>
+
+
+        <tbody>
+        <% @meetings.each do |meeting| %>
+
+        <% agendaitems = Consideration.where('meeting_id = ?', meeting.id) %>
+            <tr>
+              <td><%= link_to meeting.meetingid, meeting %></td>
+              <td>
+                <%= meeting.status %>
+              </td>
+              <td><%=  meeting.real_start.strftime("%m/  %d/%Y") if meeting.real_start %></td>
+              <td><%=  meeting.real_start.strftime("%R") if meeting.real_start %></td>
+
+              <td><%= meeting.name %></td>
+              <% if @structure.nil? %><td><%= link_to meeting.structure.name, meeting.structure %></td><% end %>
+              <td><%= agendaitems.count if agendaitems %></td>
+
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+
+
+    </div>
+  </div>
+
+
+
+
+
+      <script>
+        $(document).ready(function() {
+          $('#meetingstable').DataTable();
+        } );
+      </script>
+
+

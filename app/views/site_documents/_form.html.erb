@@ -1,0 +1,33 @@
+<%= form_for @site_document, url: users_path, html: { multipart: true } do |f| %>
+    <%= hidden_field_tag :locale, I18n.locale %>
+<%#= form_for(@site_document) do |f| %>
+  <% if @site_document.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@site_document.errors.count, "error") %> prohibited this site_document from being saved:</h2>
+
+      <ul>
+      <% @site_document.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+
+    <%= f.file_field :document %>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+<h3>User</h3>
+<p>Name: <%= @user.name if @user.name %></p>
+<p>Email: <%= @user.email if @user.email %></p>
+
+
+
+
+
+
+
+
+<div class="col-sm-3 chkpanel">
+  <label class="label">Roles</label>
+  <div class="row">
+    <%= form_for(@user) do |f| %>
+
+        <div class="field">
+          <%= f.check_box :structure_admin %>
+          <%= f.label :structure_admin %><br>
+        </div>
+
+        <div class="field">
+          <%= f.check_box :structure_manager %>
+          <%= f.label :structure_manager %><br>
+        </div>
+
+        <div class="field">
+          <%= f.check_box :system_admin %>
+          <%= f.label :system_admin %><br>
+        </div>
+
+        <div class="field">
+          <%= f.check_box :system_manager %>
+          <%= f.label :system_manager %><br>
+        </div>
+
+
+
+        <div class="actions">
+          <%= f.submit %>
+        </div>
+    <% end %>
+  </div>
+</div>

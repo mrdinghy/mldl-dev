@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @site_image.name %>
+</p>
+
+<p>
+  <strong>Imageable type:</strong>
+  <%= @site_image.imageable_type %>
+</p>
+
+<p>
+  <strong>Imageable:</strong>
+  <%= @site_image.imageable_id %>
+</p>
+
+<%= link_to 'Edit', edit_site_image_path(@site_image) %> |
+<%= link_to 'Back', site_images_path %>

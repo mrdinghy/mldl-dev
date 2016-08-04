@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "MLDL2 Case Management" %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Rails Devise" %>">
+    <link href='https://fonts.googleapis.com/css?family=Pontano+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Quintessential' rel='stylesheet' type='text/css'>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+    <script>
+        $('#myTabs a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    </script>
+    <%= csrf_meta_tags %>
+
+  </head>
+  <body>
+    <header>
+      <%= render 'layouts/navbar' %>
+    </header>
+    <main role="main" class="<%= I18n.locale.to_s %>">
+
+       <%= render 'layouts/messages' %>
+
+
+       <%= yield %>
+
+    </main>
+
+
+
+  </body>
+</html>

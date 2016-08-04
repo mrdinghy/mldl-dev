@@ -1,0 +1,12 @@
+<h3>User</h3>
+<p>Name: <%= @user.name if @user.name %></p>
+<p>Email: <%= @user.email if @user.email %></p>
+
+<H3>User Roles</H3>
+
+
+<%= 'Structure Admin' if @user.structure_admin %>
+<%= 'Structure Manager' if @user.structure_manager %>
+<%= 'Structure Admin' if @user.system_admin %>
+<%= 'Structure Admin' if @user.system_manager %>
+

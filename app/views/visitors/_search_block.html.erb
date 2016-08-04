@@ -1,0 +1,58 @@
+<%= form_tag searches_path, :method => :get do %>
+    <p>Search the library:<br>
+      <%= text_field_tag :search, params[:search] %>
+
+      <%= submit_tag "Search", :name => nil %>
+    </p>
+<% end %>
+<hr>
+
+<%= bettertabs :mytabs do |tab| %>
+
+    <%= tab.static :tech do %>
+        <h2>Tech Areas</h2>
+
+        <% Technicalarea.all.each do |area| %>
+            <%= link_to area do %><%= area.name %><% end %><br>
+        <% end %>
+
+    <% end %>
+
+    <%= tab.static :group do %>
+        <h2>Target Groups</h2>
+
+        <% Targetgroup.all.each do |group| %>
+            <%= link_to group do %><%= group.name %><% end %><br>
+
+        <% end %>
+
+    <% end %>
+
+    <%= tab.static :countries do %>
+        <h2>Countries</h2>
+
+        <% Country.all.each do |cnty| %>
+            <%= cnty.name %><br>
+        <% end %>
+
+    <% end %>
+
+    <%= tab.static :tag do %>
+        <h2>Tags</h2>
+
+        <% Tag.all.each do |tag| %>
+            <%= tag.name %><br>
+        <% end %>
+
+    <% end %>
+
+
+
+
+    <%#= tab.static :about, 'Who am I?', :partial => '/shared/about' %>
+
+
+
+    <%#= tab.static :contact_me %>
+<% end %>
+

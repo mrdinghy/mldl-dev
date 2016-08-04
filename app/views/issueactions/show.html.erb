@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Actiontype:</strong>
+  <%= @issueaction.actiontype_id %>
+</p>
+
+<p>
+  <strong>Meeting:</strong>
+  <%= @issueaction.meeting_id %>
+</p>
+
+<p>
+  <strong>Organization:</strong>
+  <%= @issueaction.organization_id %>
+</p>
+
+<p>
+  <strong>Issue:</strong>
+  <%= @issueaction.issue_id %>
+</p>
+
+<p>
+  <strong>Actionbody:</strong>
+  <%= @issueaction.actionbody %>
+</p>
+
+<%= link_to 'Edit', edit_issueaction_path(@issueaction) %> |
+<%= link_to 'Back', issueactions_path %>

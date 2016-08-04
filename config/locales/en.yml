@@ -1,0 +1,46 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  tagline: "Training Resources for Civil Society in the Middle East"
+  hello_world: "Hello world!"
+  hello_flash: "Hello flash!"
+  latest_resources: "Latest Uploaded Resources"
+  search_library: "Search the Library"
+  home: "Home"
+  about: "About"
+  find: "Find Materials"
+  survey: "User Survey"
+  submit: "Submit Materials"
+  contact: "Contact Us"
+  faq: "FAQ"
+  news: "News"
+  terms_use: "Terms of Use"
+  trainer_db: "Trainer Database"
+  trainer_db_text: "MEPI’s trainer database is a repository of local trainers in the Middle East and North Africa region.  If you’re a trainer looking for new contacts or an organization looking for a MENA-based trainer, check it out!"
+  date:
+      order:
+        - :day
+        - :month
+        - :year
+  special: "Special Focus"
+  on_women: "Woman's Programs"
+  on_youth: "Youth Programs"

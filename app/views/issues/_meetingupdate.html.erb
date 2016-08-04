@@ -1,0 +1,41 @@
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'new_note_form'}) do |f| %>
+    <% if @meeting.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@meeting.errors.count, "error") %> prohibited this location from being saved:</h2>
+
+          <ul>
+            <% @meeting.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <%= hidden_field_tag(:meeting_id, @meeting.id) %>
+    <%= hidden_field_tag(:frommeeting, true) %>
+    <%= hidden_field_tag(:actiontype_id, 3) %>
+
+
+    <%=radio_button("actiontype", "receive_newsletter", "1") %> Update w/comment<br>
+       <%=radio_button("actiontype", "receive_newsletter", "2") %> Table to next meeting<br>
+    <%=radio_button("actiontype", "receive_newsletter", "3") %> Transfer to Structure<br>
+    <%=radio_button("actiontype", "receive_newsletter", "4") %> Resolve<br>
+
+
+
+
+    <div class="form-group">
+      <%= f.label 'Meetings', :class => "col-sm-2" %>
+      <div class="col-sm-10">
+        <%= f.collection_select(:meeting_id, @mymeetings, :id, :name, include_blank: true, :class => "form-control") %>
+      </div>
+<%# Added Bootstrap classes, and help-block container for error messages %>
+      <div class="field">
+        <%= f.label 'Note:' %>
+        <%= f.text_area :actionbody %>
+      </div>
+      <div class="actions">
+        <%= f.submit 'Submit' %>
+      </div>
+<% end %>

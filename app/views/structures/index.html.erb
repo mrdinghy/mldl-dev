@@ -1,0 +1,51 @@
+<style>
+  div.boxed {
+    border: 1px #000 solid;
+
+  }
+
+
+
+</style>
+<div class="container">
+
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Structures</h1>
+
+
+    <% @csc_structures.each do |csc| %>
+      <hr>
+
+      <% dsc_structures = Structure.where('county_id = ? and structuretype_id = ?', csc.county_id, 2 ) %>
+        <div class="row" style="background-color: #CCC;">
+            <div class="col-sm-2" ><strong><%= csc.id %></strong>: <strong><%= link_to csc.name, csc %></strong></div>
+        </div>
+
+
+
+      <div class="row">
+          <% dsc_structures.each do |dsc| %>
+              <% cf_structures = Structure.where('district_id = ? and structuretype_id = ?', dsc.district_id, 1 ) %>
+
+                <div class="col-sm-2">
+                    <div class="boxed"><strong><%= dsc.id %></strong>: <strong><%= link_to dsc.name, dsc %></strong></div>
+
+
+
+                  <% cf_structures.each do |cf| %>
+                      <strong><%= cf.id %></strong>: <%= link_to cf.name, cf %> <br>
+                  <% end %>
+
+                </div>
+          <% end %>
+        </div>
+
+    <% end %>
+
+
+<br>
+
+<%= link_to 'New Structure', new_structure_path, :class => "btn btn-primary" %>
+
+</div>

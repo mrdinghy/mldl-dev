@@ -1,0 +1,66 @@
+
+<div class="container content">
+  <div class="row">
+    <div class="col-md-9">
+      <!-- Our Services -->
+      <div class="headline"><h2>Search Results</h2></div>
+
+      <h2>Search term <span style="color: orangered;"><%= params[:search] %></span></h2>
+      <% @resources.each do |result| %>
+
+
+
+
+          <strong><%= link_to result do %><%= result.title %><% end %></strong><br>
+          <% if !result.series_id.nil? %>
+              <small class="color: orange">Series: <%= result.series.name %></small><br>
+          <% end %>
+
+
+          <%= result.body %>
+          <%#= render result %>
+
+          ---------<%= result.is_arabic %>----------
+          <% if I18n.locale != 'en' %>
+              <% trans_en = Resource::Translation.where('resource_id =? and locale = ?', result.id, 'en') %>
+              <% if !trans_en.blank? %>
+                  &nbsp;&nbsp;&nbsp;<strong><%= link_to 'English', result %></strong>
+              <% end %>
+          <% end %>
+
+          <% if I18n.locale != :ar %>
+              <% trans_ar = Resource::Translation.where('resource_id =? and locale = ?', result.id, 'ar') %>
+
+              <% if !trans_ar.blank? %>
+                  &nbsp;&nbsp;&nbsp;<strong><%= link_to 'Arabic', result %></strong>
+              <% end %>
+          <% end %>
+
+          <% if I18n.locale != :fr %>
+              <% trans_fr = Resource::Translation.where('resource_id =? and locale = ?', result.id, 'fr') %>
+
+              <% if !trans_fr.blank? %>
+                  &nbsp;&nbsp;&nbsp;<strong><%= link_to 'French', result %></strong>
+
+              <% end %>
+          <% end %>
+
+<%#= debug trans_ar %>
+<%#= debug trans_fr %>
+
+
+
+
+
+          <br><br>
+      <% end %>
+
+      <br>
+
+      <%= link_to 'New Search', new_search_path %>
+    </div>
+
+  </div>
+</div>
+<%= link_to 'Edit', edit_search_path(@search) %> |
+<%= link_to 'Back', searches_path %>

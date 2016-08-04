@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="col-sm-9">
+    <p id="notice"><%= notice %></p>
+
+    <h1>
+
+      Person: <%= @person.fullname %></h1>
+
+
+<p>
+  <strong>Organization:</strong>
+  <%= @person.organization.name if @person.organization_id %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @person.email %>
+</p>
+
+
+    <h3>DAtabase activity</h3>
+
+</div>
+
+
+
+
+
+
+  <div class="col-sm-3">
+
+    <div class="btn-group-vertical" role="group" aria-label="...">
+
+      <%= link_to 'Back', people_path %><br><br>
+      <%= link_to 'Edit', edit_person_path(@person), :class => "btn btn-primary" %><br><br>
+
+
+      <%#= link_to 'New Issue (M)', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+
+      <%#= link_to 'New Issue (M)', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+
+
+
+
+      <%= link_to 'Delete', @person, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+
+    </div>
+
+
+
+
+
+
+
+
+  </div>
+
+<div class="col-sm-4">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Member of Structures</h3>
+    </div>
+    <tddiv class="panel-body">
+
+      <table class="table">
+        <thead>
+        <th>Code</th>
+        <th>Structure</th>
+        <th></th>
+        <th></th>
+        </thead>
+        <tbody>
+        <% @members.each do |s| %>
+            <tr>
+              <td>  <%= link_to s.structure.name, s.structure %> </td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+</div>
+</div>
+
+
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Meeting Participation</h3>
+      </div>
+      <tddiv class="panel-body">
+
+        <table class="table">
+          <thead>
+          <th>Start</th>
+          <th>Structure</th>
+          <th></th>
+          <th></th>
+          </thead>
+          <tbody>
+          <% @participations.each do |p| %>
+              <tr>
+                <td>  <%= link_to p.meeting.real_start, p.meeting %> </td>
+                <td>  <%= p.meeting.structure.name %></td>
+                <td></td>
+                <td></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+
+</div>
+  </div>

@@ -1,0 +1,59 @@
+
+<style>
+    .pagetitle {
+        color: orangered;
+        font-size: 16px;
+    }
+</style>
+
+<div class="col-sm-7">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <%= form_for(@post) do |f| %>
+          <%= hidden_field_tag :locale, I18n.locale %>
+          <% if @post.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(@post.errors.count, "error") %> prohibited this series from being saved:</h2>
+
+                <ul>
+                  <% @post.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+          <% end %>
+
+          <div class="field">
+            <%= f.label :title %><br>
+            <%= f.text_field :title %>
+          </div>
+          <div class="field">
+            <%= f.label 'Body' %><br>
+            <%= f.text_area :description %>
+          </div>
+          <div class="field">
+            <%= f.label :is_featured %><br>
+            <%= f.check_box :is_featured %>
+          </div>
+
+      <div class="field">
+        <%= f.label :published_at %><br>
+        <%= f.date_select :published_at %>
+      </div>
+          <div class="actions">
+            <%= f.submit %>
+          </div>
+      <% end %>
+
+    </div>
+  </div>
+
+</div>
+
+        ...
+        <%#= form.cktext_area :body, :class => 'someclass', :ckeditor => {:language => 'uk'} %>
+        ...
+        <%#= form.cktext_area :body, :value => 'Default value', :id => 'sometext' %>
+        ...
+        <%#= cktext_area :post, :info, :cols => 40, :ckeditor => {:uiColor => '#AADC6E', :toolbar => 'mini'} %>
+        ...

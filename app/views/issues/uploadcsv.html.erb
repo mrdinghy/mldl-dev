@@ -1,0 +1,9 @@
+
+
+<h2>Import Issues</h2>
+
+<%= form_tag uploadcsv_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import" %>
+<% end %>
+

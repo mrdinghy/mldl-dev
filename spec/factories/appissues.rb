@@ -1,0 +1,35 @@
+FactoryGirl.define do
+  factory :appissue do
+    uuid "MyString"
+    yourname "MyString"
+    originalmeet "2016-05-19"
+    issueid 1
+    meetingname "MyString"
+    structurecode "MyString"
+    county "MyString"
+    district "MyString"
+    status "MyString"
+    issuedistrict "MyString"
+    community "MyString"
+    category "MyString"
+    raisedby "MyString"
+    disputant "MyString"
+    duration 1
+    actioncommittee "MyText"
+    actiondescription "MyText"
+    actionnote "MyText"
+    resolved "MyString"
+    resolutiondate "2016-05-19"
+    docslink "MyText"
+    updatetype "MyString"
+    resolutiontype "MyString"
+    updated_on "2016-05-19"
+    updatedesc "MyText"
+    mediationdate "2016-05-19"
+    mediationoutcome "MyString"
+    issuedesc "MyText"
+    issuename "MyString"
+    issuenote "MyText"
+    statusnote "MyText"
+  end
+end

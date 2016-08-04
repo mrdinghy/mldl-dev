@@ -1,0 +1,91 @@
+<style>
+    .pubh1 {
+        font-size: 24px;
+    }
+    .pubh2 {
+        font-size: 22px;
+        color: #666;
+        font-weight: bold;
+    }
+    .pubh3 {
+        font-size: 16px;
+        color: orangered;
+        font-weight: bold;
+    }
+    .imageblock {
+        background-color: #999999;
+        border: 10px #999999 solid;
+
+
+    }
+    .caption {
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+
+    }
+
+
+
+
+
+</style>
+
+<div class="container">
+  <div class="col-sm-8">
+
+
+    <% @sections.each do |section| %>
+        <% if !section.name.blank? %>
+            <%if section.level_id == 1 %>
+                <span class="pubh1"><%= section.name %></span>
+            <% elsif section.level_id == 2 %>
+                <span class="pubh2"><%= section.name %></span>
+            <% elsif section.level_id == 3 %>
+                <span class="pubh3"><%= section.name %></span>
+            <% else %>
+                <h4><%= section.name %></h4>
+
+            <% end %>
+
+        <% end %>
+        <%= link_to 'Edit', edit_section_path(section) %><br>
+
+
+        <% if !section.image_file_name.blank? and !section.image_file_name.nil? and section.imageset == 1 %>
+            <br><br>
+            <div class="imageblock"><%= image_tag section.image.url, style: 'height:auto;width:100%;' %></div>
+            <div class="caption"><%= section.caption %></div>
+            <br>
+        <% end %>
+
+
+
+
+
+        <p><%= section.body.html_safe if !section.body.nil? %></p>
+
+
+
+        <% if !section.image_file_name.blank? and !section.image_file_name.nil? and section.imageset == 2 %>
+            <br>
+            <div class="imageblock"><%= image_tag section.image.url, style: 'height:auto;width:100%;' %></div>
+            <div class="caption"><%= section.caption %></div>
+            <br><br>
+        <% end %>
+
+
+
+
+
+
+
+    <% end %>
+
+
+  </div>
+
+
+
+
+</div>

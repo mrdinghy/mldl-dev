@@ -1,0 +1,25 @@
+ar:
+#Home page
+  tagline: "موارد تدريبية لمنظمات المجتمع المدني في الشرق الأوسط"
+  hello_world: "Hello Arab world!"
+  hello_flash: "Hello Arab flash!"
+  latest_resources: "Latest Uploaded Resources"
+  search_library: "Search the Library"
+  home: "الصفحة الرئيسية"
+  about: "من نحن؟"
+  find: "البحث عن المواد"
+  survey: "لاستبيان"
+  submit: "تقديم مواد"
+  contact: " اتصل بنا"
+  faq: "الأسئلة الشائعة"
+  news: "أخبار"
+  terms_use: "شروط الاستخدام"
+  trainer_db: "قاعدة بيانات المدربين"
+  date:
+      order:
+        - :day
+        - :month
+        - :year
+  special: "المزيد من الخيارات"
+  on_women: "برامج المرأة"
+  on_youth: "برامج الشباب"
