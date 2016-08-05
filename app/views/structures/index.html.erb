@@ -1,12 +1,36 @@
 <style>
-  div.boxed {
-    border: 1px #000 solid;
-
+  .cscbox, .dscbox, .cfbox, .blankbox  {
+      min-height: 60px;
+      padding: 2px;
+      margin-top: 8px;
   }
 
+.cscbox {
+    background-color: #fff;
+    color: #000;
+    border: 3px solid #553982;
+    font-size: 18px;
+}
+  .dscbox {
+      background-color: #fff;
+      color: #000;
+      border: 3px solid #478500;
+      font-size: 18px;
+  }
 
+  .cfbox {
+      background-color: #fff;
+      color: #000;
+      border: 3px solid #CCC;
+      font-size: 18px;
+  }
 
+  .blankbox {
+
+      border: 1px #fff solid;
+  }
 </style>
+
 <div class="container">
 
 <p id="notice"><%= notice %></p>
@@ -14,34 +38,68 @@
 <h1>Listing Structures</h1>
 
 
+  <div class="row">
     <% @csc_structures.each do |csc| %>
-      <hr>
 
-      <% dsc_structures = Structure.where('county_id = ? and structuretype_id = ?', csc.county_id, 2 ) %>
-        <div class="row" style="background-color: #CCC;">
-            <div class="col-sm-2" ><strong><%= csc.id %></strong>: <strong><%= link_to csc.name, csc %></strong></div>
-        </div>
+        <% dsc_structures = Structure.where('county_id = ? and structuretype_id = ?', csc.county_id, 2 ) %>
+
+        <div class="col-sm-3">
+          <div class="col-sm-12 cscbox">
+            <strong><%= link_to csc.name, csc %></strong>
 
 
+            <div class="pull-right">
+            <% if csc.calcmeets(csc) > 0 %>
+                  <%= fa_icon "users", :style => "color: green" %><%= csc.calcmeets(csc.id) %><br>
+            <% end %>
+              <% if csc.calcopen(csc) > 0 %>
+                  <%= fa_icon "wrench", :style => "color: blue" %>
+            <%= csc.calcopen(csc.id) %>
+                  <% end %>
+          </div>
 
-      <div class="row">
+         </div>
           <% dsc_structures.each do |dsc| %>
               <% cf_structures = Structure.where('district_id = ? and structuretype_id = ?', dsc.district_id, 1 ) %>
+              <div class="col-sm-2">&nbsp;</div>
 
-                <div class="col-sm-2">
-                    <div class="boxed"><strong><%= dsc.id %></strong>: <strong><%= link_to dsc.name, dsc %></strong></div>
+              <div class="col-sm-10 dscbox">
+                <strong><%= link_to dsc.name, dsc %></strong>
 
-
-
-                  <% cf_structures.each do |cf| %>
-                      <strong><%= cf.id %></strong>: <%= link_to cf.name, cf %> <br>
+                <div class="pull-right">
+                  <% if dsc.calcmeets(dsc) > 0 %>
+                      <%= fa_icon "users", :style => "color: green" %><%= dsc.calcmeets(dsc.id) %><br>
                   <% end %>
-
+                  <% if dsc.calcopen(dsc) > 0 %>
+                      <%= fa_icon "wrench", :style => "color: blue" %>
+                      <%= dsc.calcopen(dsc.id) %>
+                  <% end %>
                 </div>
-          <% end %>
-        </div>
+              </div>
 
+              <% cf_structures.each do |cf| %>
+                  <div class="col-sm-4">&nbsp;</div>
+
+                  <div class="col-sm-8 cfbox">
+                    <strong><%= link_to cf.name, cf %></strong>
+
+                    <div class="pull-right">
+                      <% if cf.calcmeets(cf) > 0 %>
+                          <%= fa_icon "users", :style => "color: green" %><%= cf.calcmeets(cf.id) %><br>
+                      <% end %>
+                      <% if cf.calcopen(cf) > 0 %>
+                          <%= fa_icon "wrench", :style => "color: blue" %>
+                          <%= cf.calcopen(cf.id) %>
+                      <% end %>
+                    </div>
+                  </div>
+              <% end %>
+
+        <% end %>
+
+</div>
     <% end %>
+  </div>
 
 
 <br>

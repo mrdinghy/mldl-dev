@@ -24,6 +24,7 @@ gem 'globalize', '~> 5.0.0'
 gem 'globalize-accessors'
 gem 'tabs_on_rails'
 gem 'bettertabs'
+gem 'font-awesome-rails'
 gem "wysiwyg-rails"
 gem 'seed_dump'
 gem 'prawn'

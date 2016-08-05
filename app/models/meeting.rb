@@ -16,22 +16,19 @@ class Meeting < ActiveRecord::Base
 
 
 
-  def meetingid
+  def meeting_id
     if !self.real_start.nil?
-    yr = self.real_start.strftime("%Y").to_s
-    mo = self.real_start.strftime("%m").to_s
+    mdate = self.real_start.strftime("%F").to_s
+
     else
-      yr = "????"
-      mo = "??"
+      mdate = "????"
     end
-
-
 
     structure = self.structure.structuretype.code
     structurename = self.structure.name
 
-    id= (yr + '-' + mo + '-' + structure[0,2] + '-'  + structurename + '-'  + self.id.to_s)
-    return id
+    meetingid = (mdate + '-' + structure[0,2] + '-'  + structurename)
+    return meetingid
   end
 
 

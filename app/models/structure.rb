@@ -60,8 +60,16 @@ class Structure < ActiveRecord::Base
 
 
 
+def calcmeets(id)
+  q=Meeting.where('structure_id =?', id).count
+  return q
+end
 
 
+  def calcopen(id)
+    q=Issue.where('structure_id =? and resolution_date  is NULL', id).count
+    return q
+  end
 
 
 

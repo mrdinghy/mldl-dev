@@ -236,7 +236,8 @@ Actiontype.create([
                       {name: 'Mediation Report'},
                       {name: 'Resolution'},
                       {name: 'Place on Hold'},
-                      {name: 'Cancel'}
+                      {name: 'Cancel'},
+                      {name: 'Reopened'}
                   ])
 
 

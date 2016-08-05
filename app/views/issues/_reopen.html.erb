@@ -14,16 +14,17 @@
     <% end %>
     <%= hidden_field_tag(:issue_id, @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
-    <%= hidden_field_tag(:actiontype_id, 7) %>
+    <%= hidden_field_tag(:actiontype_id, 10) %>
 
 
 <%# Added Bootstrap classes, and help-block container for error messages %>
     <div class="field">
       <%= f.label 'Note:' %><br>
-      This Note will be saved in the Issue history table.
+      Reactivation Notes<br>
       <%= f.text_area :actionbody,  cols: "200", rows: "12" %>
     </div>
     <div class="actions">
-      <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
+      <%= f.submit 'Reopen Issue', :class => "btn btn-danger" %>
+      Action will remove issue resolution date and save it in history table.
     </div>
 <% end %>

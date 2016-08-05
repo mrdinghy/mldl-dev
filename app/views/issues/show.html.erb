@@ -1,5 +1,15 @@
 
+<style>
 
+  .modal-addnote, .modal-escalate, .modal-resolve, .modal-reopen {
+    width: 1200px;
+  }
+
+  .modal-agenda {
+    width: 1200px;
+  }
+
+</style>
 
 <% parentstructure = Structure.find(@issue.structure.parent_id) %>
 
@@ -130,12 +140,7 @@
           <div class="panel-body">
 
             <div class="form-horizontal">
-          <div class="form-group">
-          <label class="col-sm-2">Resolution date:</label>
-          <div class="col-sm-10">
-            <%= @issue.resolution_date.strftime("%m/%d/%Y")  if @issue.resolution_date  %>
-          </div>
-        </div>
+
 
         <div class="form-group">
           <label class="col-sm-2">Action Plan</label>
@@ -151,6 +156,21 @@
             <%= @issue.actioncommittee %>
           </div>
         </div>
+
+              <div class="form-group">
+                <label class="col-sm-2">Resolution Description:</label>
+                <div class="col-sm-10">
+                  <%= @issue.resolution  %>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
 </div>
           </div>
         </div>
@@ -182,8 +202,8 @@
 
         <%= link_to 'Resolution', '#resolution_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
     <% else %>
-
-        <%= link_to 'Reopen Issue', new_issueaction_path(:issue_id => @issue.id, :actiontype_id => 1), :class => "btn btn-success" %><br><br>
+        <%= link_to 'Reopen Issue', '#reopen_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+        <%#= link_to 'Reopen Issue', new_issueaction_path(:issue_id => @issue.id, :actiontype_id => 1), :class => "btn btn-success" %><br><br>
     <% end %>
 
     <button class="btn btn-default">Print Issue Form</button><br><br>
@@ -221,7 +241,7 @@
 
 <div class="col-sm-12" style="border-top: #000 solid 1px">
 
-  <h2><span style="color: #999">History</h2>
+  <h2><span style="color: #999">History (Most Recent at Top)</h2>
 
   <table class="table table-striped">
   <tr>
@@ -245,6 +265,9 @@
       <% if action.actiontype_id == 5 %>
           <% fromstructure= Structure.find(action.laststructure_id) %>
           <strong>Issue Escalated from : <%= link_to fromstructure.name, fromstructure  if action.laststructure_id %></strong>  <br>
+      <% end %>
+      <% if action.actiontype_id == 10 %>
+          <strong>Issue Reopened!: </strong>  <br>
       <% end %>
       <%= action.actionbody %></td>
 
@@ -288,11 +311,11 @@
 
 
 <div class="modal fade" id="new_comment_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-addnote">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small>Add Comment</small><br>
+        <small>Add Comment to Issue</small><br>
         <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
       </div>
       <div class="modal-body">
@@ -314,7 +337,7 @@
 
 
 <div class="modal fade" id="escalate_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-escalate">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -336,7 +359,7 @@
 
 
 <div class="modal fade" id="resolution_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-resolve">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -358,17 +381,25 @@
 
 
 
+<div class="modal fade" id="reopen_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-reopen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Reopen Issue</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'reopen', modal: true %>
+      </div>
 
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
 
-
-
-
-
-
-
-
-
-
+    </div>
+  </div>
+</div>
 
 
 
@@ -377,11 +408,11 @@
 
 
 <div class="modal fade" id="new_agenda_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-agenda">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Add to Meeting Agenda</h4>
+        <h4 class="modal-title" id="myModalLabel">Add Issue to Meeting Agenda</h4>
       </div>
       <div class="modal-body">
         <%= render 'addagenda', modal: true %>

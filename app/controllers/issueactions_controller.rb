@@ -37,10 +37,15 @@ class IssueactionsController < ApplicationController
 
     if params[:actiontype_id] == '7'
       issue.resolution_date = DateTime.now
+      issue.resolution = params[:issueaction][:actionbody]
       issue.save
     end
 
-
+    if params[:actiontype_id] == '10'
+      @issueaction.old_resolution_date = issue.resolution_date
+      issue.resolution_date = nil
+      issue.save
+    end
 
 
     @issueaction.save
