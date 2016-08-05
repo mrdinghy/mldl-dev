@@ -16,7 +16,7 @@ class Meeting < ActiveRecord::Base
 
 
 
-  def meeting_id
+  def meetingid
     if !self.real_start.nil?
     mdate = self.real_start.strftime("%F").to_s
 

@@ -21,7 +21,7 @@
       <div class="col-sm-10">
         <%#= f.select :meeting_id, options_for_select(@mymeetings.map{ |c| [c.name, c.real_start.to_s]}),  :include_blank => true %>
         <%#= f.collection_select(:meeting_id, @mymeetings, :id, :real_start.to_s , include_blank: true, :class => "form-control") %>
-        <%= f.select :meeting_id, options_for_select(@mymeetings.collect{|m| [m.meeting_id, m.id]}), {:include_blank => true,:class=>'user-id-widget', size: 5} %>
+        <%= f.select :meeting_id, options_for_select(@mymeetings.collect{|m| [m.meetingid, m.id]}), {:include_blank => true,:class=>'user-id-widget', size: 5} %>
 
       </div>
       <br><BR>
