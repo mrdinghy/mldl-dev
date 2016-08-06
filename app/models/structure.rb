@@ -17,40 +17,21 @@ class Structure < ActiveRecord::Base
 
 
 
-  def current_meetings_held(id)
-    meetings = Meeting.where(:structure_id => id, :meeting_held => :true).count
+  def current_meetings_held
+    meetings = Meeting.where(:structure_id => self.id, :meeting_held => :true).count
 
     return meetings
   end
 
-  def total_issues(id)
-    total = Issue.where('structure_id = ?', id).count
+  def calctotal
+    total = Issue.where('structure_id = ?', self.id).count
     return total
   end
 
-  def open_issues(id)
-    open = Issue.where('structure_id = ? and resolution_date > ?', id, 10.years.ago).count
-    return open
-  end
 
-
-
-  def resolved_issues(id)
-    resolved = Issue.where('structure_id = ? and resolution_date IS NULL', id).count
-    return resolved
-  end
-  def percent_resolved(id)
-    if self.total_issues(id) > 0
-      resolvedpct = (self.resolved_issues(id).to_f / self.total_issues(id).to_f) * 100
-      #total = Issue.where('structure_id = ?', id).count
-      #resolved = Issue.where('structure_id = ? and resolution_date IS NULL', id).count
-      #resolvedpct = resolved / total
-      puts '===============================dfadsfasdf=============================='
-      puts 'total :', self.total_issues(id)
-      puts 'resolved: ', self.resolved_issues(id)
-
-      puts resolvedpct
-      puts '===============================dfadsfasdf=============================='
+  def percent_resolved
+    if self.calctotal > 0
+      resolvedpct = (self.calcresolved.to_f / self.calctotal.to_f) * 100
       return resolvedpct
     else
       return 0
@@ -60,20 +41,27 @@ class Structure < ActiveRecord::Base
 
 
 
-def calcmeets(id)
-  q=Meeting.where('structure_id =?', id).count
+def calcmeets
+  q=Meeting.where('structure_id =?', self.id).count
   return q
 end
 
 
-  def calcopen(id)
-    q=Issue.where('structure_id =? and resolution_date  is NULL', id).count
+  def calcopen
+    q=Issue.where('structure_id =? and resolution_date  is NULL', self.id).count
     return q
   end
 
 
+  def calcescalated
+    q=Issueaction.where('structure_id =? and actiontype_id = ?', self.id, 5).count
+    return q
+  end
 
-
+  def calcresolved
+    q=Issue.where('structure_id =? and resolution_date  is  not NULL', self.id).count
+    return q
+  end
 
 
 

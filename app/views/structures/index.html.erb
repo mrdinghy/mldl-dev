@@ -1,6 +1,6 @@
 <style>
   .cscbox, .dscbox, .cfbox, .blankbox  {
-      min-height: 60px;
+      min-height: 50px;
       padding: 2px;
       margin-top: 8px;
   }
@@ -9,20 +9,20 @@
     background-color: #fff;
     color: #000;
     border: 3px solid #553982;
-    font-size: 18px;
+    font-size: 14px;
 }
   .dscbox {
       background-color: #fff;
       color: #000;
       border: 3px solid #478500;
-      font-size: 18px;
+      font-size: 14px;
   }
 
   .cfbox {
       background-color: #fff;
       color: #000;
       border: 3px solid #CCC;
-      font-size: 18px;
+      font-size: 14px;
   }
 
   .blankbox {
@@ -49,12 +49,12 @@
 
 
             <div class="pull-right">
-            <% if csc.calcmeets(csc) > 0 %>
-                  <%= fa_icon "users", :style => "color: green" %><%= csc.calcmeets(csc.id) %><br>
+            <% if csc.calcmeets > 0 %>
+                  <%= fa_icon "users", :style => "color: green" %><%= csc.calcmeets %><br>
             <% end %>
-              <% if csc.calcopen(csc) > 0 %>
+              <% if csc.calcopen > 0 %>
                   <%= fa_icon "wrench", :style => "color: blue" %>
-            <%= csc.calcopen(csc.id) %>
+            <%= csc.calcopen %>
                   <% end %>
           </div>
 
@@ -67,12 +67,12 @@
                 <strong><%= link_to dsc.name, dsc %></strong>
 
                 <div class="pull-right">
-                  <% if dsc.calcmeets(dsc) > 0 %>
-                      <%= fa_icon "users", :style => "color: green" %><%= dsc.calcmeets(dsc.id) %><br>
+                  <% if dsc.calcmeets > 0 %>
+                      <%= fa_icon "users", :style => "color: green" %><%= dsc.calcmeets %><br>
                   <% end %>
-                  <% if dsc.calcopen(dsc) > 0 %>
+                  <% if dsc.calcopen > 0 %>
                       <%= fa_icon "wrench", :style => "color: blue" %>
-                      <%= dsc.calcopen(dsc.id) %>
+                      <%= dsc.calcopen %>
                   <% end %>
                 </div>
               </div>
@@ -84,12 +84,12 @@
                     <strong><%= link_to cf.name, cf %></strong>
 
                     <div class="pull-right">
-                      <% if cf.calcmeets(cf) > 0 %>
+                      <% if cf.calcmeets > 0 %>
                           <%= fa_icon "users", :style => "color: green" %><%= cf.calcmeets(cf.id) %><br>
                       <% end %>
-                      <% if cf.calcopen(cf) > 0 %>
+                      <% if cf.calcopen > 0 %>
                           <%= fa_icon "wrench", :style => "color: blue" %>
-                          <%= cf.calcopen(cf.id) %>
+                          <%= cf.calcopen %>
                       <% end %>
                     </div>
                   </div>

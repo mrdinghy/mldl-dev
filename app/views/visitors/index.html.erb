@@ -7,7 +7,7 @@
   <div class="col-md-6">
     <div class="panel panel-default">
 
-      <div class="panel-heading">County Status</div>
+      <div class="panel-heading">Status by Structure Organization</div>
 
       <div class="panel-body">
         <table class="table">
@@ -29,6 +29,7 @@
           <th>Percent Resolved</th>
           </tr>
           </thead>
+          <tbody>
           <% @structures.each do |s| %>
 
 
@@ -48,17 +49,19 @@
                   <% end %>
 
                 </td>
-                <td><%= s.current_meetings_held(s.id) %></td>
-                <td><%= s.total_issues(s.id) %></td>
+                <td><%= s.current_meetings_held %></td>
+                <td><%= s.calctotal %></td>
 
-                <td><%= s.open_issues(s.id) %></td>
-                <td><%= s.resolved_issues(s.id) %></td>
+                <td><%= s.calcopen %></td>
+                <td><%= s.calcescalated %></td>
+                <td><%= s.calcresolved %></td>
 
-                <td><%=  number_to_percentage(s.percent_resolved(s.id), precision: 1) %></td>
+                <td><%=  number_to_percentage(s.percent_resolved, precision: 1) %></td>
               </tr>
 
 
           <% end %>
+          </tbody>
         </table>
       </div>
     </div>
@@ -140,7 +143,7 @@
   <div class="col-md-6">
     <div class="panel panel-default">
 
-      <div class="panel-heading">County Status</div>
+      <div class="panel-heading">County Status (based on location of Issue)</div>
 
       <div class="panel-body">
         <table class="table">
@@ -156,20 +159,15 @@
 
               <% districts=District.where('county_id = ?', c.id)  %>
               <% districts.each do |d| %>
-                  <% dtotal= Issue.where('district_id =?', d.id).count %>
-                  <% dopen= Issue.where('district_id =? and status_id = ?', d.id, 1).count %>
-                  <% otherz = [1,2] %>
-                  <% dresolved= Issue.where('district_id =? and status_id = ?', d.id, 2 ).count %>
-                  <% pctresolved= (dresolved.to_f / dtotal.to_f ) * 100  if dresolved > 0 %>
-                  <% if dtotal > 0 %>
+                  <% if d.calctotal > 0 %>
 
                   <tr>
                     <td><%= c.name %></td>
                     <td><%= d.name %></td>
-                    <td><%= dtotal %></td>
-                    <td><%= dopen %></td>
-                    <td><%= dresolved %></td>
-                    <td><%= number_to_percentage(pctresolved, precision: 1)  if dresolved > 0 %>
+                    <td><%= d.calctotal %></td>
+                    <td><%= d.calcopen %></td>
+                    <td><%= d.calcresolved %></td>
+                    <td><%= number_to_percentage(d.percent_resolved, precision: 1)  if d.percent_resolved > 0 %>
                       <%#= dnumber_to_percentage(pctresolved, precision: 1) %></td>
                   </tr>
 <% end %>

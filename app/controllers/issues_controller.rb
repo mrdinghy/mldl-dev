@@ -17,7 +17,7 @@ class IssuesController < ApplicationController
     @issuedocs = SiteDocument.where('documentable_type = ? and documentable_id = ?', 'issue', @issue.id)
     @new_site_document = SiteDocument.new
     parent_id = @issue.structure.parent_id if @issue.structure.parent_id
-    @parent = Structure.find(parent_id)
+    @parent = Structure.find(parent_id) if parent_id
   end
 
   # GET /issues/new
