@@ -11,17 +11,31 @@ width: 1200px;
 </style>
 
 <div class="container widerbox">
-  <div class="col-sm-12">
+  <div class="row">
+    <div class="col-sm-6">
+
+
     <%= link_to 'Return to Structures', structures_path %><br>
+    <h1><span style="color: #999">Structure: </span><%= @structure.name %></h1>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="pull-right">
+      <%= link_to 'New Issue (M)', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
+      <%= link_to 'New Meeting', '#new_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
+      </div>
+    </div>
+
 
 
   </div>
 
+
   <div class="row">
 
-      <div class="col-sm-10">
+      <div class="col-sm-4">
 
-        <div class="col-sm-6">
+
           <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">General</h3>
@@ -30,7 +44,6 @@ width: 1200px;
           <div class="panel-body">
             <div class="form-horizontal">
 
-              <h1><span style="color: #999">Structure: </span><%= @structure.name %></h1>
 
             <div class="form-group">
             <label class="col-sm-3">Type (Level)</label>
@@ -70,94 +83,117 @@ width: 1200px;
           </div>
           </div>
         </div>
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Management (Users)</h3>
+                <%= link_to 'Add Mgmt', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+              </div>
+              <div class="panel-body">
+
+                <% @assignments.each do |a| %>
+                    <%= link_to a.userrole.user.name, a.userrole.user %>  - <%= a.userrole.role.name %><br>
+                <% end %>
+
+
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
 
 
-      <div class="col-sm-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">People (non Users linked to Structure)</h3>
+              <%= link_to 'Add Person', '#new_person_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+            </div>
+            <div class="panel-body">
 
-
-        <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Management (Users)</h3>
-          <%= link_to 'Add Mgmt', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
-        </div>
-          <div class="panel-body">
-
-        <% @assignments.each do |a| %>
-                <%= link_to a.userrole.user.name, a.userrole.user %>  - <%= a.userrole.role.name %><br>
-          <% end %>
-
-
-        </div>
-
-
-        </div>
-
-
-
-
-        <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">People (non Users linked to Structure)</h3>
-        <%= link_to 'Add Person', '#new_person_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
-      </div>
-      <div class="panel-body">
-
-            <table class="table">
-              <thead>
-              <th>Name</th>
-              <th>Title</th>
-              <th>Email</th>
-              <th>Phone</th>
-              </thead>
-              <tbody>
-              <% @members.each do |p| %>
-                <tr>
-                  <td>  <%= link_to p.person.fullname, p.person %> </td>
-                  <td><%= p.person.title %></td>
-                  <td><%= p.person.email %></td>
-                  <td><%= p.person.phone %></td>
-                  </tr>
+              <table class="table">
+                <thead>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Email</th>
+                <th>Phone</th>
+                </thead>
+                <tbody>
+                <% @members.each do |p| %>
+                    <tr>
+                      <td>  <%= link_to p.person.fullname, p.person %> </td>
+                      <td><%= p.person.title %></td>
+                      <td><%= p.person.email %></td>
+                      <td><%= p.person.phone %></td>
+                    </tr>
                 <% end %>
                 </tbody>
               </table>
 
 
-      </div>
+            </div>
 
-      </div>
-      </div>
-      </div>
-
-
-      <div class="col-sm-2">
+          </div>
 
 
 
-
-
-      <%= link_to 'New Issue (M)', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-      <%= link_to 'New Meeting', '#new_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br><br><br>
-
-
-      <%= link_to 'Delete', @structure, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
-
-      </div>
-
-
-
-   </div>
-
-
-
-  <%= render partial: 'issues/issues_table' %>
-
-
-  <% @tabhead = 'Meetings' %>
-  <%= render partial: 'meetings/meetings_table' %>
-
-
+        <%= link_to 'Delete', @structure, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
 </div>
+        <div class="col-sm-8">
+
+
+
+
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#viewissues">Issues</a></li>
+            <li><a data-toggle="tab" href="#viewmeetings">Meetings</a></li>
+
+          </ul>
+
+          <div class="tab-content">
+            <div id="viewissues" class="tab-pane fade in active">
+              <h3><%= @structure.name %> Issues</h3>
+              <%= render partial: 'issues/issues_table' %>
+            </div>
+            <div id="viewmeetings" class="tab-pane fade">
+              <h3><%= @structure.name %> Meetings</h3>
+              <%= render partial: 'meetings/meetings_table' %>
+            </div>
+
+          </div>
+
+
+
+
+
+
+
+
+
+
+        </div>
+  </div>
+
+
+
+
+
+
+
+
+
+      </div>
+
+
+
 
 
 

@@ -12,21 +12,46 @@
 
 <div class="container">
 
+
+
+
+  <div class="row">
+    <div class="col-sm-12">
+
+
+      <%= link_to 'Back to Meetings', meetings_path %><br>
+      <h1>
+        <span style="color: #999">Meeting: </span>Meeting: <%= @meeting.meetingid %>
+        <div class="pull-right">
+         </div>
+
+
+      </h1>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
   <div class="row">
 
-    <%= link_to 'Back to Meetings', meetings_path %><br><br>
-        <div class="col-sm-5">
+
+        <div class="col-sm-4">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">General</h3>
-              <%= link_to 'Edit', edit_meeting_path(@meeting), :class => "btn btn-primary pull-right" %>
+              <%= link_to 'Edit/Set Agenda', edit_meeting_path(@meeting), :class => "btn btn-primary pull-right" %>
             </div>
             <div class="panel-body">
-
-                  <h1>
-                  <%= @meeting.status %>
-
-                  Meeting: <%= @meeting.meetingid %></h1>
 
 
                   <p>
@@ -62,70 +87,120 @@
 
                   </p>
 
+
+
+
+
+              <div class="form-group">
+                <label class="col-sm-2">Documents</label>
+                <div class="col-sm-10">
+                  <table class="table">
+
+                    <% @meetingdocs.each do |doc| %>
+                        <tr>
+
+                          <td>
+                            <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
+                          </td>
+                          <td>
+                            <%= doc.document_updated_at %><br>
+                          </td>
+                        </tr>
+
+                    <% end %>
+                  </table>
+
+                  <%= simple_form_for @new_site_document do |form| %>
+                      <%= form.hidden_field :documentable_id, :value => @meeting.id %>
+                      <%= form.hidden_field :documentable_type, :value => 'meeting' %>
+                      <%= form.input :document, as: :file, :label => false %>
+                      <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+                  <% end %>
+
+                </div>
+              </div>
+
+<div class="pull-right">
+
+              <%= link_to 'Delete', @meeting, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+</div>
             </div>
           </div>
 
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Participants</h3>
+              <%= link_to 'Add Participant', '#new_participant_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+            </div>
+            <div class="panel-body">
+
+              <table class="table">
+                <thead>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Organization</th>
+
+                </thead>
+                <tbody>
+                <% @participants.each do |p| %>
+                    <tr>
+                      <td>  <%= link_to p.person.fullname, p.person %> </td>
+                      <td><%= p.person.title %></td>
+                      <td><%= p.person.email %></td>
+                      <td><%= p.person.phone %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
 
 
+            </div>
 
+          </div>
+            </div>
+
+
+      <div class="col-sm-6">
 
         <div class="panel panel-default">
-          <div class="panel-heading">Attachments</div>
+          <div class="panel-heading">Agenda Issues</div>
           <div class="panel-body">
-            <% @meetingdocs.each do |doc| %>
-                <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
-                <%= doc.document_updated_at %><br>
-            <% end %>
-            <%= simple_form_for @new_site_document do |form| %>
-                <%= form.hidden_field :documentable_id, :value => @meeting.id %>
-                <%= form.hidden_field :documentable_type, :value => 'meeting' %>
-                <%= form.input :document, as: :file %>
-                <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
-            <% end %>
+
+            <table id="agendatable"  class="hover" cellspacing="0" width="100%">
+              <thead>
+              <tr>
+
+                <th>Issue</th>
+                <th>Disputant</th>
+                <th>Community</th>
+
+                <th>District</th>
+                <th>Report</th>
+
+              </tr>
+              </thead>
+
+              <tbody>
+              <% @meetingactions.each do |agenda| %>
+                  <% issue = Issue.find(agenda.issue_id) %>
+                  <% modalid = '#meetingreport-' + agenda.id.to_s %>
+                  <tr>
+
+                    <td><%= link_to issue.name, issue %></td>
+                    <td><%= issue.disputant %></td>
+                    <td><%= issue.community %></td>
+                    <td><%= issue.district.name if issue.district_id %></td>
+                    <td><%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %></td>
+
+
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
           </div>
-          </div>
-
-
-
-
-
-
-
-
-            </div>
-
-
-      <div class="col-sm-5">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Participants</h3>
-          <%= link_to 'Add Participant', '#new_participant_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
-        </div>
-        <div class="panel-body">
-
-          <table class="table">
-            <thead>
-            <th>Name</th>
-            <th>Title</th>
-            <th>Organization</th>
-
-            </thead>
-            <tbody>
-            <% @participants.each do |p| %>
-                <tr>
-                  <td>  <%= link_to p.person.fullname, p.person %> </td>
-                  <td><%= p.person.title %></td>
-                  <td><%= p.person.email %></td>
-                  <td><%= p.person.phone %></td>
-                </tr>
-            <% end %>
-            </tbody>
-          </table>
-
-
         </div>
 
-      </div>
+
       </div>
 
 
@@ -146,7 +221,6 @@
       <button class="btn btn-default">Print Issue Forms</button><br>
 
 
-      <%= link_to 'Delete', @meeting, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
 
       </div>
 
@@ -159,50 +233,7 @@
       </div>
   </div>
 
-<div class="row">
 
-
-<div class="panel panel-default">
-  <div class="panel-heading">Agenda Issues</div>
-  <div class="panel-body">
-
-    <table id="agendatable"  class="hover" cellspacing="0" width="100%">>
-      <thead>
-      <tr>
-
-        <th>Issue</th>
-        <th>Disputant</th>
-        <th>Community</th>
-
-        <th>District</th>
-        <th>Report</th>
-
-      </tr>
-      </thead>
-
-      <tbody>
-      <% @meetingactions.each do |agenda| %>
-          <% issue = Issue.find(agenda.issue_id) %>
-          <% modalid = '#meetingreport-' + agenda.id.to_s %>
-          <tr>
-
-            <td><%= link_to issue.name, issue %></td>
-            <td><%= issue.disputant %></td>
-            <td><%= issue.community %></td>
-            <td><%= issue.district.name if issue.district_id %></td>
-            <td><%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %></td>
-
-
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-
-
-<div>
 
 
 </div>
