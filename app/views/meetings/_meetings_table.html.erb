@@ -29,7 +29,7 @@
         <tbody>
         <% @meetings.each do |meeting| %>
 
-        <% agendaitems = Consideration.where('meeting_id = ?', meeting.id) %>
+        <% agendaitems = Issueaction.where('meeting_id = ? and actiontype = ?', meeting.id, Actiontype::AGENDA) %>
             <tr>
               <td><%= link_to meeting.meetingid, meeting %></td>
               <td>

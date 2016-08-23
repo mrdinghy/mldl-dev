@@ -1,0 +1,66 @@
+
+
+<div style="margin:0px auto;width:460px;">
+  Bars:
+  <div id="chart1" style="border:1px solid #59525B; height: 300px;"></div><br />
+  Stacked bars:
+  <div id="chart2" style="border:1px solid #59525B;"></div><br />
+  Multiple bars:
+  <div id="chart3" style="border:1px solid #59525B;"></div>
+</div>
+
+<!--  Loading js for the charts -->
+<!--- <script src="js/d3.v3.js"></script>
+ <script src="js/rickshaw.min.js"></script>-->
+<script>
+    //single area
+    var graph = new Rickshaw.Graph({
+        renderer: 'bar',
+        element: document.querySelector('#chart1'),
+        series: [ {
+            data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+            color: 'steelblue'
+        } ]
+
+    });
+    graph.render();
+
+    //stacked areas
+    var graph = new Rickshaw.Graph({
+        renderer: 'bar',
+        element: document.querySelector('#chart2'),
+        series: [
+            {
+                data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+                color: '#4682b4'
+            }, {
+                data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+                color: '#9cc1e0'
+
+            } ]
+
+    });
+    graph.render();
+
+    //multiple areas
+    var graph = new Rickshaw.Graph({
+        renderer: 'bar',
+        element: document.querySelector('#chart3'),
+        series: [
+            {
+                data: [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 38 }, { x: 3, y: 30 }, { x: 4, y: 32 } ],
+                color: '#4682b4'
+            }, {
+                data: [ { x: 0, y: 20 }, { x: 1, y: 24 }, { x: 2, y: 19 }, { x: 3, y: 15 }, { x: 4, y: 16 } ],
+                color: '#9cc1e0'
+
+            } ]
+
+    });
+    graph.renderer.unstack = true;
+    graph.render();
+
+
+</script>
+
+

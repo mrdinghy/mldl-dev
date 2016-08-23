@@ -1,0 +1,109 @@
+
+<div class="col-sm-6">
+<canvas id="myChart" width="500" height="500"></canvas>
+</div>
+
+
+<script>
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ["Land","IntBorder","InBorder","Violence","GovtCorrupt","Infrastructure","Security","PublicHealth","Traditional","Other"],
+
+            datasets: [{
+                label: '# of Issues',
+                data: [132,118,127,117,121,100,145,128,137,103],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+
+                borderWidth: 1
+            }]
+        },
+        options: {
+
+        }
+    });
+</script>
+
+
+<div class="col-sm-6">
+  <canvas id="myChartbar" width="500" height="500"></canvas>
+</div>
+
+
+<script>
+    var ctx = document.getElementById("myChartbar");
+    var myChartbar = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Jan","Feb","Mar","Apr","May","Jun","July","Aug"],
+
+            datasets: [
+                {
+                label: '# of Issues',
+                data: [<%= @issuedata %>],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
+
+                ],
+
+                borderWidth: 1
+            }
+                ,
+
+                {
+                    label: 'Resolutions',
+                    data: [<%= @resolved %>],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1.0)',
+                        'rgba(255, 99, 132, 1.0)',
+                        'rgba(255, 99, 132, 1.0)',
+                        'rgba(255, 99, 132, 1.0)',
+                        'rgba(255, 99, 132, 1.0)',
+                        'rgba(255, 99, 132, 1.0)',
+                        'rgba(255, 99, 132, 1.0)',
+                        'rgba(255, 99, 132, 1.0)'
+
+                    ],
+
+                    borderWidth: 1
+                }
+
+
+
+
+
+
+
+            ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+
+            }
+        }
+    });
+</script>

@@ -7,6 +7,11 @@ class Person < ActiveRecord::Base
   has_many :meetings, :through => :participations
 
 
+
+  has_many :mediators, :dependent => :destroy
+  has_many :mediations, :through => :mediators
+
+
   has_many :issues, :foreign_key => :raised_by
 
 

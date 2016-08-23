@@ -3,13 +3,13 @@
 
 
 
-<%= form_for(@assignment) do |f| %>
-    <% if @assignment.errors.any? %>
+<%= form_for(@userrole) do |f| %>
+    <% if @userrole.errors.any? %>
         <div id="error_explanation">
-          <h2><%= pluralize(@assignment.errors.count, "error") %> prohibited this assignment from being saved:</h2>
+          <h2><%= pluralize(@userrole.errors.count, "error") %> prohibited this assignment from being saved:</h2>
 
           <ul>
-            <% @assignment.errors.full_messages.each do |message| %>
+            <% @userrole.errors.full_messages.each do |message| %>
                 <li><%= message %></li>
             <% end %>
           </ul>
@@ -17,26 +17,26 @@
     <% end %>
 
     <div class="field">
-      <%= f.label 'Add Administrator' %><br>
-      <%= f.collection_select(:userrole_id, @alladmins.all, :id, :user, include_blank: true, :class => "form-control") %>
+      <%#= f.label 'Structure Role' %><br>
+      <%#=radio_button(:userrole, :userrole_id, '7') %> Manager<br>
+      <%#=radio_button(:userrole, :userrole_id, '8') %> Administrator<br>
+      <%= f.collection_select(:user_id, @allusers, :id, :name, include_blank: true, :class => "form-control") %>
+      <%#= f.collection_select(:person_id, Person.all, :id, :fullname, include_blank: true, :class => "form-control") %>
+
 
     </div>
 
     <div class="field">
-      <%= f.label 'Add Manager' %><br>
-      <%= f.collection_select(:userrole_id, @allmanagers.all, :id, :user, include_blank: true, :class => "form-control") %>
+      <%= f.label 'Assign Manager' %><br>
+      <%#= select_tag(:userrole_id, @allmanagers, :id, user_id.user.name, include_blank: true, :class => "form-control") %>
+
+      <%#= f.select_tag 'userrole_id', options_from_collection_for_select(@userroles, :id, :user_id, include_blank: true, :class => "form-control") %>
 
     </div>
 
 
 
-
-
-
-
-
-
-
+    <%= hidden_field_tag(:role_id, '2') %>
     <%= hidden_field_tag(:structure_id, @structure.id) %>
     <div class="actions">
       <%= f.submit %>

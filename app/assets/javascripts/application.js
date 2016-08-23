@@ -22,4 +22,8 @@
 //= require jquery.bettertabs
 //= require froala_editor.min
 //= require lists.min
+//= require d3.v3
+//= require rickshaw.min
+//= require Chart
+//= require Chart.bundle
 //= require_tree .

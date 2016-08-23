@@ -1,5 +1,81 @@
 <div class="container">
-  <h2>Dashboard Framework</h2>
+  <h2>Dashboard Options</h2>
+
+
+
+
+
+<div class="row">
+
+  <div class="col-sm-9">
+
+
+
+
+    <ul class="nav nav-tabs">
+      <li class="active"><a data-toggle="tab" href="#viewissues">Map</a></li>
+      <li><a data-toggle="tab" href="#viewmeetings">Bar charts</a></li>
+      <li><a data-toggle="tab" href="#viewmediations">D3 Dash</a></li>
+      <li><a data-toggle="tab" href="#viewchartjs">Chartjs</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="viewissues" class="tab-pane fade in active">
+        <h3>CartoDB Map</h3>
+        <%= render partial: 'cartodbimbed' %>
+      </div>
+      <div id="viewmeetings" class="tab-pane fade">
+        <h3>RiskshawJS Bars</h3>
+        <%= render partial: 'riskshawbars' %>
+      </div>
+      <div id="viewmediations" class="tab-pane fade">
+        <h3> D3 Dashboard</h3>
+        <%= render partial: 'd3dashboard' %>
+      </div>
+      <div id="viewchartjs" class="tab-pane fade">
+        <h3> ChartJS</h3>
+        <%= render partial: 'chartjs' %>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+
+  <div class="col-sm-3">
+<h3>Monthly Activity Report</h3>
+
+
+  <%= form_tag actionreport_path, :method => :get do %>
+      <%= select_tag(:reportmonth, options_for_select(Month.to_a), :include_blank => 'Select Month >') %><br><br>
+
+      <%= select_tag(:reportyear, options_for_select(['2014','2015', '2016']), :include_blank => 'Select Year')  %><br><br>
+      <div class="actions">
+        <%= submit_tag 'Generate', :class => 'btn btn-primary'%>
+      </div>
+  <% end %>
+
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -26,7 +102,9 @@
             <th>Total Issues</th>
           <th>Open</th>
           <th>Resolved</th>
-          <th>Percent Resolved</th>
+            <th>Cancelled</th>
+
+
           </tr>
           </thead>
           <tbody>
@@ -37,26 +115,24 @@
 
               <tr>
                 <td>
-                  <% if s.structuretype_id == 4 %>
+                  <% if s.structuretype == Structuretype::NSC %>
                       <strong><%= link_to s.name, s  %></strong>
-                <% elsif s.structuretype_id == 3 %>
+                <% elsif s.structuretype ==  Structuretype::CSC %>
                   <strong><%= link_to s.name, s  %></strong>
-                <% elsif s.structuretype_id == 2  %>
+                <% elsif s.structuretype ==  Structuretype::DSC  %>
 
                       &nbsp;&nbsp;<%= link_to s.name, s  %>
-                  <% elsif s.structuretype_id == 1  %>
+                  <% elsif s.structuretype ==  Structuretype::CF  %>
                       &nbsp;&nbsp;&nbsp;&nbsp;<em><%= link_to s.name, s  %></em>
                   <% end %>
 
                 </td>
-                <td><%= s.current_meetings_held %></td>
-                <td><%= s.calctotal %></td>
+                <td><%= s.qmeetings(0,0,s.id,0).count %></td>
+                <td><%= s.qissues(0,0,s.id,0).count %></td>
+                <td><%= s.openissues(0,0,s.id,0).count %></td>
+                <td><%= s.resolvedissues(0,0,s.id,0).count %></td>
+                <td><%= s.cancelledissues(0,0,s.id,0).count %></td>
 
-                <td><%= s.calcopen %></td>
-                <td><%= s.calcescalated %></td>
-                <td><%= s.calcresolved %></td>
-
-                <td><%=  number_to_percentage(s.percent_resolved, precision: 1) %></td>
               </tr>
 
 
@@ -109,30 +185,6 @@
 
 
 
-  <table class="table">
-
-    <thead>
-    <th>Structure</th>
-    <th>Date Time</th>
-    <th>Location</th>
-    <th>Issues</th>
-
-    </thead>
-
-
-
-
-
-    <% @upcoming.each do |m| %>
-        <% numissues=Consideration.where('meeting_id = ?', m.id)  %>
-        <tr>
-          <td><%= link_to m.structure.name, m  if m.structure_id %></td>
-          <td><%= m.real_start.strftime("%F") %>  <strong><%= m.real_start.strftime("%H:%M") %></strong></td>
-          <td><%= m.location %></td>
-          <td><%= numissues.count %></td>
-        </tr>
-    <% end %>
-  </table>
 
 
 
@@ -155,24 +207,8 @@
             <th>Resolved</th>
             <th>Percent Resolved</th>
           </thead>
-          <% @counties.each do |c| %>
 
-              <% districts=District.where('county_id = ?', c.id)  %>
-              <% districts.each do |d| %>
-                  <% if d.calctotal > 0 %>
 
-                  <tr>
-                    <td><%= c.name %></td>
-                    <td><%= d.name %></td>
-                    <td><%= d.calctotal %></td>
-                    <td><%= d.calcopen %></td>
-                    <td><%= d.calcresolved %></td>
-                    <td><%= number_to_percentage(d.percent_resolved, precision: 1)  if d.percent_resolved > 0 %>
-                      <%#= dnumber_to_percentage(pctresolved, precision: 1) %></td>
-                  </tr>
-<% end %>
-              <% end %>
-          <% end %>
         </table>
       </div>
     </div>

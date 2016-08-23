@@ -1,0 +1,231 @@
+<p id="notice"><%= notice %></p>
+
+
+<div class="container">
+
+
+
+
+  <div class="row">
+    <div class="col-sm-12">
+
+
+      <%= link_to 'Back to Mediations', mediations_path %><br>
+      <h1>
+        <span style="color: #999">Mediation: </span> <%#= @mediation.issue.name %>
+        <div class="pull-right">
+        </div>
+
+
+      </h1>
+
+    </div>
+  </div>
+
+  <div class="row">
+
+
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">General</h3>
+          <%= link_to 'Edit', edit_mediation_path(@mediation), :class => "btn btn-primary pull-right" %>
+        </div>
+
+        <div class="panel-body">
+
+
+
+
+          <p>
+            <strong>Name:</strong>
+            <%= @mediation.name %>
+          </p>
+
+          <p>
+            <strong>Issue:</strong>
+            <%= @mediation.issue.name %>
+          </p>
+
+          <p>
+            <strong>Structure:</strong>
+            <%= @mediation.issue.structure.name %>
+          </p>
+          <p>
+            <strong>Mediation start:</strong>
+            <%= @mediation.mediation_start %>
+          </p>
+
+          <p>
+            <strong>Mediation end:</strong>
+            <%= @mediation.mediation_end %>
+          </p>
+
+          <p>
+            <strong>Mediation notes:</strong>
+            <%= @mediation.mediation_notes %>
+          </p>
+
+
+          <div class="form-group">
+            <label class="col-sm-2">Documents</label>
+            <div class="col-sm-10">
+              <table class="table">
+
+                <% @mediationdocs.each do |doc| %>
+                    <tr>
+
+                      <td>
+                        <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
+                      </td>
+                      <td>
+                        <%= doc.document_updated_at %><br>
+                      </td>
+                    </tr>
+
+                <% end %>
+              </table>
+
+              <%= simple_form_for @new_site_document do |form| %>
+                  <%= form.hidden_field :documentable_id, :value => @mediation.id %>
+                  <%= form.hidden_field :documentable_type, :value => 'mediation' %>
+                  <%= form.input :document, as: :file, :label => false %>
+                  <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+              <% end %>
+
+            </div>
+          </div>
+
+
+
+
+
+          <%= link_to 'Edit', edit_mediation_path(@mediation) %> |
+          <%= link_to 'Back', mediations_path %>
+
+
+          <div class="pull-right">
+
+            <%= link_to 'Delete', @mediation, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Mediators</h3>
+          <%= link_to 'Add Mediator', '#new_mediator_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+        </div>
+        <div class="panel-body">
+
+          <table class="table">
+            <thead>
+            <th>Name</th>
+            <th>Title</th>
+            <th>Organization</th>
+
+            </thead>
+            <tbody>
+            <% @mediators.each do |m| %>
+                <tr>
+                  <td>  <%= link_to m.person.fullname, m.person %> </td>
+                  <td><%= m.person.title %></td>
+                  <td><%= m.person.email %></td>
+                  <td><%= m.person.phone %></td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+
+
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+
+
+
+
+  <div class="col-sm-2">
+
+    <div class="btn-group-vertical" role="group" aria-label="...">
+
+
+
+
+
+
+      <%= link_to 'Mediation Result', '#mediation_result_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+
+      <button class="btn btn-default">Print Mediation Report</button><br>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+  </div>
+
+</div>
+
+
+
+
+
+<div class="modal fade" id="new_mediator_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-addissue">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Add New Mediator to Meeting Agenda</small><br>
+        <h4 class="modal-title" id="myModalLabel">mediation id</h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'addmediator', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="mediation_result_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-addissue">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Report out from meeting</small><br>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+        <%= render partial: "mediationresults" %>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

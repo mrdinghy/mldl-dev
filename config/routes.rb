@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
 
+  resources :userroles
+  resources :actiontypes
+  resources :mediators
+  resources :mediations
   resources :participations
   resources :assignments
   resources :roles
   resources :scopes
   resources :memberships
+  resources :userroles
   resources :people
   resources :actiontypes
   resources :issueactions
@@ -17,24 +22,20 @@ Rails.application.routes.draw do
   resources :statuses
   resources :categories
   resources :issues
-  resources :issues
+
   resources :organizations
   resources :meetings
   resources :counties
   resources :structures
   resources :districts
-  resources :dbfields
-  resources :dbtables
-  resources :requests
-  resources :sections
-  resources :chapters
-  resources :books
+
+
 
   #resources :searches
-  resources :resources
+
   resources :site_images
   resources :site_documents
-  resources :post_documents
+
   devise_for :users
   resources :posts
   resources  :people_structures
@@ -49,6 +50,11 @@ Rails.application.routes.draw do
   post 'addnote', to: 'issues#addnote', as: 'addnote'
   post 'addperson', to: 'structures#addperson', as: 'addperson'
   get 'adjustroles', to: 'users#adjustroles', as: 'adjustroles'
+  get 'actionreport', to: 'visitors#actionreport', as: 'actionreport'
+  get 'searchissues', to: 'issues#searchissues', as: 'searchissues'
+  get 'issueresults', to: 'issues#searchresults', as: 'issueresults'
+
+  get 'seeder', to: 'issues#seeder', as: 'seeder'
   root 'visitors#index'
 
 

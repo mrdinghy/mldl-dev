@@ -69,6 +69,6 @@ class ActiontypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def actiontype_params
-      params.require(:actiontype).permit(:name)
+      params.require(:actiontype).permit(:name, :usedby)
     end
 end

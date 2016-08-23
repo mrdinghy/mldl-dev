@@ -34,6 +34,8 @@ class SiteDocumentsController < ApplicationController
       d = Meeting.find(did)
     elsif dtype == 'issue'
       d = Issue.find(did)
+    elsif dtype == 'mediation'
+      d = Mediation.find(did)
     end
 
 

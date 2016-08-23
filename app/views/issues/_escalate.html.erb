@@ -15,7 +15,7 @@
     <%= hidden_field_tag(:issue_id, @issue.id) %>
     <%= hidden_field_tag(:parent_id, @issue.structure.parent_id) %>
     <%= hidden_field_tag(:fromissue, true) %>
-    <%= hidden_field_tag(:actiontype_id, 5) %>
+    <%= hidden_field_tag(:actiontype,  Actiontype::ESCALATED) %>
 
 
 <%# Added Bootstrap classes, and help-block container for error messages %>

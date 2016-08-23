@@ -6,6 +6,7 @@ class CreatePeople < ActiveRecord::Migration
       t.string :phone
       t.string :title
       t.string :email
+      t.integer :organization_id
 
       t.timestamps null: false
     end

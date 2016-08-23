@@ -1,0 +1,106 @@
+<div class="col-sm-3">
+  <div class="col-sm-12 cscbox">
+    <strong><%= link_to csc.name, csc %></strong>
+
+
+
+
+  </div>
+  <% dsc_structures.each do |dsc| %>
+      <% cf_structures = Structure.where('district_id = ? and structuretype_id = ?', dsc.district_id, 1 ) %>
+      <div class="col-sm-2">&nbsp;</div>
+
+      <div class="col-sm-10 dscbox">
+        <strong><%= link_to dsc.name, dsc %></strong>
+
+        <%= render partial: "structuretablerow", locals: {s: dsc} %>
+      </div>
+
+      <% cf_structures.each do |cf| %>
+          <div class="col-sm-4">&nbsp;</div>
+
+          <div class="col-sm-8 cfbox">
+            <strong><%= link_to cf.name, cf %></strong>
+
+            <%= render partial: "structuretablerow", locals: {s: cf} %>
+          </div>
+      <% end %>
+
+  <% end %>
+
+</div>
+
+
+
+<tr>
+  <td>
+    <% if s.structuretype_id == 4 %>
+        <strong><%= link_to s.name, s  %></strong>
+    <% elsif s.structuretype_id == 3 %>
+        <strong><%= link_to s.name, s  %></strong>
+    <% elsif s.structuretype_id == 2  %>
+
+        &nbsp;&nbsp;<%= link_to s.name, s  %>
+    <% elsif s.structuretype_id == 1  %>
+        &nbsp;&nbsp;&nbsp;&nbsp;<em><%= link_to s.name, s  %></em>
+    <% end %>
+
+  </td>
+  <td><%= s.current_meetings_held(s.id) %></td>
+  <td><%= s.total_issues(s.id) %></td>
+
+  <td><%= s.open_issues(s.id) %></td>
+  <td><%= s.escalated_issues(s.id) %></td>
+  <td><%= s.resolved_issues(s.id) %></td>
+
+  <td><%=  number_to_percentage(s.percent_resolved(s.id), precision: 1) %></td>
+</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="pull-right">
+  <% if s.calcmeets(s) > 0 %>
+      <%= fa_icon "users", :style => "color: green" %><%= s.calcmeets(csc.id) %><br>
+  <% end %>
+  <% if s.calcopen(s) > 0 %>
+      <%= fa_icon "wrench", :style => "color: blue" %>
+      <%= s.calcopen(s.id) %>
+  <% end %>
+</div>
+
+
+
+

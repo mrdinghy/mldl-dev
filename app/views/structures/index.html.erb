@@ -41,7 +41,7 @@
   <div class="row">
     <% @csc_structures.each do |csc| %>
 
-        <% dsc_structures = Structure.where('county_id = ? and structuretype_id = ?', csc.county_id, 2 ) %>
+        <% dsc_structures = Structure.where('county_id = ? and structuretype = ?', csc.county_id, Structuretype::DSC ) %>
 
         <div class="col-sm-3">
           <div class="col-sm-12 cscbox">
@@ -49,31 +49,27 @@
 
 
             <div class="pull-right">
-            <% if csc.calcmeets > 0 %>
-                  <%= fa_icon "users", :style => "color: green" %><%= csc.calcmeets %><br>
-            <% end %>
-              <% if csc.calcopen > 0 %>
+                 <%= fa_icon "users", :style => "color: green" %>
+              <%= csc.qmeetings(0,0,csc.id,0).count %><br>
                   <%= fa_icon "wrench", :style => "color: blue" %>
-            <%= csc.calcopen %>
-                  <% end %>
+                <%= csc.openissues(0,0,csc.id,0).count %>
           </div>
 
          </div>
           <% dsc_structures.each do |dsc| %>
-              <% cf_structures = Structure.where('district_id = ? and structuretype_id = ?', dsc.district_id, 1 ) %>
+              <% cf_structures = Structure.where('district_id = ? and structuretype = ?', dsc.district_id, Structuretype::CF ) %>
               <div class="col-sm-2">&nbsp;</div>
 
               <div class="col-sm-10 dscbox">
                 <strong><%= link_to dsc.name, dsc %></strong>
 
                 <div class="pull-right">
-                  <% if dsc.calcmeets > 0 %>
-                      <%= fa_icon "users", :style => "color: green" %><%= dsc.calcmeets %><br>
-                  <% end %>
-                  <% if dsc.calcopen > 0 %>
+
+                      <%= fa_icon "users", :style => "color: green" %>
+                  <%= dsc.qmeetings(0,0,dsc.id,0).count %><br>
+
                       <%= fa_icon "wrench", :style => "color: blue" %>
-                      <%= dsc.calcopen %>
-                  <% end %>
+                      <%= dsc.openissues(0,0,dsc.id,0).count %>
                 </div>
               </div>
 
@@ -84,13 +80,11 @@
                     <strong><%= link_to cf.name, cf %></strong>
 
                     <div class="pull-right">
-                      <% if cf.calcmeets > 0 %>
-                          <%= fa_icon "users", :style => "color: green" %><%= cf.calcmeets(cf.id) %><br>
-                      <% end %>
-                      <% if cf.calcopen > 0 %>
-                          <%= fa_icon "wrench", :style => "color: blue" %>
-                          <%= cf.calcopen %>
-                      <% end %>
+                      <%= fa_icon "users", :style => "color: green" %>
+                      <%= cf.qmeetings(0,0,cf.id,0).count %><br>
+
+                      <%= fa_icon "wrench", :style => "color: blue" %>
+                      <%= cf.openissues(0,0,cf.id,0).count %>
                     </div>
                   </div>
               <% end %>

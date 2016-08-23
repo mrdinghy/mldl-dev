@@ -11,16 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160805194227) do
+ActiveRecord::Schema.define(version: 20160822214711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "actiontypes", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "appissues", force: :cascade do |t|
     t.string   "uuid"
@@ -96,13 +90,6 @@ ActiveRecord::Schema.define(version: 20160805194227) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "considerations", force: :cascade do |t|
-    t.integer  "meeting_id"
-    t.integer  "issue_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "counties", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -117,17 +104,18 @@ ActiveRecord::Schema.define(version: 20160805194227) do
   end
 
   create_table "issueactions", force: :cascade do |t|
-    t.integer  "actiontype_id"
+    t.integer  "actiontype"
     t.integer  "meeting_id"
+    t.integer  "mediation_id"
     t.integer  "organization_id"
     t.integer  "issue_id"
     t.text     "actionbody"
     t.integer  "user_id"
     t.integer  "structure_id"
+    t.datetime "old_resolution_date"
+    t.integer  "laststructure_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.integer  "laststructure_id"
-    t.datetime "old_resolution_date"
   end
 
   create_table "issues", force: :cascade do |t|
@@ -136,12 +124,11 @@ ActiveRecord::Schema.define(version: 20160805194227) do
     t.integer  "structure_id"
     t.integer  "district_id"
     t.string   "location"
-    t.integer  "status_id"
     t.integer  "manager_id"
     t.integer  "scope_id"
     t.text     "status_note"
     t.text     "actionplan"
-    t.datetime "resolution_date"
+    t.date     "resolution_date"
     t.string   "disputant"
     t.string   "community"
     t.integer  "category_id"
@@ -149,9 +136,26 @@ ActiveRecord::Schema.define(version: 20160805194227) do
     t.integer  "raised_by"
     t.text     "resolution"
     t.text     "actioncommittee"
+    t.date     "cancelled_at"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.date     "established_at"
+  end
+
+  create_table "mediations", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "issue_id"
+    t.datetime "mediation_start"
+    t.datetime "mediation_end"
+    t.text     "mediation_notes"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "mediators", force: :cascade do |t|
+    t.integer  "person_id"
+    t.integer  "mediation_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "meetings", force: :cascade do |t|
@@ -179,9 +183,9 @@ ActiveRecord::Schema.define(version: 20160805194227) do
 
   create_table "organizations", force: :cascade do |t|
     t.string   "name"
+    t.integer  "organizationtype_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.integer  "organizationtype_id"
   end
 
   create_table "organizationtypes", force: :cascade do |t|
@@ -203,9 +207,9 @@ ActiveRecord::Schema.define(version: 20160805194227) do
     t.string   "phone"
     t.string   "title"
     t.string   "email"
+    t.integer  "organization_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.integer  "organization_id"
   end
 
   create_table "post_translations", force: :cascade do |t|
@@ -288,15 +292,9 @@ ActiveRecord::Schema.define(version: 20160805194227) do
     t.datetime "image_updated_at"
   end
 
-  create_table "statuses", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "structures", force: :cascade do |t|
     t.string   "name"
-    t.integer  "structuretype_id"
+    t.integer  "structuretype"
     t.integer  "district_id"
     t.integer  "county_id"
     t.integer  "parent_id"
@@ -305,18 +303,12 @@ ActiveRecord::Schema.define(version: 20160805194227) do
     t.datetime "updated_at",       null: false
   end
 
-  create_table "structuretypes", force: :cascade do |t|
-    t.string   "name"
-    t.string   "code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "userroles", force: :cascade do |t|
     t.integer  "user_id"
+    t.integer  "structure_id"
     t.integer  "role_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "users", force: :cascade do |t|

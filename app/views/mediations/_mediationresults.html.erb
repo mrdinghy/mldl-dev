@@ -1,0 +1,68 @@
+v
+
+
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+
+
+<%# thisissue = Issue.find(issue_id) %>
+
+
+<%= form_for(@issueaction) do |f| %>
+    <div class="form-horizontal">
+      <% if @issueaction.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@issueaction.errors.count, "error") %> prohibited this action from being saved:</h2>
+
+            <ul>
+              <% @issueaction.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+      <% end %>
+      <h3>Mediation: <%= @mediation.issue.name %></h3>
+      <%= hidden_field_tag(:mediation_id, @mediation.id) %>
+      <%= hidden_field_tag(:issue_id, @mediation.issue_id) %>
+      <%= hidden_field_tag(:parent_id, @mediation.issue.structure.parent_id) %>
+
+      <%= hidden_field_tag(:structure_id, @mediation.issue.structure_id) %>
+      <%= hidden_field_tag(:frommediation, 1) %>
+
+      <div class="row">
+        <div class="col-sm-9">
+          Report Notes from Mediation for this Issue:<br>
+
+          <%= f.text_area :actionbody, cols: "100", rows: "12" %>
+
+
+        </div>
+
+        <div class="col-sm-3">
+          <div style="font-size: 16px">
+
+            <h3>Mediation Result</h3>
+
+
+
+
+            <%= radio_button :actiontype, 'Resolved', Actiontype::MEDIATION_RESULT_RESOLVED %> Resolved<br>
+            <%= radio_button(:actiontype,  'Ongoing', Actiontype::MEDIATION_RESULT_ONGOING) %> Ongoing<br>
+            <%= radio_button(:actiontype,  'Escalate Issue', Actiontype::MEDIATION_RESULT_ESCALATED) %> Escalate Issue<br>
+            <%= radio_button(:actiontype,  'Cancel Issue', Actiontype::MEDIATION_RESULT_CANCELLED) %> Cancel Issue<br>
+
+
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="pull-right"><%= f.submit :class => "btn btn-primary" %></div>
+      <br><br>
+    </div>
+<% end %>
+

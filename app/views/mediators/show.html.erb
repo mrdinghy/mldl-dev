@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @mediator.person_id %>
+</p>
+
+<p>
+  <strong>Mediation:</strong>
+  <%= @mediator.mediation_id %>
+</p>
+
+<%= link_to 'Edit', edit_mediator_path(@mediator) %> |
+<%= link_to 'Back', mediators_path %>

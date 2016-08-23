@@ -1,0 +1,82 @@
+
+
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+
+
+<% thisissue = Issue.find(issue_id) %>
+<div class="panel panel-default">
+
+  <div class="panel-heading"><h2><%= @panelheader %></h2>
+    <%if params[:action] == "edit" %><h2><strong><%= @mediation.name %></strong></h2><% end %></div>
+
+  <div class="panel-body">
+
+
+
+    <%= simple_form_for @mediation do |f| %>
+        <div class="form-horizontal">
+          <% if @mediation.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(@mediation.errors.count, "error") %> prohibited this mediation from being saved:</h2>
+
+                <ul>
+                  <% @mediation.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+          <% end %>
+
+
+
+          <div class="field">
+            <%= f.label :name %><br>
+            <%= f.text_field :name %>
+          </div>
+          <div class="field">
+            <%= f.label :issue_id %><br>
+            <%= f.number_field :issue_id %>
+          </div>
+          <div class="form-group">
+            <%= f.label 'Mediation Start', :class => "col-sm-2 control-label" %>
+            <div class='col-sm-1 input-group date' id='mediationstart'>
+              <%= f.input :mediation_start, :as => :datetime_picker, :class => "form-control", :label => false %>
+              <%#= f.input :real_start, as: :date_time_picker %>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+              $(function () {
+                  $('#mediationstart').datetimepicker();
+              });
+          </script>
+
+
+          <div class="form-group">
+            <%= f.label 'Completion End', :class => "col-sm-2 control-label" %>
+            <div class='col-sm-1 input-group date' id='mediationend'>
+              <%= f.input :mediation_end, :as => :datetime_picker, :class => "form-control", :label => false %>
+
+            </div>
+          </div>
+          <script type="text/javascript">
+              $(function () {
+                  $('#mediationend').datetimepicker();
+              });
+          </script>
+
+
+          <div class="field">
+            <%= f.label :mediation_notes %><br>
+            <%= f.text_area :mediation_notes %>
+          </div>
+          <div class="actions">
+            <%= f.submit %>
+          </div>
+    <% end %>
+
+
+</div>
+      </div>
+    </div>

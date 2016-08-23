@@ -6,12 +6,11 @@ class CreateIssues < ActiveRecord::Migration
       t.integer :structure_id
       t.integer :district_id
       t.string :location
-      t.integer :status_id
       t.integer :manager_id
       t.integer :scope_id
       t.text :status_note
       t.text :actionplan
-      t.datetime :resolution_date
+      t.date :resolution_date
       t.string :disputant
       t.string :community
       t.integer :category_id
@@ -19,6 +18,7 @@ class CreateIssues < ActiveRecord::Migration
       t.integer :raised_by
       t.text :resolution
       t.text :actioncommittee
+      t.date :cancelled_at
 
 
       t.timestamps null: false

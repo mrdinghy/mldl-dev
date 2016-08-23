@@ -11,14 +11,49 @@ class IssuesController < ApplicationController
   # GET /issues/1.json
   def show
     @myactions = Issueaction.where('issue_id=?', @issue.id).order('created_at DESC')
+    @mymediations = Mediation.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymeetings = Meeting.where('structure_id=?', @issue.structure_id)
     @raisedby = Person.find(@issue.raised_by) if @issue.raised_by
     @issueaction = Issueaction.new
+    @mediation = Mediation.new
     @issuedocs = SiteDocument.where('documentable_type = ? and documentable_id = ?', 'issue', @issue.id)
     @new_site_document = SiteDocument.new
     parent_id = @issue.structure.parent_id if @issue.structure.parent_id
     @parent = Structure.find(parent_id) if parent_id
   end
+
+
+  def searchissues
+
+    @allcategories = Category.all
+    @allscopes= Scope.all
+    @allstructures = Structure.order(:id)
+    @alldistricts = District.all
+    @allpersons = Person.all
+    @allusers = User.all
+
+
+  end
+
+  def searchresults
+
+    searchterm = params[:search_term]
+    searchresults = Issue.all
+    searchresults = Issue.where('category_id in (?)', params[:category_ids]) if !params[:category_ids].blank?
+    searchresults = Issue.where('structure_id in (?)', params[:structure_ids]) if !params[:structure_ids].blank?
+    searchresults = Issue.where('district_id in (?)', params[:district_ids]) if !params[:district_ids].blank?
+    searchresults = Issue.where('organization_id in (?)', params[:organization_ids]) if !params[:organization_ids].blank?
+    searchresults = Issue.where('name like ? or description like ? or community like  ? ', "%#{searchterm}%", "%#{searchterm}%", "%#{searchterm}%") if !params[:search_term].blank?
+
+    @issues = searchresults
+    render 'index'
+  end
+
+
+
+
+
+
 
   # GET /issues/new
   def new
@@ -50,7 +85,7 @@ class IssuesController < ApplicationController
     if params[:structure_id]
        structure = Structure.find(params[:structure_id])
       @issue.structure_id = params[:structure_id]
-      @issue.status_id=1
+
       #Issueaction.create(structure_id: structure.id, issue_id: @issue.id, actiontype: 1, user_id: current_user.id)
     end
 
@@ -84,18 +119,21 @@ class IssuesController < ApplicationController
   # PATCH/PUT /issues/1.json
   def update
 
-
-    if params[:addraiser]
-      peep=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email], title: params[:title])
-
-
-      @issue.raised_by = peep.id
+    @issue = Issue(issue_params)
 
 
 
-    end
+   # if params[:addraiser]
+    #  peep=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email], title: params[:title])
+
+
+     # @issue.raised_by = peep.id
+
+
+
+    #end
     puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts @issue.raised_by
+    puts @issue
 
     @issue.save
 
@@ -167,6 +205,138 @@ class IssuesController < ApplicationController
 
 
 
+  def seeder
+    struct=7
+    Issue.where('id > 108').destroy_all
+    Meeting.where('id > 28').destroy_all
+    Issueaction.where('id > 0').destroy_all
+
+    self.seeder2(7)
+    self.seeder2(8)
+    self.seeder2(9)
+    self.seeder2(10)
+    self.seeder2(11)
+    self.seeder2(12)
+    self.seeder2(13)
+
+render 'index'
+
+  end
+
+
+
+  def seeder2(struct)
+
+
+    self.seedmeeting(1,struct)
+    self.seedmeeting(2,struct)
+    self.seedmeeting(3,struct)
+    self.seedmeeting(4,struct)
+    self.seedmeeting(5,struct)
+    self.seedmeeting(6,struct)
+    self.seedmeeting(7,struct)
+    self.seedmeeting(8,struct)
+
+    self.seedagendas(1,struct)
+
+
+
+
+
+
+
+  end
+
+def seedagendas(m,struct)
+
+  meets = Meeting.where('structure_id = ?', struct)
+  meets.each do |sm|
+    agendadate=sm.real_start - 3.days
+    decdate = sm.real_start
+    issues2 = Issue.where('extract(month from created_at) = ? and structure_id = ?', m,struct)
+    issues2.each do |i2|
+      agenda=Issueaction.create(issue_id: i2.id, actiontype: 2, structure_id: struct, meeting_id: sm, actionbody: 'added to meeting', user_id: rand(2..5))
+
+      agenda.created_at = agendadate
+      agenda.save!
+
+
+      outcome = [34,35,36,37,38].sample
+
+      if outcome = 35
+      agenda=Issueaction.create(issue_id: i2.id, actiontype: 35, structure_id: struct, meeting_id: sm, actionbody: 'resolved at meeting', user_id: rand(2..5))
+
+      i2.resolution_date = decdate
+      i2.save
+
+      agenda.created_at = decdate
+      agenda.save!
+      end
+
+
+      if outcome = 34
+        agenda=Issueaction.create(issue_id: i2.id, actiontype: 34, structure_id: struct, meeting_id: sm, actionbody: 'unresolved at meeting', user_id: rand(2..5))
+
+        agenda.created_at = sm.real_start
+        agenda.save!
+      end
+
+      if outcome = 38
+        agenda=Issueaction.create(issue_id: i2.id, actiontype: 38, structure_id: struct, meeting_id: sm, actionbody: 'unresolved at meeting', user_id: rand(2..5))
+
+        agenda.created_at = sm.real_start
+        agenda.save!
+      end
+
+
+
+
+
+
+
+    end
+  end
+end
+
+
+  def seedmeeting(m,structure_id)
+    meeting1 = Meeting.create(name: 'weekly meeting', location: 'Meeting House', real_start: DateTime.new(2016,m,rand(1..27),9,0,0), structure_id: structure_id)
+
+    Meeting.update(meeting1, real_end: meeting1.real_start + 1.hours)
+    array = [1, 2, 3, 4, 5, 6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    array.each { |x|
+      self.seedissue(m,structure_id)
+    }
+
+
+
+  end
+
+
+
+  def seedissue(m,structure_id)
+  newissue=Issue.create(
+      name: 'Test Issue lice presence in Wee-Gbeyi District',
+      description: 'Mob violence in Wee-Gbeyi district over the past few years, Wee-Gbeyi DSC members reported on limited security personnel presence in the district With the history',
+      structure_id: structure_id,
+      district_id: rand(12..17),
+      scope_id: rand(1..5),
+      actionplan: 'Referred to CSC for redress in two months',
+      disputant: 'All citizens of Wee-Gbeyi',
+      community: 'Test community',
+      category_id: rand(1..10),
+      old_id: '2015-11-CF-XX-00168',
+      actioncommittee: 'DSC leadership')
+
+  newissue.created_at = DateTime.new(2016,m,22,9,0,0)
+    newissue.save!
+
+
+
+
+
+
+end
 
 
 
@@ -179,7 +349,7 @@ class IssuesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
       params.require(:issue).permit(:name, :description, :structure_id, :community, :yourname, :district_id, :location, :status_id, :status_note,
-                                    :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee )
+                                    :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, structure_ids: [] )
     end
 end
 

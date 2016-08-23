@@ -5,22 +5,22 @@ class StructuresController < ApplicationController
   # GET /structures.json
   def index
     @nsc = Structure.where('structuretype_id =?', 4)
-    @csc_structures = Structure.where('structuretype_id =?', 3)
+    @csc_structures = Structure.where('structuretype =?', Structuretype::CSC)
   end
 
   # GET /structures/1
   # GET /structures/1.json
   def show
     @issues= Issue.where('structure_id = ?', @structure.id)
+    @mediations = Mediation.all
     @members= Membership.where('structure_id = ?', @structure.id)
     @meetings = Meeting.where('structure_id = ?', @structure.id)
     @parent = Structure.find(@structure.parent_id) if @structure.parent_id
-    @assignments = Assignment.where('structure_id = ?', @structure.id)
-    @assignment = Assignment.new
+    @userroles = Userrole.where('structure_id = ?', @structure.id)
 
-    @alladmins = Userrole.where('role_id = ?', 2)
-    @allmanagers = Userrole.where('role_id = ?', 1)
-
+    @allusers = User.all
+    #@allmanagers = Userrole.where('role_id = ?', 1)
+    @userrole = Userrole.new
 
     @issue = Issue.new
     @meeting = Meeting.new
@@ -94,6 +94,6 @@ class StructuresController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def structure_params
-      params.require(:structure).permit(:name, :structuretype_id, :district_id, :county_id, :parent_id, :default_location)
+      params.require(:structure).permit(:name, :structuretype, :district_id, :county_id, :parent_id, :default_location)
     end
 end

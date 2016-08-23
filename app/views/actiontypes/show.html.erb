@@ -5,5 +5,10 @@
   <%= @actiontype.name %>
 </p>
 
+<p>
+  <strong>Usedby:</strong>
+  <%= @actiontype.usedby %>
+</p>
+
 <%= link_to 'Edit', edit_actiontype_path(@actiontype) %> |
 <%= link_to 'Back', actiontypes_path %>

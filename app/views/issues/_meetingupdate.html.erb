@@ -17,11 +17,11 @@
     <%= hidden_field_tag(:actiontype_id, 3) %>
 
 
-    <%=radio_button("actiontype", "receive_newsletter", "1") %> Update w/comment<br>
-       <%=radio_button("actiontype", "receive_newsletter", "2") %> Table to next meeting<br>
-    <%=radio_button("actiontype", "receive_newsletter", "3") %> Transfer to Structure<br>
-    <%=radio_button("actiontype", "receive_newsletter", "4") %> Resolve<br>
-
+    <%=radio_button("actiontype", Actiontype::MEETING_RESULT_RESOLVED) %> Resolved<br>
+       <%=radio_button("actiontype",  Actiontype::MEETING_RESULT_ONGOING) %> Ongoing<br>
+    <%=radio_button("actiontype",  Actiontype::MEETING_RESULT_ESCALATED) %> Escalate Issue<br>
+    <%=radio_button("actiontype",  Actiontype::MEETING_RESULT_MEDIATION) %> Send to Mediation<br>
+    <%=radio_button("actiontype",  Actiontype::MEETING_RESULT_CANCELLED, "4") %> Cancel Issue<br>
 
 
 

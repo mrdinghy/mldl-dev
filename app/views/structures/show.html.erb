@@ -48,7 +48,7 @@ width: 1200px;
             <div class="form-group">
             <label class="col-sm-3">Type (Level)</label>
             <div class="col-sm-9">
-            <strong> <%= @structure.structuretype.name if @structure.structuretype_id %></strong>
+            <strong> <%= @structure.structuretype_humanize if @structure.structuretype %></strong>
             </div>
             </div>
 
@@ -91,8 +91,8 @@ width: 1200px;
               </div>
               <div class="panel-body">
 
-                <% @assignments.each do |a| %>
-                    <%= link_to a.userrole.user.name, a.userrole.user %>  - <%= a.userrole.role.name %><br>
+                <% @userroles.each do |a| %>
+                    <%= link_to a.user.name, a.user %>  - <%= a.role.name %><br>
                 <% end %>
 
 
@@ -155,7 +155,7 @@ width: 1200px;
           <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#viewissues">Issues</a></li>
             <li><a data-toggle="tab" href="#viewmeetings">Meetings</a></li>
-
+            <li><a data-toggle="tab" href="#viewmediations">Mediations</a></li>
           </ul>
 
           <div class="tab-content">
@@ -167,7 +167,10 @@ width: 1200px;
               <h3><%= @structure.name %> Meetings</h3>
               <%= render partial: 'meetings/meetings_table' %>
             </div>
-
+            <div id="viewmediations" class="tab-pane fade">
+              <h3><%= @structure.name %> Mediations</h3>
+              <%= render partial: 'mediations/mediations_table' %>
+            </div>
           </div>
 
 

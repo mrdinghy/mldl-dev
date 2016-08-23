@@ -20,7 +20,6 @@
     <th></th>
     <th>Name</th>
     <% if @structure.nil? %><th>Structure</th> <% end %>
-    <th>Status</th>
     <th>Category</th>
 
     <th>District</th>
@@ -48,7 +47,6 @@
               </td>
         <td><%= issue.name %></td>
         <% if @structure.nil? %><td><%= issue.structure.name  if issue.structure_id %></td><% end %>
-        <td><%= issue.status.name if issue.status_id %></td>
         <td><%= issue.category.name if issue.category_id %></td>
         <td><%= issue.district.name if issue.district_id %></td>
         <td><%= issue.disputant %></td>

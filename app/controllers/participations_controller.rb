@@ -29,7 +29,7 @@ class ParticipationsController < ApplicationController
     meeting=Meeting.find(params[:meeting_id])
     @participation.meeting_id = params[:meeting_id]
     if params[:addparticipant]
-      part=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email])
+      peep=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email])
       @particiaption.person_id = peep.id
     end
 

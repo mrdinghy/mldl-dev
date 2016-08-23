@@ -10,7 +10,7 @@ class MeetingsController < ApplicationController
   # GET /meetings/1
   # GET /meetings/1.json
   def show
-    @meetingactions = Issueaction.where('meeting_id = ? and actiontype_id = ?', @meeting.id, 2)
+    @meetingactions = Issueaction.where('meeting_id = ? and actiontype = ?', @meeting.id, Actiontype::AGENDA)
     @participants = Participation.where('meeting_id = ?', @meeting.id)
     #@mymeetings = Meeting.where('structure_id=?', @meeting.structure_id)
     @participation = Participation.new
@@ -59,14 +59,13 @@ class MeetingsController < ApplicationController
 
 
  issuesadded =params[:meeting][:issue_ids].reject { |e| e.to_s.empty? }
- Issueaction.where('actiontype_id = 2 and meeting_id = ? and issue_id in (?)', params[:id], issuesadded).destroy_all
-puts '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+ Issueaction.where('actiontype = ? and meeting_id = ? and issue_id in (?)', Actiontype::AGENDA, params[:id], issuesadded).destroy_all
 
 
  if params[:meeting][:issue_ids]
         issuesadded.each do |i|
 
-        Issueaction.create(meeting_id: @meeting.id, issue_id: i, actiontype_id: 2)
+        Issueaction.create(meeting_id: @meeting.id, structure_id: @meeting.structure_id, issue_id: i, actiontype: Actiontype::AGENDA)
       end
     end
 
@@ -90,6 +89,14 @@ puts '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
       format.json { head :no_content }
     end
   end
+
+
+
+
+
+
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

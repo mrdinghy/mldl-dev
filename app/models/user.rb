@@ -10,13 +10,19 @@ class User < ActiveRecord::Base
   #belongs_to :person
 
 
-  has_many :assignments, :dependent => :destroy
-  has_many :structures, :through => :assignments
 
 
   has_many :userroles, :dependent => :destroy
   has_many :roles, :through => :userroles
+  has_many :structures, :through => :userroles
 
 
+  has_many :issueactions, :dependent => :destroy
+  has_many :issues, :through => :issueactions
+
+  def namesake
+    namesake = self.name
+    return namesake
+  end
 
 end

@@ -1,3 +1,38 @@
+
+
+
+
+
+<script>
+
+    $('#new_meetingissue_modal').on('submit', function() {
+        $('#new_report_model').modal('hide');
+    })
+
+    $('#meetingreport-x').on('submit', function() {
+        $('#new_report_model').modal('hide');
+    })
+
+    <% @meetingactions.each do |agenda| %>
+    <% modalid = '#meetingreport-' + agenda.id.to_s %>
+    $('<%= modalid %>').on('submit', function() {
+        $('#new_report_model').modal('hide');
+    })
+    <% end %>
+
+    $(document).ready(function() {
+        $('#agendatable').DataTable();
+    } );
+</script>
+
+
+
+
+
+
+
+
+
 <style>
 
   .modal-addperson {
@@ -7,6 +42,25 @@
   .modal-addissue {
     width: 1200px;
   }
+
+
+  <%# @meetingactions.each do |agenda| %>
+
+  <%# issue = Issue.find(agenda.issue_id) %>
+  <%# modalid = '#meetingreport-' + agenda.id.to_s %>
+
+  .<%#= modalid %>
+
+  <%# end %>
+
+
+
+
+
+
+
+
+
 
 </style>
 
@@ -83,11 +137,11 @@
                   <p>
                   <strong>Structure:</strong>
                   <%= link_to @meeting.structure do %><%= @meeting.structure.name %><% end %>
-                  <%= @meeting.structure.structuretype.name %>
+                  <%= @meeting.structure.structuretype_humanize %>
 
                   </p>
 
-
+              <a data-toggle="modal" class="btn btn-default" href="#meetingreport-18">Report</a>
 
 
 
@@ -172,7 +226,7 @@
 
                 <th>Issue</th>
                 <th>Disputant</th>
-                <th>Community</th>
+                <th>Meeting Results</th>
 
                 <th>District</th>
                 <th>Report</th>
@@ -182,15 +236,29 @@
 
               <tbody>
               <% @meetingactions.each do |agenda| %>
-                  <% issue = Issue.find(agenda.issue_id) %>
-                  <% modalid = '#meetingreport-' + agenda.id.to_s %>
+                  <% issue = Issue.find(agenda.issue.id) %>
+                  <% results = Issueaction.where('issue_id =? and meeting_id = ? and actiontype > 0', agenda.issue_id, @meeting.id ) %>
+                  <% modalid = '#meetingreport-' + agenda.issue.id.to_s %>
                   <tr>
 
-                    <td><%= link_to issue.name, issue %></td>
+                    <td><%= link_to issue.name, issue %> [<%= issue.id %>]</td>
                     <td><%= issue.disputant %></td>
-                    <td><%= issue.community %></td>
+                    <td>
+                    <% results.each do |r| %>
+                          <%= r.actiontype_humanize %><br>
+                    <% end %>
+
+
+                    </td>
                     <td><%= issue.district.name if issue.district_id %></td>
-                    <td><%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %></td>
+                    <td>
+                      <% if results.count > 0 %>
+                          <%= link_to 'Revise',  modalid, 'data-toggle' => 'modal', :class => "btn btn-success" %>
+                          <% else %>
+                      <%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %>
+                        <% end %>
+
+                    </td>
 
 
                   </tr>
@@ -287,17 +355,18 @@
 
 
   <% @meetingactions.each do |agenda| %>
-      <% modalid = '#meetingreport-' + agenda.id.to_s %>
+      <% modalid = 'meetingreport-' + agenda.issue.id.to_s %>
       <div class="modal fade" id="<%= modalid %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-addissue">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
               <small>Report out from meeting</small><br>
-              <h4 class="modal-title" id="myModalLabel"><%= @meeting.id %></h4>
+              <h4 class="modal-title" id="myModalLabel"><%= agenda.id %></h4>
             </div>
             <div class="modal-body">
-              <%= render 'addmeetingissues', modal: true %>
+              <%= render partial: "meetingreportout", locals: {issue_id: agenda.issue.id} %>
+
             </div>
 
             <div class="modal-footer">
@@ -309,31 +378,6 @@
       </div>
 
     <% end %>
-
-
-
-
-
-
-
-
-<script>
-
-  $('#new_meetingissue_modal').on('submit', function() {
-    $('#new_report_model').modal('hide');
-  })
-
-
-
-  $(document).ready(function() {
-    $('#agendatable').DataTable();
-  } );
-</script>
-
-
-
-
-
 
 
 

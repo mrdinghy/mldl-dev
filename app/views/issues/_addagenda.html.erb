@@ -13,8 +13,9 @@
         </div>
     <% end %>
     <%= hidden_field_tag(:issue_id, @issue.id) %>
+
     <%= hidden_field_tag(:fromissue, true) %>
-    <%= hidden_field_tag(:actiontype_id, 2) %>
+    <%= hidden_field_tag(:actiontype, Actiontype::AGENDA) %>
 <% xmeetings = Meeting.where('structure_id = ?', @issue.id) %>
     <div class="form-group">
       <%= f.label 'Select A Meeting', :class => "col-sm-2" %>

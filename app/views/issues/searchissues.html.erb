@@ -1,0 +1,141 @@
+<style>
+    .chkpanel {
+        font-size: 14px;
+        font-weight: normal;
+
+
+    }
+
+
+
+</style>
+
+
+
+
+
+
+<div class="container">
+
+
+  <h2>Search Issues</h2>
+<div class="row">
+  <%= form_tag issueresults_path, :method => :get do %>
+    <%= hidden_field_tag :locale, I18n.locale %>
+
+
+
+
+
+
+
+
+
+
+
+      <div class = "col-sm-4">
+<h3>MLDL Structures</h3>
+<div class="chkpanel">
+
+        <% @allstructures.each do |item| %>
+
+
+      <% if item.structuretype == Structuretype::NSC %>
+          <strong>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br><br></strong>
+      <% elsif item.structuretype ==  Structuretype::CSC %>
+          <strong>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br></strong>
+      <% elsif item.structuretype ==  Structuretype::DSC  %>
+
+          &nbsp;&nbsp;&nbsp;&nbsp;  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br>
+      <% elsif item.structuretype ==  Structuretype::CF  %>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br></em>
+      <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <% end %>
+</div>
+
+</div>
+
+
+
+
+
+
+
+        <div class = "col-sm-4">
+<h3>Search String</h3>
+      <div class="field">
+
+        <%= text_field_tag 'search_term' %><br>
+        <small>Community names, Issue names descriptions, Action comments, resolutions</small>
+      </div>
+
+
+
+        <%#= select_tag(:category_ids, Category.all, :id, :name) {:include_blank => "Select"}, { :multiple => true })%><br><br>
+        <div class="field">
+          <h3>Categories</h3>
+       <%= select_tag "category_ids", options_from_collection_for_select(Category.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
+</div>
+         <div class="field">
+              <h3>Organizations</h3>
+        <%= select_tag "organization_ids", options_from_collection_for_select(Organization.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
+            </div>
+              <div class="field">
+                <h3>Districts <small>(where Issue Occured)</small></h3>
+        <%= select_tag "district_ids", options_from_collection_for_select(District.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
+              </div>
+
+</div>
+
+      <div class="col-sm-4">
+        <h3>Search by Issue Actions</h3>
+
+        Action types<br>
+        <%#= select_tag "actiontype_ids", options_from_collection_for_select(Actiontype.keys.to_a), :include_blank => "Select", :multiple => true  %><br><br>
+
+        <%#= select_tag :actiontype_ids, Actiontype.keys.to_a, :multiple => true %>
+        <%#= select_tag(:actiontypes_ids, Actiontype.keys.to_a, :include_blank => "Select", :multiple => true )%>
+        <%#= select_tag(:actiontypes_ids, Actiontype.to_a, :include_blank => "Select", :multiple => true ) %>
+        <%#= select_tag :actiontype_ids, Actiontype.to_a,  {:include_blank => "Select", :multiple => true }  %>
+
+
+
+
+
+        <%= select_tag(:reportmonth, options_for_select(Month.to_a), :selected => :aug) %>
+
+        <%= select_tag(:reportyear, options_for_select(['2014','2015', '2016']), :selected => 2016)  %>
+        <br><br>
+
+
+
+        <h3>Search by People</h3>
+        <%= select_tag "people_ids", options_from_collection_for_select(Person.all, "id", :fullname), :include_blank => "Select", :multiple => true  %>
+
+
+
+        <h3>Search by MLDL Managers</h3>
+        <%= select_tag "user_ids", options_from_collection_for_select(User.all, "id", :name), :include_blank => "Select", :multiple => true  %><br><br>
+        ><br><br>
+
+        <div class="actions">
+      <%= submit_tag 'Search', :class => "btn btn-primary" %>
+    </div>
+</div>
+<% end %>
+
+  </div>
+</div>

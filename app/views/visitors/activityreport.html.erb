@@ -1,0 +1,129 @@
+<div class = "container">
+
+  <table id="activityperiod"  class="table">
+  <thead><tr>
+
+    <th rowspan="2">Structure</th>
+    <th rowspan="2">Old Ongoing</th>
+    <th rowspan="2">New Issues</th>
+
+    <th colspan="3" style="background-color: #67b168">Meetings</th>
+    <th colspan="5" style="background-color: darkorange">Meeting Results</th>
+    <th rowspan="2">Total Mediations</th>
+    <th colspan="4" style="background-color: darkgreen">Mediation Results</th>
+  </tr>
+
+
+
+  <tr>
+    <th>Scheduled</th>
+    <th>Completed</th>
+    <th>Issues On Agendas</th>
+  <th>Resolved</th>
+  <th>Escalated</th>
+  <th>Mediated</th>
+  <th>Cancelled</th>
+    <th>Unresolved</th>
+
+    <th>Resolved</th>
+    <th>Escalated</th>
+     <th>Cancelled</th>
+    <th>Unresolved</th>
+  </tr>
+
+
+
+
+  </thead>
+  <tbody>
+
+  <% @allstructures.each do |s| %>
+
+        <% created =  s.maindata(params[:reportyear], params[:reportmonth],s.id,0,0,Actiontype::CREATED,0).count %>
+        <% onagenda =   s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::AGENDA,0,0).count %>
+        <% mediation = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEDIATION,0,0).count %>
+        <% cancelled = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::CANCELLED,0,0).count %>
+        <% reopened = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::REOPENED,0,0).count %>
+        <% escalated = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::ESCALATED,0,0).count %>
+        <% resolved = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::ESCALATED,0,0).count %>
+
+
+      <% mtgresolved =   s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEETING_RESULT_RESOLVED,0,0).count %>
+      <% mtgmediation = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEETING_RESULT_MEDIATION,0,0).count %>
+      <% mtgcancelled = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEETING_RESULT_CANCELLED,0,0).count %>
+      <% mtgongoing = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEETING_RESULT_ONGOING,0,0).count %>
+      <% mtgescalated = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEETING_RESULT_ESCALATED,0,0).count %>
+
+      <% medresolved =   s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEDIATION_RESULT_RESOLVED,0,0).count %>
+      <% medcancelled = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEDIATION_RESULT_CANCELLED,0,0).count %>
+      <% medongoing = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEDIATION_RESULT_ONGOING,0,0).count %>
+      <% medescalated = s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::MEDIATION_RESULT_ESCALATED,0,0).count %>
+      
+
+
+
+
+
+      <% totalresolved =  (resolved + mtgresolved + medresolved) %>
+      <% totalescalated =  (escalated + mtgescalated + medescalated) %>
+      <% totalcancelled =  (cancelled + mtgcancelled + medcancelled) %>
+      <% totalmediation =  (mediation + mtgmediation) %>
+
+
+
+
+
+
+
+  <tr>
+   <td>
+     <% if s.structuretype == Structuretype::NSC %>
+         <strong><%= link_to s.name, s  %></strong>
+     <% elsif s.structuretype ==  Structuretype::CSC %>
+         <strong><%= link_to s.name, s  %></strong>
+     <% elsif s.structuretype ==  Structuretype::DSC  %>
+
+         &nbsp;&nbsp;<%= link_to s.name, s  %>
+     <% elsif s.structuretype ==  Structuretype::CF  %>
+         &nbsp;&nbsp;&nbsp;&nbsp;<em><%= link_to s.name, s  %></em>
+     <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+     </td>
+      <td> <%= s.preissues(params[:reportyear], params[:reportmonth],s.id,0).count %></td>
+    <td> <%= s.qissues(params[:reportyear], params[:reportmonth],s.id,0).count %></td>
+    <td> <%= s.qmeetings(params[:reportyear], params[:reportmonth],s.id,0).count %></td>
+    <td> <%= s.qmeetings(params[:reportyear], params[:reportmonth],s.id,1).count %></td>
+    <td> <%= s.maindata(params[:reportyear], params[:reportmonth],s.id,0,Actiontype::AGENDA,0,0).count %></td>
+    <td> <%= mtgresolved %></td>
+    <td> <%= mtgmediation %></td>
+    <td> <%= mtgcancelled %></td>
+    <td> <%= mtgescalated %></td>
+    <td> <%= mtgongoing %></td>
+
+    <td> <%= totalmediation %></td>
+    <td> <%= medresolved %></td>
+    <td> <%= medescalated %></td>
+    <td> <%= medcancelled %></td>
+    <td> <%= medongoing %></td>
+
+
+    
+  </tr>
+<% end %>
+
+
+
+
+</table>
+    </div>
