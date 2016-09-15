@@ -5,6 +5,7 @@ class CountiesController < ApplicationController
   # GET /counties.json
   def index
     @counties = County.all
+
   end
 
   # GET /counties/1
@@ -19,7 +20,13 @@ class CountiesController < ApplicationController
 
   # GET /counties/1/edit
   def edit
+
   end
+
+ 
+
+
+end
 
   # POST /counties
   # POST /counties.json

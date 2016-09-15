@@ -11,20 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160822214711) do
+ActiveRecord::Schema.define(version: 20160913185310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "appissues", force: :cascade do |t|
+    t.string   "timestamp"
     t.string   "uuid"
     t.string   "yourname"
-    t.date     "originalmeet"
+    t.date     "originalmeetingdate"
+    t.string   "meetingcode"
     t.integer  "issueid"
     t.string   "meetingname"
-    t.string   "structurecode"
-    t.string   "county"
-    t.string   "district"
+    t.string   "structure"
+    t.string   "structurecounty"
+    t.string   "structuredistrict"
     t.string   "status"
     t.string   "issuedistrict"
     t.string   "community"
@@ -32,25 +34,29 @@ ActiveRecord::Schema.define(version: 20160822214711) do
     t.string   "raisedby"
     t.string   "disputant"
     t.integer  "duration"
-    t.text     "actioncommittee"
-    t.text     "actiondescription"
-    t.text     "actionnote"
-    t.string   "resolved"
+    t.text     "actionplancommittee"
+    t.text     "actionplandescription"
+    t.text     "actionplannotes"
+    t.string   "ongoing_resolved"
     t.date     "resolutiondate"
-    t.text     "docslink"
+    t.string   "report_ongoing"
+    t.text     "googledocs"
+    t.text     "resolution"
     t.string   "updatetype"
     t.string   "resolutiontype"
-    t.date     "updated_on"
-    t.text     "updatedesc"
+    t.date     "updatedate"
+    t.text     "updatedescription"
     t.date     "mediationdate"
     t.string   "mediationoutcome"
-    t.text     "issuedesc"
+    t.text     "issuedescription"
     t.string   "issuename"
-    t.text     "issuenote"
-    t.text     "statusnote"
-    t.text     "resolution"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.text     "issuenotes"
+    t.text     "statusnotes"
+    t.date     "referraldate"
+    t.string   "referredto"
+    t.text     "referralnote"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
   create_table "assignments", force: :cascade do |t|
@@ -92,6 +98,13 @@ ActiveRecord::Schema.define(version: 20160822214711) do
 
   create_table "counties", force: :cascade do |t|
     t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "disputants", force: :cascade do |t|
+    t.integer  "person_id"
+    t.integer  "issue_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -141,6 +154,13 @@ ActiveRecord::Schema.define(version: 20160822214711) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "managers", force: :cascade do |t|
+    t.integer  "userrole_id"
+    t.integer  "structure_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "mediations", force: :cascade do |t|
     t.string   "name"
     t.integer  "issue_id"
@@ -170,6 +190,7 @@ ActiveRecord::Schema.define(version: 20160822214711) do
     t.integer  "attendees_male"
     t.integer  "attendees_females"
     t.boolean  "meeting_held"
+    t.string   "old_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
   end
@@ -194,6 +215,13 @@ ActiveRecord::Schema.define(version: 20160822214711) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "owners", force: :cascade do |t|
+    t.integer  "issue_id"
+    t.integer  "person_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "participations", force: :cascade do |t|
     t.integer  "person_id"
     t.integer  "meeting_id"
@@ -208,21 +236,15 @@ ActiveRecord::Schema.define(version: 20160822214711) do
     t.string   "title"
     t.string   "email"
     t.integer  "organization_id"
+    t.integer  "structure_id"
+    t.integer  "gender"
+    t.string   "community"
+    t.string   "agencyname"
+    t.string   "salut"
+    t.string   "suffix"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
-
-  create_table "post_translations", force: :cascade do |t|
-    t.integer  "post_id",     null: false
-    t.string   "locale",      null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.string   "title"
-    t.text     "description"
-  end
-
-  add_index "post_translations", ["locale"], name: "index_post_translations_on_locale", using: :btree
-  add_index "post_translations", ["post_id"], name: "index_post_translations_on_post_id", using: :btree
 
   create_table "posts", force: :cascade do |t|
     t.date     "start_date"
@@ -255,17 +277,6 @@ ActiveRecord::Schema.define(version: 20160822214711) do
     t.string   "targetgroup_ids"
     t.string   "organization_ids"
   end
-
-  create_table "site_document_translations", force: :cascade do |t|
-    t.integer  "site_document_id", null: false
-    t.string   "locale",           null: false
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.string   "name"
-  end
-
-  add_index "site_document_translations", ["locale"], name: "index_site_document_translations_on_locale", using: :btree
-  add_index "site_document_translations", ["site_document_id"], name: "index_site_document_translations_on_site_document_id", using: :btree
 
   create_table "site_documents", force: :cascade do |t|
     t.string   "documentable_type"

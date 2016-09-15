@@ -1,10 +1,13 @@
 
-<%= link_to 'New Person', new_person_path %>
+
 <div class="container">
   <p id="notice"><%= notice %></p>
 
 
   <h2>People List</h2>
+  <div class="pull-right">
+  <%= link_to 'New Person', new_person_path, :class => "btn btn-primary" %>
+  </div>
   <%= render 'people_table' %>
 
 </div>

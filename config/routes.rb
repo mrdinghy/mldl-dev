@@ -51,13 +51,25 @@ Rails.application.routes.draw do
   post 'addperson', to: 'structures#addperson', as: 'addperson'
   get 'adjustroles', to: 'users#adjustroles', as: 'adjustroles'
   get 'actionreport', to: 'visitors#actionreport', as: 'actionreport'
+
   get 'searchissues', to: 'issues#searchissues', as: 'searchissues'
   get 'issueresults', to: 'issues#searchresults', as: 'issueresults'
 
-  get 'seeder', to: 'issues#seeder', as: 'seeder'
-  root 'visitors#index'
+  get 'searchmeetings', to: 'meetings#searchmeetings', as: 'searchmeetings'
+  get 'meetingresults', to: 'meetings#meetingresults', as: 'meetingresults'
 
+
+  post 'adddisputant', to: 'issues#adddisputant', as: 'adddisputant'
+  post 'addparticipant', to: 'meetings#addparticipant', as: 'addparticipant'
+  post 'addmediator', to: 'mediations#addmediator', as: 'addmediator'
+  post 'addmemember', to: 'structures#addmembership', as: 'addmember'
+  post 'addmanager', to: 'structures#addmanager', as: 'addmanager'
+
+  get 'seeder', to: 'issues#seeder', as: 'seeder'
+  get '/tests2', :to => redirect('/tests2.html')
+  root 'visitors#index'
+  #get "counties/:county_id/districts", to: "application#districts", as: "districts", format: :json
 
   resources :users
-  mount Ckeditor::Engine => '/ckeditor'
+
 end

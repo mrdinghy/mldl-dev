@@ -4,13 +4,13 @@ puts 'CREATED ADMIN USER: ' << user.email
 
 
 
-User.create(email: 'stvmetzger@aol.com', password: 'cantina23')
-User.create(email: 'ssnyder@thekaizencompany.com', password: 'snyderMLDL123', name: 'Steve Snyder')
-User.create(email: 'btimlin@thekaizencompany.com', password: 'timlinMLDL123')
-User.create(email: 'mohmart@thekaizencompany.com', password: 'ohartMLDL123')
-User.create(email: 'ryan.thomas.rt@gmail.com', password: 'thomasMLDL123')
-User.create(email: 'voinjama_mgr@mldl.org', password: 'voinjama1234')
-User.create(email: 'voinjama_adm@mldl.org', password: 'voinjama1234')
+User.create(name: 'Steve Metzger', email: 'stvmetzger@aol.com', password: 'cantina23')
+User.create(name: 'Steve Snyder', email: 'ssnyder@thekaizencompany.com', password: 'snyderMLDL123')
+User.create(name: 'Breana Timlin', email: 'btimlin@thekaizencompany.com', password: 'timlinMLDL123')
+User.create(name: 'Meagan Ohmart', email: 'mohmart@thekaizencompany.com', password: 'ohartMLDL123')
+User.create(name: 'Ryan Thomas', email: 'ryan.thomas.rt@gmail.com', password: 'thomasMLDL123')
+User.create(name: 'Voinjama Manager', email: 'voinjama_mgr@mldl.org', password: 'voinjama1234')
+User.create(name: 'Voinjama Admin', email: 'voinjama_adm@mldl.org', password: 'voinjama1234')
 
 Userrole.create(user_id: 1, role_id: 3)
 Userrole.create(user_id: 2, role_id: 3)
@@ -70,19 +70,19 @@ Structure.create(name: 'National Security Council', structuretype: Structuretype
 c = County.create(name: 'Bomi')
 
 d = District.create(name: 'Dewoin', county_id: c.id)
-d = District.create(name: 'Klay District', county_id: c.id)
-d = District.create(name: 'Mecca District', county_id: c.id)
-d = District.create(name: 'Senjeh District', county_id: c.id)
+d = District.create(name: 'Klay', county_id: c.id)
+d = District.create(name: 'Mecca', county_id: c.id)
+d = District.create(name: 'Senjeh', county_id: c.id)
 
 c = County.create(name: 'Bong')
 sc = Structure.create(name: 'Bong CSC', structuretype: Structuretype::CSC, county_id: c.id, parent_id: 1)
 
 d = District.create(name: 'Fuamah', county_id: c.id)
-d = District.create(name: 'Kokoyah District', county_id: c.id)
+d = District.create(name: 'Kokoyah', county_id: c.id)
 
 d = District.create(name: 'Kpai (Panta-Kpa)', county_id: c.id)
 sd = Structure.create(name: 'Kpaai DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id)
-communities = ['Zoewienta']
+communities = ['Zoewienta CF']
 communities.each do |x|
   scl = Structure.create(name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id)
 end
@@ -95,9 +95,9 @@ communities.each do |x|
 end
 
 
-d = District.create(name: 'Salala District', county_id: c.id)
-d = District.create(name: 'Sanayea District', county_id: c.id)
-d = District.create(name: 'Zota District', county_id: c.id)
+d = District.create(name: 'Salala', county_id: c.id)
+d = District.create(name: 'Sanayea', county_id: c.id)
+d = District.create(name: 'Zota', county_id: c.id)
 
 # Gbarpolu
 
@@ -106,30 +106,30 @@ d = District.create(name: 'Zota District', county_id: c.id)
 
 
 
-c = County.create(name: 'Lofa County')
+c = County.create(name: 'Lofa CSC')
 sc = Structure.create(name: 'Lofa CSC', structuretype: Structuretype::CSC, county_id: c.id, parent_id: 1)
 
-d = District.create(name: 'Foya District', county_id: c.id)
+d = District.create(name: 'Foya', county_id: c.id)
 sd = Structure.create(name: 'Foya DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id)
-communities = ['Shelloe']
+communities = ['Shelloe CF']
 communities.each do |x|
   scl = Structure.create(name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id)
 end
 
-d = District.create(name: 'Kolahun District', county_id: c.id)
-d = District.create(name: 'Salayea District', county_id: c.id)
-d = District.create(name: 'Vahun District', county_id: c.id)
+d = District.create(name: 'Kolahun', county_id: c.id)
+d = District.create(name: 'Salayea', county_id: c.id)
+d = District.create(name: 'Vahun', county_id: c.id)
 
-d = District.create(name: 'Voinjama District', county_id: c.id)
+d = District.create(name: 'Voinjama', county_id: c.id)
 sd = Structure.create(name: 'Voinjama DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id)
-communities = ['Vezella CF']
+communities = ['Vezella CF, Kolliemai CF']
 communities.each do |x|
   scl = Structure.create(name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id)
 end
 
 
 
-d = District.create(name: 'Zorzor District', county_id: c.id)
+d = District.create(name: 'Zorzor', county_id: c.id)
 sd = Structure.create(name: 'Zorzor DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id)
 communities = ['Konia CF']
 communities.each do |x|
@@ -140,10 +140,10 @@ end
 
 
 
-c = County.create(name: 'Nimba County')
+c = County.create(name: 'Nimba')
 sc = Structure.create(name: 'Nimba CSC', structuretype: Structuretype::CSC, county_id: c.id, parent_id: 1)
 
-d = District.create(name: 'Gbehlay-Geh District', county_id: c.id)
+d = District.create(name: 'Gbehlay-Geh', county_id: c.id)
 sd = Structure.create(name: 'Gbehlay-Geh DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id)
 communities = ['Garplay CF']
 communities.each do |x|
@@ -201,13 +201,24 @@ sc = Structure.create(name: 'Grand Gedeh CSC', structuretype: Structuretype::CSC
 
 d = District.create(name: 'Bhai', county_id: c.id)
 sd = Structure.create(name: 'Bhai DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id)
+communities = ['Sennehwen CF']
+communities.each do |x|
+  scl = Structure.create(name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id)
+end
+
 
 d = District.create(name: 'Gbao', county_id: c.id)
 sd = Structure.create(name: 'Gbao DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id)
-
+communities = ['Polar CF']
+communities.each do |x|
+  scl = Structure.create(name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id)
+end
 d = District.create(name: 'Konobo', county_id: c.id)
 sd = Structure.create(name: 'Konobo DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id)
-
+communities = ['Ziah CF']
+communities.each do |x|
+  scl = Structure.create(name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id)
+end
 
 
 Membership.create(structure_id:2, person_id: 1)

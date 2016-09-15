@@ -1,34 +1,104 @@
+
+
+
+
+
+
+
+
 <style>
 
-.modal-addperson {
-width: 600px;
+.modal-addmeeting {
+width: 800px;
 }
-
 .modal-addissue {
-width: 1200px;
+width: 800px;
 }
 
 </style>
 
-<div class="container widerbox">
-  <div class="row">
-    <div class="col-sm-6">
 
 
-    <%= link_to 'Return to Structures', structures_path %><br>
-    <h1><span style="color: #999">Structure: </span><%= @structure.name %></h1>
-    </div>
 
-    <div class="col-sm-6">
-      <div class="pull-right">
-      <%= link_to 'New Issue (M)', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".chosen-select").select2();
+  });
+
+</script>
+
+
+
+
+
+<select class="chosen-select input-md form-control">
+
+  <option>Dallas Cowboys</option>
+  <option>New York Giants</option>
+  <option>Philadelphia Eagles</option>
+  <option>Washington Redskins</option>
+
+  <option>Chicago Bears</option>
+  <option>Detroit Lions</option>
+  <option>Green Bay Packers</option>
+  <option>Minnesota Vikings</option>
+
+  <option>Atlanta Falcons</option>
+  <option>Carolina Panthers</option>
+  <option>New Orleans Saints</option>
+  <option>Tampa Bay Buccaneers</option>
+
+  <option>Arizona Cardinals</option>
+  <option>St. Louis Rams</option>
+  <option>San Francisco 49ers</option>
+  <option>Seattle Seahawks</option>
+
+  <option>Buffalo Bills</option>
+  <option>Miami Dolphins</option>
+  <option>New England Patriots</option>
+  <option>New York Jets</option>
+
+  <option>Baltimore Ravens</option>
+  <option>Cincinnati Bengals</option>
+  <option>Cleveland Browns</option>
+  <option>Pittsburgh Steelers</option>
+
+  <option>Houston Texans</option>
+  <option>Indianapolis Colts</option>
+  <option>Jacksonville Jaguars</option>
+  <option>Tennessee Titans</option>
+
+  <option>Denver Broncos</option>
+  <option>Kansas City Chiefs</option>
+  <option>Oakland Raiders</option>
+  <option>San Diego Chargers</option>
+
+</select>
+
+
+
+
+
+
+<!-- Page content-->
+  <div class="content-wrapper widerbox">
+
+
+    <%= link_to 'Return to Structures', structures_path %>
+
+    <h4 class="page-header"><span style="color: #999">Structure: </span><%= @structure.name %></h4>
+    <!-- START row-->
+
+    <div class="pull-right">
+      <%= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
       <%= link_to 'New Meeting', '#new_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
-      </div>
     </div>
 
 
 
-  </div>
+
+
 
 
   <div class="row">
@@ -38,14 +108,40 @@ width: 1200px;
 
           <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">General</h3>
+
             <%= link_to 'Edit', edit_structure_path(@structure), :class => "btn btn-small btn-primary pull-right"   %>
           </div>
           <div class="panel-body">
             <div class="form-horizontal">
 
 
-            <div class="form-group">
+
+
+              <div class="form-group mb">
+                <label class="col-sm-2 control-label mb">DateTimePicker</label>
+                <div class="col-sm-10">
+                  <div id="datetimepicker1" class="input-group date">
+                    <input type="text" class="form-control">
+                                 <span class="input-group-addon">
+                                    <span class="fa fa-calendar"></span>
+                                 </span>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <div class="form-group">
             <label class="col-sm-3">Type (Level)</label>
             <div class="col-sm-9">
             <strong> <%= @structure.structuretype_humanize if @structure.structuretype %></strong>
@@ -55,7 +151,7 @@ width: 1200px;
             <div class="form-group">
             <label class="col-sm-3">County</label>
             <div class="col-sm-9">
-            <strong> <%= @structure.county.name if @structure.county_id %></strong>
+            <strong> <%= @structure.district.county.name if @structure.district_id %></strong>
             </div>
             </div>
             <div class="form-group">
@@ -84,64 +180,24 @@ width: 1200px;
           </div>
         </div>
 
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Management (Users)</h3>
-                <%= link_to 'Add Mgmt', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
-              </div>
-              <div class="panel-body">
-
-                <% @userroles.each do |a| %>
-                    <%= link_to a.user.name, a.user %>  - <%= a.role.name %><br>
-                <% end %>
-
-
-              </div>
-
-
-
-
-
-
-
-
-
-
-
-
-        </div>
-
-
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">People (non Users linked to Structure)</h3>
-              <%= link_to 'Add Person', '#new_person_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
-            </div>
-            <div class="panel-body">
-
-              <table class="table">
-                <thead>
-                <th>Name</th>
-                <th>Title</th>
-                <th>Email</th>
-                <th>Phone</th>
-                </thead>
-                <tbody>
-                <% @members.each do |p| %>
-                    <tr>
-                      <td>  <%= link_to p.person.fullname, p.person %> </td>
-                      <td><%= p.person.title %></td>
-                      <td><%= p.person.email %></td>
-                      <td><%= p.person.phone %></td>
-                    </tr>
-                <% end %>
-                </tbody>
-              </table>
-
-
-            </div>
-
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Management (Users)</h3>
+            <%#= link_to 'Add Manager', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
           </div>
+          <div class="panel-body">
+
+            <% @mymanagers.each do |a| %>
+                <%= a.userrole.user.name %><br>
+            <% end %>
+
+            <small>Add Manager</small><br>
+            <%= render 'addmanager' %>
+          </div>
+      </div>
+
+
+
 
 
 
@@ -156,6 +212,7 @@ width: 1200px;
             <li class="active"><a data-toggle="tab" href="#viewissues">Issues</a></li>
             <li><a data-toggle="tab" href="#viewmeetings">Meetings</a></li>
             <li><a data-toggle="tab" href="#viewmediations">Mediations</a></li>
+            <li><a data-toggle="tab" href="#viewmembers">Members</a></li>
           </ul>
 
           <div class="tab-content">
@@ -171,6 +228,52 @@ width: 1200px;
               <h3><%= @structure.name %> Mediations</h3>
               <%= render partial: 'mediations/mediations_table' %>
             </div>
+            <div id="viewmembers" class="tab-pane fade">
+              <h3><%= @structure.name %> Members</h3>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">People (non Users linked to Structure)</h3>
+                  <%#= link_to 'Add Person', '#new_person_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+                </div>
+                <div class="panel-body">
+
+                  <table class="table">
+                    <thead>
+                    <th>Name</th>
+                    <th>Organization/Title</th>
+                    <th>Email</th>
+
+                    </thead>
+                    <tbody>
+                    <% @mypeople.each do |p| %>
+                        <tr>
+                          <td>  <%= link_to p.person.fullname, p.person %> </td>
+                          <td><small><%= p.person.organization.name if p.person.organization_id %></small><br><%= p.person.title %></td>
+                          <td><%= p.person.email %></td>
+
+                        </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+
+                  <hr>
+                  <small>Link Person to Structure</small><br>
+                  <%= render 'addmember' %>
+
+
+
+
+                  <script type="text/javascript">
+                    $(document).ready(function() {
+                      $(".js-example-basic-single").select2();
+                    });
+
+                  </script>
+
+                </div>
+
+              </div>
+            </div>
           </div>
 
 
@@ -200,30 +303,8 @@ width: 1200px;
 
 
 
-
-
-  <div class="modal fade" id="new_person_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-addperson">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <small>Add Person to Structure</small><br>
-          <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
-        </div>
-        <div class="modal-body">
-          <%= render 'addperson', modal: true %>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
 <div class="modal fade" id="new_mgmt_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-addperson">
+  <div class="modal-dialog modal-addmgmt">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -242,50 +323,44 @@ width: 1200px;
   </div>
 </div>
 
-
-  <div class="modal fade" id="new_issue_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-addissue">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <small>Add New Issue to Structure</small><br>
-          <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
-        </div>
-        <div class="modal-body">
-          <%= render 'addstructureissue', modal: true %>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-
+<div class="modal fade" id="new_issue_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-addmeeting">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Add New Issue to Structure</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
       </div>
+      <div class="modal-body">
+        <%= render 'addstructureissue', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
     </div>
   </div>
+</div>
 
-
-
-
-  <div class="modal fade" id="new_meeting_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-addissue">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <small>Add New Structure Meeting</small><br>
-          <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
-        </div>
-        <div class="modal-body">
-          <%= render 'addstructuremeeting', modal: true %>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-
+<div class="modal fade" id="new_meeting_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-addmeeting">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Add New Structure Meeting</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
       </div>
+      <div class="modal-body">
+        <%= render 'addstructuremeeting', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
     </div>
   </div>
-
 </div>
 
 
@@ -297,18 +372,21 @@ width: 1200px;
 
 
 
-  <script>
 
-    $('#new_person_modal').on('submit', function() {
-      $('#new_report_model').modal('hide');
+<script>
+
+
+    $('#new_mgmt_modal').on('submit', function() {
+      $('#new_mgmt_modal').modal('hide');
     })
 
-     $('#new_issue_modal').on('submit', function() {
-      $('#new_report_model').modal('hide');
+
+    $('#new_issue_modal').on('submit', function() {
+      $('#new_issue_modal').modal('hide');
     })
 
     $('#new_meeting_modal').on('submit', function() {
-      $('#new_report_model').modal('hide');
+      $('#new_meeting_modal').modal('hide');
     })
 
 

@@ -9,6 +9,9 @@
 
 
 </style>
+<script>
+    $(document).ready(function() { $("#issuedisputants").select2(); });
+</script>
 
 
 
@@ -120,10 +123,14 @@
         <%= select_tag(:reportyear, options_for_select(['2014','2015', '2016']), :selected => 2016)  %>
         <br><br>
 
+        <div class="field" id="issuedisputants">
+        <%= label_tag 'Select/Search Person' %><br>
+        <%= select_tag 'person_id', options_from_collection_for_select(Person.all, :id, :fullname), include_blank: true, :id => 'e1', :class => "form-control" %>
 
+      </div>
 
         <h3>Search by People</h3>
-        <%= select_tag "people_ids", options_from_collection_for_select(Person.all, "id", :fullname), :include_blank => "Select", :multiple => true  %>
+        <%#= select_tag "people_ids", options_from_collection_for_select(Person.all, "id", :fullname), :include_blank => "Select", :multiple => true  %>
 
 
 

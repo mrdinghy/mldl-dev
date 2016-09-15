@@ -11,22 +11,21 @@ class StructuresController < ApplicationController
   # GET /structures/1
   # GET /structures/1.json
   def show
+
     @issues= Issue.where('structure_id = ?', @structure.id)
     @mediations = Mediation.all
-    @members= Membership.where('structure_id = ?', @structure.id)
+    @mypeople= Membership.where('structure_id = ?', @structure.id)
+    @mymanagers = Manager.where('structure_id = ?', @structure.id)
     @meetings = Meeting.where('structure_id = ?', @structure.id)
     @parent = Structure.find(@structure.parent_id) if @structure.parent_id
-    @userroles = Userrole.where('structure_id = ?', @structure.id)
-
-    @allusers = User.all
-    #@allmanagers = Userrole.where('role_id = ?', 1)
-    @userrole = Userrole.new
+    @availablemanagers = Userrole.where('role_id = ?', 2)
 
     @issue = Issue.new
     @meeting = Meeting.new
     @available_people = Person.all
     @person = Person.new
     @membership = Membership.new
+    @manager = Manager.new
 
   end
 
@@ -39,8 +38,8 @@ class StructuresController < ApplicationController
 
   # GET /structures/1/edit
   def edit
-  end
 
+  end
 
 
 
@@ -65,6 +64,7 @@ class StructuresController < ApplicationController
   # PATCH/PUT /structures/1
   # PATCH/PUT /structures/1.json
   def update
+
     respond_to do |format|
       if @structure.update(structure_params)
         format.html { redirect_to @structure, notice: 'Structure was successfully updated.' }
@@ -86,6 +86,70 @@ class StructuresController < ApplicationController
     end
   end
 
+
+
+  def addmembership
+
+    @membership = Membership.new
+    structure=Structure.find(params[:structure_id])
+    @membership.structure_id = structure.id
+    if params[:addpeep]
+      peep=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email], title: params[:title], organization_id: params[:organization_id])
+      @membership.person_id = peep.id
+    else
+      @membership.person_id = params[:person_id]
+    end
+
+    respond_to do |format|
+      if @membership.save
+        format.html { redirect_to structure, notice: 'Participation was successfully created.' }
+        format.json { render :show, status: :created, location: @membership }
+      else
+        format.html { render :new }
+        format.json { render json: @membership.errors, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
+
+
+
+  def addmanager
+    @manager = Manager.new
+    structure=Structure.find(params[:structure_id])
+    @manager.structure_id = structure.id
+    @manager.userrole_id = params[:userrole_id]
+
+    respond_to do |format|
+      if @manager.save
+        format.html { redirect_to structure, notice: 'Participation was successfully created.' }
+        format.json { render :show, status: :created, location: @membership }
+      else
+        format.html { render :new }
+        format.json { render json: @membership.errors, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_structure
@@ -94,6 +158,6 @@ class StructuresController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def structure_params
-      params.require(:structure).permit(:name, :structuretype, :district_id, :county_id, :parent_id, :default_location)
+      params.require(:structure).permit(:name, :structuretype, :district_id, :county_id, :parent_id, :default_location, memberships:[:person_id, :structure_id])
     end
 end

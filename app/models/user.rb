@@ -13,8 +13,6 @@ class User < ActiveRecord::Base
 
 
   has_many :userroles, :dependent => :destroy
-  has_many :roles, :through => :userroles
-  has_many :structures, :through => :userroles
 
 
   has_many :issueactions, :dependent => :destroy

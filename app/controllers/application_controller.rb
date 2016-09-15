@@ -7,14 +7,12 @@ class ApplicationController < ActionController::Base
     I18n.locale = params[:locale] || I18n.default_locale
   end
 
-  #before_action :authenticate_user!
+  before_action :authenticate_user!
   protect_from_forgery with: :exception
 
 
   #allstructs = Structure.pluck(:id)
   #delophans = Issue.where('structure_id not in (?)', allstructs).delete_all
-
-
 
 
 

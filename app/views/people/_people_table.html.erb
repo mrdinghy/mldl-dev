@@ -13,7 +13,9 @@
   <thead>
   <tr>
     <th>Name first</th>
-    <th>Name last</th>
+    <th>Community</th>
+    <th>Gender</th>
+    <th>Affiliation (*)</th>
     <th>Email</th>
     <th>Organization</th>
     <th>Structures</th>
@@ -22,11 +24,13 @@
   </thead>
 
   <tbody>
-  <% @people.each do |person| %>
+  <% @mypeople.each do |person| %>
       <% mystructures = Membership.where('person_id = ?', person.id) %>
       <tr>
         <td><%= link_to person.fullname, person %></td>
-        <td><%= person.name_last %></td>
+        <td><%= person.community %></td>
+        <td><%= person.gender_humanize %></td>
+        <td><%= person.agencyname %></td>
         <td><%= person.email %></td>
         <td><%= person.organization.name if person.organization_id %></td>
         <td>
@@ -42,7 +46,9 @@
 
 <br>
 
-
+</div>
+  </div>
+</div>
     <script>
         $(document).ready(function() {
             $('#peopletable').DataTable();

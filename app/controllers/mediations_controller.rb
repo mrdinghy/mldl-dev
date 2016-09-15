@@ -10,7 +10,7 @@ class MediationsController < ApplicationController
   # GET /mediations/1
   # GET /mediations/1.json
   def show
-    @issue=Issue.find(@mediation.id)
+    @issue=Issue.find(@mediation.issue_id)
     @mediators = Mediator.where('mediation_id = ?', @mediation.id)
     @mediator = Mediator.new
     @new_site_document = SiteDocument.new
@@ -36,6 +36,7 @@ class MediationsController < ApplicationController
     issueaction= Issueaction.new
     issue = Issue.find(params[:issue_id])
     issueaction.issue_id = params[:issue_id]
+    issueaction.user_id = current_user.id
     issueaction.mediation_id = @mediation.id
 
     issueaction.actiontype = Actiontype::MEDIATION
@@ -75,6 +76,50 @@ class MediationsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+
+
+  def addmediator
+    @mediator = Mediator.new
+    mediation=Mediation.find(params[:mediation_id])
+    @mediator.mediation_id = mediation.id
+    if params[:addpeep]
+      peep=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email], title: params[:title], organization_id: params[:organization_id])
+      @mediator.person_id = peep.id
+    else
+      @mediator.person_id = params[:person_id]
+    end
+
+    respond_to do |format|
+      if @mediator.save
+        format.html { redirect_to mediation, notice: 'Participation was successfully created.' }
+        format.json { render :show, status: :created, location: @mediator }
+      else
+        format.html { render :new }
+        format.json { render json: @mediator.errors, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

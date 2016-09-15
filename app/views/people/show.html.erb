@@ -70,7 +70,7 @@
         <th></th>
         </thead>
         <tbody>
-        <% @members.each do |s| %>
+        <% @mymemberships.each do |s| %>
             <tr>
               <td>  <%= link_to s.structure.name, s.structure %> </td>
               <td></td>
@@ -99,8 +99,9 @@
           <th></th>
           </thead>
           <tbody>
-          <% @participations.each do |p| %>
+          <% @myparticipations.each do |p| %>
               <tr>
+
                 <td>  <%= link_to p.meeting.real_start, p.meeting %> </td>
                 <td>  <%= p.meeting.structure.name %></td>
                 <td></td>
@@ -111,4 +112,66 @@
         </table>
 
 </div>
+  </div>
+
+
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Issue Disputant</h3>
+      </div>
+      <tddiv class="panel-body">
+
+        <table class="table">
+          <thead>
+          <th></th>
+          <th>Issue</th>
+          <th></th>
+          <th></th>
+          </thead>
+          <tbody>
+          <% @myissues.each do |i| %>
+              <tr>
+                <td>  </td>
+                <td>  <%= link_to i.issue.name, i.issue %></td>
+                <td></td>
+                <td></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+
+    </div>
+  </div>
+
+
+
+
+  <div class="col-sm-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">As Mediator</h3>
+      </div>
+      <tddiv class="panel-body">
+
+        <table class="table">
+          <thead>
+          <th></th>
+          <th>Mediation</th>
+          <th></th>
+          <th></th>
+          </thead>
+          <tbody>
+          <% @mymediations.each do |m| %>
+              <tr>
+                <td>  </td>
+                <td>  <%= link_to m.mediation.issue.name, m.mediation.issue %></td>
+                <td> <%= m.mediation.mediation_start %></td>
+                <td></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+
+    </div>
   </div>

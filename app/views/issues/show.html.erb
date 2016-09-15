@@ -1,13 +1,10 @@
 
 <style>
 
-  .modal-addnote, .modal-escalate, .modal-resolve, .modal-reopen {
-    width: 1200px;
+  .modal-addnote, .modal-escalate, .modal-resolve, .modal-mediation, .modal-cancel, .modal-reopen, .modal-agenda {
+    width: 800px;
   }
 
-  .modal-agenda {
-    width: 1200px;
-  }
 
 </style>
 
@@ -16,15 +13,11 @@
 
 <% parentlink = 'Refer Issue to ' + parentstructure.name %>
 
-
-<div class="container">
-
-  <div class="row">
-    <div class="col-sm-12">
+<div class="content-wrapper widerbox">
 
 
       <%= link_to 'Return to Issues', issues_path %><br>
-      <h1><span style="color: #999">Issue: </span><%= @issue.issueid %>
+      <h3><span style="color: #999">Issue: </span><%= @issue.issuecode %>
         <div class="pull-right"><strong>
           <% if @issue.resolution_date %>
               <span style="color: darkslategrey">:Resolved</span>
@@ -35,21 +28,19 @@
           <% end %>
         </div>
         </strong>
-
-      </h1>
-      <h2><%= @issue.name %></h2>
+<br>
+      <%= @issue.name %></h3>
     </div>
-  </div>
 
   <div class="row">
 
 
 
-    <div class="col-sm-5">
+    <div class="col-sm-3">
 
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">General</h3>
+
 
           <%= link_to 'Edit', edit_issue_path(@issue), :class => "btn btn-primary pull-right" %>
         </div>
@@ -64,90 +55,65 @@
 
 
             <div class="form-group">
-              <label class="col-sm-2">Distupants</label>
-              <div class="col-sm-10">
+              <label class="col-sm-4">Distupants</label>
+              <div class="col-sm-8">
                 <%= @issue.disputant %>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="col-sm-2">Raised by (Person)</label>
-              <div class="col-sm-10">
+              <label class="col-sm-4">Raised by (Person)</label>
+              <div class="col-sm-8">
                 <%= link_to @raised_by.fullname, @raised_by if @issue.raised_by %>
               </div>
             </div>
 
 
             <div class="form-group">
-              <label class="col-sm-2">Category</label>
-              <div class="col-sm-10">
+              <label class="col-sm-4">Category</label>
+              <div class="col-sm-8">
                 <%= @issue.category.name if @issue.category_id %>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2">Description</label>
-              <div class="col-sm-10">
+              <label class="col-sm-4">Description</label>
+              <div class="col-sm-8">
                 <%= @issue.description %>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2">Managing Council</label>
-              <div class="col-sm-10">
+              <label class="col-sm-4">Managing Council</label>
+              <div class="col-sm-8">
                 <%= link_to @issue.structure.name, @issue.structure %>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="col-sm-2">District Location of Issue:</label>
-              <div class="col-sm-10">
+              <label class="col-sm-4">District Location of Issue:</label>
+              <div class="col-sm-8">
                 <%= @issue.district.name if @issue.district_id %>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2">Community Origin</label>
-              <div class="col-sm-10">
+              <label class="col-sm-4">Community Origin</label>
+              <div class="col-sm-8">
                 <strong><%= @issue.community %></strong>
               </div>
             </div>
 
 
 
+
+
+
+
             <div class="form-group">
-              <label class="col-sm-2">Status Note</label>
-              <div class="col-sm-10">
+              <label class="col-sm-4">Status Note</label>
+              <div class="col-sm-8">
                 <%= @issue.status_note %>
               </div>
             </div>
 
-
-            <div class="form-group">
-              <label class="col-sm-2">Documents</label>
-              <div class="col-sm-10">
-                <table class="table">
-
-                  <% @issuedocs.each do |doc| %>
-                      <tr>
-
-                        <td>
-                          <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
-                        </td>
-                        <td>
-                          <%= doc.document_updated_at %><br>
-                        </td>
-                      </tr>
-
-                  <% end %>
-                </table>
-
-                <%= simple_form_for @new_site_document do |form| %>
-                    <%= form.hidden_field :documentable_id, :value => @issue.id %>
-                    <%= form.hidden_field :documentable_type, :value => 'issue' %>
-                    <%= form.input :document, as: :file, :label => false %>
-                    <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
-                <% end %>
-
-              </div>
-            </div>
 
 
 
@@ -178,49 +144,282 @@
 
 
 
-    </div>
-
-
-    <div class="col-sm-5">
 
 
 
 
+ </div>
 
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Action/Resolution</h3>
+
+    <div class="col-sm-8">
+
+
+
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#viewresolution">Resolution</a></li>
+        <li><a data-toggle="tab" href="#viewhistory">History</a></li>
+        <li><a data-toggle="tab" href="#viewdisputants">Disputants</a></li>
+        <li><a data-toggle="tab" href="#viewmediations">Mediations</a></li>
+
+        <li><a data-toggle="tab" href="#viewdocuments">Documents</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div id="viewresolution" class="tab-pane fade in active">
+          <h3>Action/Resolution</h3>
+
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+
+            </div>
+            <div class="panel-body">
+
+              <div class="form-horizontal">
+
+
+                <div class="form-group">
+                  <label class="col-sm-2">Action Plan</label>
+                  <div class="col-sm-10">
+                    <%= @issue.actionplan %>
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <label class="col-sm-2">Action Plan Committee</label>
+                  <div class="col-sm-10">
+                    <%= @issue.actioncommittee %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-2">Resolution Description:</label>
+                  <div class="col-sm-10">
+                    <%= @issue.resolution  %>
+                  </div>
+                </div>
+
+
+
+
+
+
+
+
+              </div>
+            </div>
+
+
+          </div>
+
         </div>
-        <div class="panel-body">
-
-          <div class="form-horizontal">
 
 
-            <div class="form-group">
-              <label class="col-sm-2">Action Plan</label>
-              <div class="col-sm-10">
-                <%= @issue.actionplan %>
-              </div>
+
+
+
+        <div id="viewhistory" class="tab-pane fade in ">
+          <h3>History</h3>
+
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+
+            </div>
+            <div class="panel-body">
+
+
+              <table class="table table-striped">
+                <tr>
+                  <th>Action Date</th>
+                  <th>Action</th>
+                  <th>User</th>
+
+                  <th>Description</th>
+                </tr>
+                <% if @issue.issueactions.any? %>
+                    <% @issue.issueactions.each do |action| %>
+
+                        <tr>
+                          <td><%= action.created_at.strftime("%m/%d/%Y") if action.created_at %></td>
+                          <td><%= action.actiontype_humanize if action.actiontype %></td>
+                          <td><%= action.user.name if action.user_id %></td>
+
+                          <td>
+
+                            <% if action.actiontype == Actiontype::AGENDA %>
+                                <% thismeeting= Meeting.find(action.meeting_id) %>
+                                <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  if action.meeting_id %></strong>  <br>
+                            <% end %>
+
+                            <% if action.actiontype == Actiontype::ESCALATED or
+                                    action.actiontype == Actiontype::MEETING_RESULT_ESCALATED or
+                                    action.actiontype == Actiontype::MEDIATION_RESULT_ESCALATED %>
+                                <% if action.laststructure_id %>
+
+                                    <% fromstructure= Structure.find(action.laststructure_id)  %>
+                                    <strong>Issue Escalated from : <%= link_to fromstructure.name, fromstructure  %></strong>  <br>
+                                <% end %>
+                            <% end %>
+
+                            <% if action.actiontype == Actiontype::RESOLVED or
+                                    action.actiontype == Actiontype::MEETING_RESULT_RESOLVED or
+                                    action.actiontype == Actiontype::MEDIATION_RESULT_RESOLVED %>
+                                <% if action.meeting_id %>
+                                    <% thismeeting= Meeting.find(action.meeting_id) %>
+                                    <strong>Resolved in Meeting!: </strong>  <br>
+                                    <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
+                                <% elsif action.mediation_id %>
+                                    <% thismediation= Mediation.find(action.mediation_id) %>
+                                    <strong>Resolved in Mediation!: </strong>  <br>
+                                    <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
+                                <% else %>
+                                    <strong>Issue Resolved!: </strong>  <br>
+                                <% end %>
+
+                            <% end %>
+
+                            <% if action.actiontype == Actiontype::CANCELLED or
+                                    action.actiontype == Actiontype::MEETING_RESULT_CANCELLED or
+                                    action.actiontype == Actiontype::MEDIATION_RESULT_CANCELLED %>
+
+                                <% if action.meeting_id %>
+                                    <% thismeeting= Meeting.find(action.meeting_id) %>
+                                    <strong>Cancelled in Meeting!: </strong>  <br>
+                                    <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
+                                <% elsif action.mediation_id %>
+                                    <% thismediation= Mediation.find(action.mediation_id) %>
+                                    <strong>Cancelled in Mediation!: </strong>  <br>
+                                    <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
+                                <% else %>
+                                    <strong>Issue Cancelled!: </strong>  <br>
+                                <% end %>
+
+                            <% end %>
+
+
+                            <% if action.actiontype == Actiontype::ONGOING or
+                                    action.actiontype == Actiontype::MEETING_RESULT_ONGOING or
+                                    action.actiontype == Actiontype::MEDIATION_RESULT_ONGOING %>
+
+                                <% if action.meeting_id %>
+                                    <% thismeeting= Meeting.find(action.meeting_id) %>
+                                    <strong>Unresolved in  Meeting!: </strong>  <br>
+                                    <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
+                                <% elsif action.mediation_id %>
+                                    <% thismediation= Mediation.find(action.mediation_id) %>
+                                    <strong>Unresolved in Mediation!: </strong>  <br>
+                                    <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
+                                <% else %>
+
+                                <% end %>
+
+                            <% end %>
+
+
+
+                            <% if action.actiontype == Actiontype::MEDIATION or
+                                    action.actiontype == Actiontype::MEETING_RESULT_MEDIATION %>
+
+                                <% if action.meeting_id %>
+                                    <% thismeeting= Meeting.find(action.meeting_id) %>
+                                    <strong>Sent to Mediation from Meeting!: </strong>  <br>
+                                    <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
+                                <% else %>
+                                    <strong>Issue Sent to Mediation!: </strong>  <br>
+                                <% end %>
+
+                            <% end %>
+
+
+
+                            <% if action.actiontype == Actiontype::REOPENED %>
+                                <strong>Issue Reopened!: </strong>  <br>
+                            <% end %>
+
+                            <%# if action.actiontype == Actiontype::COMMENT %>
+                               <!-- <strong>Comment: </strong>  <br>-->
+                            <%# end %>
+
+                            <% if action.actiontype == Actiontype::CREATED %>
+                                <strong>Created</strong>  <br>
+                            <% end %>
+
+
+
+
+
+
+
+
+                            <%= action.actionbody %></td>
+
+                        </tr>
+
+
+
+                    <% end %>
+                <% end %>
+
+
+              </table>
+
+
+
+
+
+
+            </div>
+          </div>
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+        <div id="viewdisputants" class="tab-pane fade in">
+          <h3>Disputants</h3>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+
+
+              <%#= link_to 'Add Disputant', '#addDisputant', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+            </div>
+            <div class="panel-body">
+
+              <table class="table">
+                <thead>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Organization</th>
+
+                </thead>
+                <tbody>
+                <% @mydisputants.each do |p| %>
+                    <tr>
+                      <td>  <%= link_to p.person.fullname, p.person %> </td>
+                      <td><%= p.person.title %></td>
+                      <td><%= p.person.email %></td>
+                      <td><%= p.person.phone %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+              </table>
+
+
             </div>
 
-
-            <div class="form-group">
-              <label class="col-sm-2">Action Plan Committee</label>
-              <div class="col-sm-10">
-                <%= @issue.actioncommittee %>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-2">Resolution Description:</label>
-              <div class="col-sm-10">
-                <%= @issue.resolution  %>
-              </div>
-            </div>
-
-
-
-
+            <hr>
+            <small>Link Person to Structure</small><br>
+            <%= render 'adddisputant' %>
 
 
 
@@ -228,209 +427,94 @@
           </div>
         </div>
 
-
-      </div>
-
-
-
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Mediations</h3>
+        <div id="viewmediations" class="tab-pane fade in">
+          <h3>Mediations</h3>
 
 
-        </div>
-        <div class="panel-body">
+          <div class="panel panel-default">
+            <div class="panel-heading">
 
 
-          <table class="table table-striped">
-            <tr>
-              <th>Name/ID</th>
-              <th>Medation Start</th>
-              <th>Medation End</th>
-              <th>Mediators</th>
-              </tr>
+            </div>
+            <div class="panel-body">
 
-            <% @mymediations.each do |med| %>
 
+              <table class="table table-striped">
                 <tr>
-                  <td><%= link_to 'View', med %></td>
-                  <td><%= med.mediation_start.strftime("%m/%d/%Y") if med.mediation_start %></td>
-                  <td><%= med.mediation_end.strftime("%m/%d/%Y") if med.mediation_end %></td>
-                  <td></td>
-
-
-
+                  <th>Name/ID</th>
+                  <th>Medation Start</th>
+                  <th>Medation End</th>
+                  <th>Mediators</th>
                 </tr>
 
+                <% @mymediations.each do |med| %>
+
+                    <tr>
+                      <td><%= link_to 'View', med %></td>
+                      <td><%= med.mediation_start.strftime("%m/%d/%Y") if med.mediation_start %></td>
+                      <td><%= med.mediation_end.strftime("%m/%d/%Y") if med.mediation_end %></td>
+                      <td></td>
 
 
-            <% end %>
 
-          </table>
-
+                    </tr>
 
 
 
+                <% end %>
 
+              </table>
+
+
+
+
+
+
+            </div>
+          </div>
 
         </div>
+
+
+
+        <div id="viewdocuments" class="tab-pane fade in">
+          <h3>Documents</h3>
+          <div class="form-group">
+            <label class="col-sm-4">Documents</label>
+            <div class="col-sm-8">
+              <table class="table">
+
+                <% @issuedocs.each do |doc| %>
+                    <tr>
+
+                      <td>
+                        <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
+                      </td>
+                      <td>
+                        <%= doc.document_updated_at %><br>
+                      </td>
+                    </tr>
+
+                <% end %>
+              </table>
+
+              <%= simple_form_for @new_site_document do |form| %>
+                  <%= form.hidden_field :documentable_id, :value => @issue.id %>
+                  <%= form.hidden_field :documentable_type, :value => 'issue' %>
+                  <%= form.input :document, as: :file, :label => false %>
+                  <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+              <% end %>
+
+            </div>
+          </div>
+
+
+
+         </div>
+
       </div>
-
-
-
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">History</h3>
-
-
-        </div>
-        <div class="panel-body">
-
-
-          <table class="table table-striped">
-            <tr>
-              <th>Action Date</th>
-              <th>Action</th>
-              <th>User</th>
-
-              <th>Description</th>
-            </tr>
-
-            <% @myactions.each do |action| %>
-
-                <tr>
-                  <td><%= action.created_at.strftime("%m/%d/%Y") if action.created_at %></td>
-                  <td><%= action.actiontype_humanize if action.actiontype %></td>
-                  <td><%= action.user.name if action.user_id %></td>
-
-                  <td>
-                     
-                    <% if action.actiontype == Actiontype::AGENDA %>
-                        <% thismeeting= Meeting.find(action.meeting_id) %>
-                        <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  if action.meeting_id %></strong>  <br>
-                    <% end %>
-
-                        <% if action.actiontype == Actiontype::ESCALATED or
-                                action.actiontype == Actiontype::MEETING_RESULT_ESCALATED or
-                                action.actiontype == Actiontype::MEDIATION_RESULT_ESCALATED %>
-                             <% if action.laststructure_id %>
-
-                                <% fromstructure= Structure.find(action.laststructure_id)  %>
-                                <strong>Issue Escalated from : <%= link_to fromstructure.name, fromstructure  %></strong>  <br>
-                             <% end %>
-                        <% end %>
-
-                        <% if action.actiontype == Actiontype::RESOLVED or
-                                action.actiontype == Actiontype::MEETING_RESULT_RESOLVED or
-                                action.actiontype == Actiontype::MEDIATION_RESULT_RESOLVED %>
-                            <% if action.meeting_id %>
-                              <% thismeeting= Meeting.find(action.meeting_id) %>
-                              <strong>Resolved in Meeting!: </strong>  <br>
-                              <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
-                            <% elsif action.mediation_id %>
-                                <% thismediation= Mediation.find(action.mediation_id) %>
-                                <strong>Resolved in Mediation!: </strong>  <br>
-                                <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
-                            <% else %>
-                                    <strong>Issue Resolved!: </strong>  <br>
-                           <% end %>
-
-                        <% end %>
-
-                        <% if action.actiontype == Actiontype::CANCELLED or
-                                action.actiontype == Actiontype::MEETING_RESULT_CANCELLED or
-                                action.actiontype == Actiontype::MEDIATION_RESULT_CANCELLED %>
-                        
-                            <% if action.meeting_id %>
-                                <% thismeeting= Meeting.find(action.meeting_id) %>
-                                <strong>Cancelled in Meeting!: </strong>  <br>
-                                <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
-                            <% elsif action.mediation_id %>
-                                <% thismediation= Mediation.find(action.mediation_id) %>
-                                <strong>Cancelled in Mediation!: </strong>  <br>
-                                <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
-                            <% else %>
-                                <strong>Issue Cancelled!: </strong>  <br>
-                            <% end %>
-
-                        <% end %>
-
-
-                        <% if action.actiontype == Actiontype::ONGOING or
-                                action.actiontype == Actiontype::MEETING_RESULT_ONGOING or
-                                action.actiontype == Actiontype::MEDIATION_RESULT_ONGOING %>
-
-                            <% if action.meeting_id %>
-                                <% thismeeting= Meeting.find(action.meeting_id) %>
-                                <strong>Unresolved in  Meeting!: </strong>  <br>
-                                <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
-                            <% elsif action.mediation_id %>
-                                <% thismediation= Mediation.find(action.mediation_id) %>
-                                <strong>Unresolved in Mediation!: </strong>  <br>
-                                <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
-                            <% else %>
-
-                            <% end %>
-
-                        <% end %>
-                        
-                        
-
-                        <% if action.actiontype == Actiontype::MEDIATION or
-                                action.actiontype == Actiontype::MEETING_RESULT_MEDIATION %>
-
-                            <% if action.meeting_id %>
-                                <% thismeeting= Meeting.find(action.meeting_id) %>
-                                <strong>Sent to Mediation from Meeting!: </strong>  <br>
-                                <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
-                            <% else %>
-                                <strong>Issue Sent to Mediation!: </strong>  <br>
-                            <% end %>
-
-                        <% end %>
-
-
-
-                        <% if action.actiontype == Actiontype::REOPENED %>
-                        <strong>Issue Reopened!: </strong>  <br>
-                         <% end %>
-
-                        <% if action.actiontype == Actiontype::COMMENT %>
-                            <strong>Comment: </strong>  <br>
-                        <% end %>
-
-                        <% if action.actiontype == Actiontype::CREATED %>
-                            <strong>Created</strong>  <br>
-                        <% end %>
-
-
-
-
-
-
-
-
-                        <%= action.actionbody %></td>
-
-                        </tr>
-
-
-
-                    <% end %>
-
-                    </table>
-
-
-
-
-
-
-                    </div>
-                    </div>
-
-
-                    </div>
-                    <div class="col-sm-2">
+      </div>
+      <div class="col-sm-1">
 
 
                       <% if !@issue.resolution_date.nil? or !@issue.cancelled_at.nil? %>
@@ -472,27 +556,26 @@
 
 
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
+
+<div class="modal fade" id="addDisputant" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-adddisputant">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Add New Person linked to this Issue</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @issue.id %></h4>
       </div>
       <div class="modal-body">
-        ...
+
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
+
     </div>
   </div>
-  </div>
-
-
-
+</div>
 
 
 
@@ -657,8 +740,6 @@
 
 
 
-
-
 <script>
   $('#myModal').on('shown.bs.modal', function () {
   $('#myInput').focus()
@@ -675,8 +756,6 @@ $('#new_location_model').modal('hide');
   $('#new_report_form').on('submit', function() {
     $('#new_report_model').modal('hide');
   })
-
-
 
 
 </script>

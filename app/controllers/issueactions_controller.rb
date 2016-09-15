@@ -24,10 +24,12 @@ class IssueactionsController < ApplicationController
   # POST /issueactions
   # POST /issueactions.json
   def create
+puts '------------------user--------------------------------'
 
     @issueaction = Issueaction.new(issueaction_params)
     issue = Issue.find(params[:issue_id])
     @issueaction.issue_id = params[:issue_id]
+    @issueaction.user_id = current_user.id
     @issueaction.structure_id = issue.structure_id
     @issueaction.actiontype = params[:actiontype] if params[:actiontype]
     @issueaction.meeting_id = params[:meeting_id] if params[:meeting_id]

@@ -4,14 +4,31 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-    @people = Person.all
+    @mypeople = Person.all
+
+    #self.fixmembership(@mypeople)
   end
+
+  def fixmembership(allpeeps)
+    allpeeps.each do |p|
+      m = Membership.new
+      m.person_id = p.id
+      m.structure_id = p.structure_id
+      m.save!
+    end
+
+
+  end
+
 
   # GET /people/1
   # GET /people/1.json
   def show
-    @members= Membership.where('person_id = ?', @person.id)
-    @participations = Participation.where('person_id = ?', @person.id)
+    @mymemberships= Membership.where('person_id = ?', @person.id)
+    @myparticipations = Participation.where('person_id = ?', @person.id)
+    @myissues = Disputant.where('person_id = ?', @person.id)
+    @mymediations = Mediator.where('person_id = ?', @person.id)
+
   end
 
   # GET /people/new
@@ -71,6 +88,6 @@ class PeopleController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      params.require(:person).permit(:name_first, :name_last, :email)
+      params.require(:person).permit(:name_first, :name_last, :email, :organization_id)
     end
 end

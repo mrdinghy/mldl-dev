@@ -5,6 +5,12 @@ class Issue < ActiveRecord::Base
   belongs_to :user, :foreign_key => :created_by
   belongs_to :category
   belongs_to :scope
+
+
+  has_many :disputants, :dependent => :destroy
+  has_many :people, :through => :disputants
+
+
   has_many :issueactions, :dependent => :destroy
   has_many :meetings, :through => :issueactions
   has_many :users, :through => :issueactions
@@ -15,11 +21,11 @@ class Issue < ActiveRecord::Base
 
 
 
-  def issueid
+  def issuecode()
     structure = self.structure.structuretype_humanize
     structurename = self.structure.name
 
-    id= (structure[0,2] + '-'  + structurename + '-' + self.id.to_s )
+    id= (structurename + '-' + self.id.to_s )
     return id
   end
 

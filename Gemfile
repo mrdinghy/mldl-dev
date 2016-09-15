@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.2.3'
-gem 'rails', '4.2.4'
-gem 'rake', '11.1.2'
+gem 'rails', '4.2.5'
+gem 'rake', '11.2.2'
 gem 'pg'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -10,20 +10,12 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'simple_form'
-gem 'momentjs-rails', '~> 2.9'
+#gem 'momentjs-rails', '~> 2.9'
 #gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem "paperclip", "3.5.4"
 gem "enumerate_it"
 gem 'acts_as_commentable_with_threading'
-gem 'ckeditor'
-gem 'sunspot_rails'
-gem 'sunspot_solr' # optional pre-packaged Solr distribution for use in development
-#gem 'traco'
-gem 'globalize', '~> 5.0.0'
-gem 'globalize-accessors'
-gem 'tabs_on_rails'
-gem 'bettertabs'
 gem 'font-awesome-rails'
 gem "wysiwyg-rails"
 gem 'seed_dump'

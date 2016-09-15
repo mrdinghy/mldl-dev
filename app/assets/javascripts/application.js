@@ -12,18 +12,34 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
 //= require bootstrap-sprockets
+//= require turbolinks
+//= require modernizr.custom
+//= require jquery.storageapi
+//= require jquery.easing
+//= require animo
+//= require chosen.jquery.min
 //= require moment
-//= require bootstrap-datetimepicker
-//= require pickers
+//= require bootstrap-datetimepicker.min
+//= require select2
 //= require jquery.dataTables.min
-//= require dataTables.bootstrap.min
-//= require jquery.bettertabs
-//= require froala_editor.min
-//= require lists.min
-//= require d3.v3
-//= require rickshaw.min
-//= require Chart
-//= require Chart.bundle
+//= require dataTables.colVis
+//= require dataTables.bootstrap
+//= require jquery.slimscroll.min
+//= require screenfull
+//= require index
+//= require skycons
+//= require app
+
+// require moment
+// require bootstrap-datetimepicker
+// require pickers
+
+// require froala_editor.min
+// require lists.min
+// require d3.v3
+// require rickshaw.min
+// require Chart
+// require Chart.bundle
 //= require_tree .
+

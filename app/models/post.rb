@@ -1,7 +1,5 @@
 class Post < ActiveRecord::Base
 
-  translates :title, :description
-
   has_many :site_documents
   has_many :site_images
 

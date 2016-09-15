@@ -1,86 +1,5 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Appissues</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Uuid</th>
-      <th>Yourname</th>
-      <th>Originalmeet</th>
-      <th>Issueid</th>
-      <th>Meetingname</th>
-      <th>Structurecode</th>
-      <th>County</th>
-      <th>District</th>
-      <th>Status</th>
-      <th>Issuedistrict</th>
-      <th>Community</th>
-      <th>Category</th>
-      <th>Raisedby</th>
-      <th>Disputant</th>
-      <th>Duration</th>
-      <th>Actioncommittee</th>
-      <th>Actiondescription</th>
-      <th>Actionnote</th>
-      <th>Resolved</th>
-      <th>Resolutiondate</th>
-      <th>Docslink</th>
-      <th>Updatetype</th>
-      <th>Resolutiontype</th>
-      <th>Updated on</th>
-      <th>Updatedesc</th>
-      <th>Mediationdate</th>
-      <th>Mediationoutcome</th>
-      <th>Issuedesc</th>
-      <th>Issuename</th>
-      <th>Issuenote</th>
-      <th>Statusnote</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @appissues.each do |appissue| %>
-      <tr>
-        <td><%= appissue.uuid %></td>
-        <td><%= appissue.yourname %></td>
-        <td><%= appissue.originalmeet %></td>
-        <td><%= appissue.issueid %></td>
-        <td><%= appissue.meetingname %></td>
-        <td><%= appissue.structurecode %></td>
-        <td><%= appissue.county %></td>
-        <td><%= appissue.district %></td>
-        <td><%= appissue.status %></td>
-        <td><%= appissue.issuedistrict %></td>
-        <td><%= appissue.community %></td>
-        <td><%= appissue.category %></td>
-        <td><%= appissue.raisedby %></td>
-        <td><%= appissue.disputant %></td>
-        <td><%= appissue.duration %></td>
-        <td><%= appissue.actioncommittee %></td>
-        <td><%= appissue.actiondescription %></td>
-        <td><%= appissue.actionnote %></td>
-        <td><%= appissue.resolved %></td>
-        <td><%= appissue.resolutiondate %></td>
-        <td><%= appissue.docslink %></td>
-        <td><%= appissue.updatetype %></td>
-        <td><%= appissue.resolutiontype %></td>
-        <td><%= appissue.updated_on %></td>
-        <td><%= appissue.updatedesc %></td>
-        <td><%= appissue.mediationdate %></td>
-        <td><%= appissue.mediationoutcome %></td>
-        <td><%= appissue.issuedesc %></td>
-        <td><%= appissue.issuename %></td>
-        <td><%= appissue.issuenote %></td>
-        <td><%= appissue.statusnote %></td>
-        <td><%= link_to 'Show', appissue %></td>
-        <td><%= link_to 'Edit', edit_appissue_path(appissue) %></td>
-        <td><%= link_to 'Destroy', appissue, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
 <br>
 
@@ -89,40 +8,13 @@
 <% @meetings.each do |meet| %>
 <tr>
   <td><%= meet.meetingname %></td>
-  <td><%= meet.originalmeet %></td>
-  <td><%= meet.structurecode %></td>
-  <td><%= meet.county %></td>
-  <td><%= meet.district %></td>
-
-
-
-
+  <td><%= meet.originalmeetingdate.strftime("%m/%d/%Y") if meet.originalmeetingdate %></td>
+  <td><%= meet.meetingcode %></td>
 
 
 </tr>
 
 <% end %>
-</table>
-
-
-
-
-<table>
-
-  <% @countydist.each do |cm| %>
-      <tr>
-
-        <td><%= cm.county %></td>
-        <td><%= cm.district %></td>
-
-
-
-
-
-
-      </tr>
-
-  <% end %>
 </table>
 
 

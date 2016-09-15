@@ -32,7 +32,7 @@
   <tbody>
   <% @issues.each do |issue| %>
       <tr>
-        <td><%= link_to issue.id, issue %></td>
+        <td><%= link_to issue.issuecode, issue %></td>
         <td><%= link_to issue.old_id, issue %></td>
         <td>
 

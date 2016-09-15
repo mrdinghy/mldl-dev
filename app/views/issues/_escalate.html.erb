@@ -1,17 +1,7 @@
 <% modal ||= false %>
 <% remote = modal ? true : false %>
 <%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'new_note_form'}) do |f| %>
-    <% if @issueaction.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@location.errors.count, "error") %> prohibited this location from being saved:</h2>
 
-          <ul>
-            <% @issue.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
     <%= hidden_field_tag(:issue_id, @issue.id) %>
     <%= hidden_field_tag(:parent_id, @issue.structure.parent_id) %>
     <%= hidden_field_tag(:fromissue, true) %>
@@ -20,9 +10,9 @@
 
 <%# Added Bootstrap classes, and help-block container for error messages %>
     <div class="field">
-      <%= f.label 'Note:' %><br>
+      <%= f.label 'Action Note (optional):' %><br>
 
-      <%= f.text_area :actionbody,  cols: "200", rows: "12" %>
+      <%= f.text_area :actionbody,  cols: "120", rows: "12" %>
     </div>
     <div class="actions">
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>

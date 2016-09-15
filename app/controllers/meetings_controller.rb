@@ -14,11 +14,50 @@ class MeetingsController < ApplicationController
     @participants = Participation.where('meeting_id = ?', @meeting.id)
     #@mymeetings = Meeting.where('structure_id=?', @meeting.structure_id)
     @participation = Participation.new
+    @available_people = Person.all
     @issue = Issue.new
     @issueaction = Issueaction.new
     @meetingdocs = SiteDocument.where('documentable_type = ? and documentable_id = ?', 'meeting', @meeting.id)
     @new_site_document = SiteDocument.new
+
   end
+
+
+
+  def searchmeetings
+
+    @allstructures = Structure.order(:id)
+    @allpersons = Person.all
+
+
+  end
+
+  def meetingresults
+
+    searchterm = params[:search_term]
+    searchresults = Meeting.all
+
+    searchresults = Meeting.where('structure_id in (?)', params[:structure_ids]) if !params[:structure_ids].blank?
+
+    #searchresults = Meeting.where('name like ? or description like ? or community like  ? ', "%#{searchterm}%", "%#{searchterm}%", "%#{searchterm}%") if !params[:search_term].blank?
+
+    @Meetings = searchresults
+    render 'index'
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   # GET /meetings/new
   def new
@@ -91,6 +130,34 @@ class MeetingsController < ApplicationController
   end
 
 
+  def addparticipant
+
+
+
+    @participant = Participation.new
+    meeting=Meeting.find(params[:meeting_id])
+    @participant.meeting_id = meeting.id
+    if params[:addpeep]
+      peep=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email], title: params[:title], organization_id: params[:organization_id])
+      @participant.person_id = peep.id
+    else
+      @participant.person_id = params[:person_id]
+    end
+
+    respond_to do |format|
+      if @participant.save
+        format.html { redirect_to meeting, notice: 'Participation was successfully created.' }
+        format.json { render :show, status: :created, location: @participation }
+      else
+        format.html { render :new }
+        format.json { render json: @participant.errors, status: :unprocessable_entity }
+      end
+    end
+
+
+
+
+  end
 
 
 

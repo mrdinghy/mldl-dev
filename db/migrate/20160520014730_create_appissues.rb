@@ -1,14 +1,16 @@
 class CreateAppissues < ActiveRecord::Migration
   def change
     create_table :appissues do |t|
+      t.string :timestamp
       t.string :uuid
       t.string :yourname
-      t.date :originalmeet
+      t.date :originalmeetingdate
+      t.string  :meetingcode
       t.integer :issueid
       t.string :meetingname
-      t.string :structurecode
-      t.string :county
-      t.string :district
+      t.string :structure
+      t.string :structurecounty
+      t.string :structuredistrict
       t.string :status
       t.string :issuedistrict
       t.string :community
@@ -16,23 +18,28 @@ class CreateAppissues < ActiveRecord::Migration
       t.string :raisedby
       t.string :disputant
       t.integer :duration
-      t.text :actioncommittee
-      t.text :actiondescription
-      t.text :actionnote
-      t.string :resolved
+      t.text :actionplancommittee
+      t.text :actionplandescription
+      t.text :actionplannotes
+      t.string :ongoing_resolved
+      t.string :resolutiondate
       t.date :resolutiondate
-      t.text :docslink
+      t.string :report_ongoing
+      t.text :googledocs
+      t.text :resolution
       t.string :updatetype
       t.string :resolutiontype
-      t.date :updated_on
-      t.text :updatedesc
+      t.date :updatedate
+      t.text :updatedescription
       t.date :mediationdate
       t.string :mediationoutcome
-      t.text :issuedesc
+      t.text :issuedescription
       t.string :issuename
-      t.text :issuenote
-      t.text :statusnote
-      t.text :resolution
+      t.text :issuenotes
+      t.text :statusnotes
+      t.date :referraldate
+      t.string :referredto
+      t.text :referralnote
 
       t.timestamps null: false
     end

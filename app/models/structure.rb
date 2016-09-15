@@ -11,13 +11,10 @@ class Structure < ActiveRecord::Base
 
   has_many :memberships, :dependent => :destroy
   has_many :people, :through => :memberships
+  accepts_nested_attributes_for :memberships, :reject_if => :all_blank, :allow_destroy => true
 
-  has_many :userroles, :dependent => :destroy
-  has_many :users, :through => :userroles
-  has_many :roles, :through => :userroles
-
-
-
+  has_many :managers, :dependent => :destroy
+  has_many :userroles, :through => :managers
 
 
 

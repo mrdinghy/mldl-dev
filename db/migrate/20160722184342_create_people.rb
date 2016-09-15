@@ -7,6 +7,12 @@ class CreatePeople < ActiveRecord::Migration
       t.string :title
       t.string :email
       t.integer :organization_id
+      t.integer :structure_id
+      t.integer :gender
+      t.string :community
+      t.string :agencyname
+      t.string :salut
+      t.string :suffix
 
       t.timestamps null: false
     end

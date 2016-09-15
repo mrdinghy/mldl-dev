@@ -1,68 +1,62 @@
 <% modal ||= false %>
 <% remote = modal ? true : false %>
+<script>
+    $(document).ready(function() { $("#selectmediator").select2(); });
+</script>
+
+
+<%= form_tag addmediator_path do %>
 
 
 
-<%= form_for(@mediator) do |f| %>
-    <% if @mediator.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@mediator.errors.count, "error") %> prohibited this mediator from being saved:</h2>
 
-          <ul>
-            <% @mediator.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
 
-    <div class="field">
-      <%= f.label :person_id %><br>
-      <%= f.collection_select(:person_id, Person.all, :id, :fullname, include_blank: true, :class => "form-control") %>
+
+
+    <div class="field" id="selectmediator">
+      <%= label_tag 'Select/Search Person' %><br>
+      <%= select_tag 'person_id', options_from_collection_for_select(Person.all, :id, :fullname), include_blank: true, :class => "form-control" %>
 
     </div>
 
+
+
     <div class="field">
-      <%= f.label :person_id %><br>
+      <%= label_tag 'Add Person' %><br>
       <label><input type="checkbox" name="addpeep" id="addpeep" value="1"> Click to add new person to system</label><br>
 
     </div>
 
     <div id="person_details" style="display:none;">
       <div class="field">
-        <%= f.label "First Name" %><br>
+        <%= label_tag "First Name" %><br>
         <input type="text" name="fname" />
       </div>
       <div class="field">
-        <%= f.label "Last Name" %><br>
+        <%= label_tag "Last Name" %><br>
         <input type="text" name="lname" />
       </div>
       <div class="field">
-        <%= f.label "Email" %><br>
+        <%= label_tag "Title" %><br>
+        <input type="text" name="title" />
+      </div>
+      <div class="field">
+        <%= label_tag "Email" %><br>
         <input type="text" name="email" />
       </div>
     </div>
 
 
 
-
-
-
-
-
-
-
-
-
-
     <%= hidden_field_tag(:mediation_id, @mediation.id) %>
     <div class="actions">
-      <%= f.submit %>
+      <%= submit_tag 'Submit' %>
     </div>
 <% end %>
 
 
 <script type="text/javascript">
+
     var checkbox = document.getElementById('addpeep');
     var details_div = document.getElementById('person_details');
     checkbox.onchange = function() {
@@ -73,5 +67,6 @@
         }
     };
 </script>
+
 
 

@@ -1,0 +1,12 @@
+
+
+<%= form_tag adddisputant_path do %>
+
+    <%= render 'people/addpeopletoobject' %>
+
+    <%= hidden_field_tag(:issue_id, @issue.id) %>
+    <div class="actions">
+      <%= submit_tag 'Submit', :class => "btn btn-small btn-primary" %>
+    </div>
+<% end %>
+

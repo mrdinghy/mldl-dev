@@ -1,45 +1,26 @@
-<% modal ||= false %>
-<% remote = modal ? true : false %>
 
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".selectmanager").select2();
+    });
+</script>
 
-<%= form_for(@userrole) do |f| %>
-    <% if @userrole.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@userrole.errors.count, "error") %> prohibited this assignment from being saved:</h2>
+<%= form_tag addmanager_path do |f| %>
 
-          <ul>
-            <% @userrole.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
-
+    Add Current System Managers to this Stucture
     <div class="field">
-      <%#= f.label 'Structure Role' %><br>
-      <%#=radio_button(:userrole, :userrole_id, '7') %> Manager<br>
-      <%#=radio_button(:userrole, :userrole_id, '8') %> Administrator<br>
-      <%= f.collection_select(:user_id, @allusers, :id, :name, include_blank: true, :class => "form-control") %>
-      <%#= f.collection_select(:person_id, Person.all, :id, :fullname, include_blank: true, :class => "form-control") %>
 
+      <%= select_tag 'userrole_id', options_from_collection_for_select(@availablemanagers, :id, :user_id), include_blank: true, :class => "selectmanager" %>
 
-    </div>
-
-    <div class="field">
-      <%= f.label 'Assign Manager' %><br>
-      <%#= select_tag(:userrole_id, @allmanagers, :id, user_id.user.name, include_blank: true, :class => "form-control") %>
-
-      <%#= f.select_tag 'userrole_id', options_from_collection_for_select(@userroles, :id, :user_id, include_blank: true, :class => "form-control") %>
 
     </div>
 
 
 
-    <%= hidden_field_tag(:role_id, '2') %>
     <%= hidden_field_tag(:structure_id, @structure.id) %>
     <div class="actions">
-      <%= f.submit %>
+      <%= submit_tag 'Submit', :class => "btn btn-small btn-primary" %>
     </div>
 <% end %>
 

@@ -10,16 +10,27 @@
  * file per style scope.
  *
  */
-@import "bootstrap-sprockets";
-@import "bootstrap";
-@import "bootstrap-datetimepicker.min";
-@import "datatables";
-@import "dataTables.bootstrap";
-@import "jquery.dataTables";
-@import "dataTables.jqueryui";
-@import "froala_editor.min";
-@import "froala_style.min";
-@import "font-awesome";
+ @import "bootstrap-sprockets";
+ @import "bootstrap";
+ @import "font-awesome";
+ @import "simple-line-icons";
+ @import "animate.min";
+ @import "chosen.min";
+ @import "bootstrap-datetimepicker.min";
+ @import "select2";
+ @import "dataTables.colVis";
+ @import "dataTables.bootstrap";
+ @import "index";
+ @import "app";
+/*
+
+
+
+ @import "jquery.dataTables";
+ @import "dataTables.jqueryui";
+ @import "froala_editor.min";
+ @import "froala_style.min";*/
+
 
 
 .ar {  direction: rtl;   }
@@ -27,16 +38,17 @@
 .en { direction: ltr;
   font-family: 'Pontano Sans', sans-serif;}
 
+.topnavbar {
+  background-image: linear-gradient(to right, #666666 0%, #999999 100%);
+  }
 
-
-
- .container {
-   width: 90%;
+ .layout-h .wrapper > section {
+   max-width: 95%;
+   margin-left: auto;
+   margin-right: auto;
  }
 
-.widerbox {
-  width: 90%;
-}
+
 
 .navbar-default {
   background-color: teal;

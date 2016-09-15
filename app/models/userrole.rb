@@ -1,6 +1,8 @@
 class Userrole < ActiveRecord::Base
   belongs_to :user
   belongs_to :role
-  belongs_to :structure
+  has_many :managers, :dependent => :destroy
+
+
 
 end

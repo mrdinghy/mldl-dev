@@ -1,28 +1,30 @@
 <style>
   .cscbox, .dscbox, .cfbox, .blankbox  {
-      min-height: 50px;
-      padding: 2px;
+      min-height: 40px;
+      padding: 1px;
       margin-top: 8px;
   }
 
 .cscbox {
     background-color: #fff;
     color: #000;
-    border: 3px solid #553982;
+    border: 1px solid #553982;
     font-size: 14px;
 }
   .dscbox {
       background-color: #fff;
       color: #000;
-      border: 3px solid #478500;
+      border: 1px solid #478500;
       font-size: 14px;
+
   }
 
   .cfbox {
       background-color: #fff;
       color: #000;
-      border: 3px solid #CCC;
+      border: 1px solid #CCC;
       font-size: 14px;
+
   }
 
   .blankbox {
@@ -31,73 +33,100 @@
   }
 </style>
 
-<div class="container">
-
-<p id="notice"><%= notice %></p>
-
-<h1>Listing Structures</h1>
 
 
-  <div class="row">
-    <% @csc_structures.each do |csc| %>
 
-        <% dsc_structures = Structure.where('county_id = ? and structuretype = ?', csc.county_id, Structuretype::DSC ) %>
-
-        <div class="col-sm-3">
-          <div class="col-sm-12 cscbox">
-            <strong><%= link_to csc.name, csc %></strong>
+<section>
+  <!-- Page content-->
+  <div class="content-wrapper">
 
 
-            <div class="pull-right">
-                 <%= fa_icon "users", :style => "color: green" %>
-              <%= csc.qmeetings(0,0,csc.id,0).count %><br>
-                  <%= fa_icon "wrench", :style => "color: blue" %>
+
+
+    <h4 class="page-header">MLDL Structures</h4>
+    <!-- START row-->
+
+
+
+    <div class="row">
+      <% @csc_structures.each do |csc| %>
+
+          <% dsc_structures = Structure.where('county_id = ? and structuretype = ?', csc.county_id, Structuretype::DSC ) %>
+
+          <div class="col-sm-3">
+            <div class="col-sm-12 cscbox">
+              <strong><%= link_to csc.name, csc %></strong>
+
+
+              <div class="pull-right">
+                <%= fa_icon "users", :style => "color: green" %>
+                <%= csc.qmeetings(0,0,csc.id,0).count %>
+                <%= fa_icon "wrench", :style => "color: blue" %>
                 <%= csc.openissues(0,0,csc.id,0).count %>
-          </div>
-
-         </div>
-          <% dsc_structures.each do |dsc| %>
-              <% cf_structures = Structure.where('district_id = ? and structuretype = ?', dsc.district_id, Structuretype::CF ) %>
-              <div class="col-sm-2">&nbsp;</div>
-
-              <div class="col-sm-10 dscbox">
-                <strong><%= link_to dsc.name, dsc %></strong>
-
-                <div class="pull-right">
-
-                      <%= fa_icon "users", :style => "color: green" %>
-                  <%= dsc.qmeetings(0,0,dsc.id,0).count %><br>
-
-                      <%= fa_icon "wrench", :style => "color: blue" %>
-                      <%= dsc.openissues(0,0,dsc.id,0).count %>
-                </div>
               </div>
 
-              <% cf_structures.each do |cf| %>
-                  <div class="col-sm-4">&nbsp;</div>
+            </div>
+            <% dsc_structures.each do |dsc| %>
+                <% cf_structures = Structure.where('district_id = ? and structuretype = ?', dsc.district_id, Structuretype::CF ) %>
 
-                  <div class="col-sm-8 cfbox">
-                    <strong><%= link_to cf.name, cf %></strong>
+                <div class="col-sm-2">&nbsp;</div>
+                <div class="col-sm-10 dscbox">
+                  <strong><%= link_to dsc.name, dsc %></strong>
 
-                    <div class="pull-right">
-                      <%= fa_icon "users", :style => "color: green" %>
-                      <%= cf.qmeetings(0,0,cf.id,0).count %><br>
+                  <div class="pull-right">
 
-                      <%= fa_icon "wrench", :style => "color: blue" %>
-                      <%= cf.openissues(0,0,cf.id,0).count %>
-                    </div>
+                    <%= fa_icon "users", :style => "color: green" %>
+                    <%= dsc.qmeetings(0,0,dsc.id,0).count %>
+
+                    <%= fa_icon "wrench", :style => "color: blue" %>
+                    <%= dsc.openissues(0,0,dsc.id,0).count %>
                   </div>
-              <% end %>
+                </div>
 
-        <% end %>
+                <% cf_structures.each do |cf| %>
 
-</div>
-    <% end %>
+                    <div class="col-sm-4">&nbsp;</div>
+                    <div class="col-sm-8 cfbox">
+                      <strong><%= link_to cf.name, cf %></strong>
+
+                      <div class="pull-right">
+                        <%= fa_icon "users", :style => "color: green" %>
+                        <%= cf.qmeetings(0,0,cf.id,0).count %>
+
+                        <%= fa_icon "wrench", :style => "color: blue" %>
+                        <%= cf.openissues(0,0,cf.id,0).count %>
+                      </div>
+                    </div>
+                <% end %>
+
+            <% end %>
+
+          </div>
+      <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <!-- END row-->
+
+
+
+
+
+
+
+
+
+
   </div>
-
-
-<br>
-
-<%= link_to 'New Structure', new_structure_path, :class => "btn btn-primary" %>
-
-</div>
+</section>

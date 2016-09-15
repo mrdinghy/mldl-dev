@@ -1,1 +1,0 @@
-json.partial! "mediators/mediator", mediator: @mediator

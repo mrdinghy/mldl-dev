@@ -1,0 +1,102 @@
+
+
+
+
+
+<!-- START Top Navbar-->
+<nav role="navigation" class="navbar topnavbar">
+  <!-- START navbar header-->
+
+  <div class="row" style="background-color: #fff;">
+    <div class="col-sm-12" style="padding-left: 40px; padding-right: 40px;">
+
+      <span style="font-size: 24px; font-weight: bold; color: coral;">MLDL2</span>
+      <span style="font-size: 18px">Mitigating Local Disputes in Liberia, Phase II</span>
+
+    <span class="pull-right">
+      <% if user_signed_in? %>
+      Welcome <%= current_user.name %>!
+          <% end %>
+    </span>
+  </div>
+</div>
+
+  <div class="navbar-header">
+    <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a href="#/" class="navbar-brand">
+      <div class="brand-logo">
+
+        <!---<img src="img/logo.png" alt="App Logo" class="img-responsive">--->
+      </div>
+      <div class="brand-logo-collapsed">
+        <img src="img/logo-single.png" alt="App Logo" class="img-responsive">
+      </div>
+    </a>
+  </div>
+  <!-- END navbar header-->
+  <!-- START Nav wrapper-->
+  <div class="navbar-collapse collapse">
+    <!-- START Left navbar-->
+    <ul class="nav navbar-nav">
+      <li></li>
+      <li><a href="#dashboard" data-toggle="dropdown">Dashboard</a>
+        <ul class="dropdown-menu animated fadeIn">
+          <li><a href="dashboard.html">Dashboard v1</a>
+          </li>
+          <li><a href="dashboard_v2.html">Dashboard v2</a>
+          </li>
+          <li><a href="dashboard_v3.html">Dashboard v3</a>
+          </li>
+        </ul>
+      </li>
+      <li><%= link_to "Home", root_path %></li>
+      <li><%= link_to "Structures", structures_path %></li>
+      <li><%= link_to "Meetings", meetings_path %></li>
+      <li><%= link_to "Issues", searchissues_path %></li>
+      <li><%= link_to "Mediations", mediations_path %></li>
+
+      <li><%= link_to "People", people_path %></li>
+    </ul>
+    <!-- END Left navbar-->
+    <!-- START Right Navbar-->
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'All Users', users_path %></li>
+          <li><%= link_to 'Structures', structures_path %></li>
+          <li><%= link_to 'Counties', counties_path %></li>
+          <li><%= link_to 'Issue Scopes', scopes_path %></li>
+          <li><%= link_to 'Issue Categories', categories_path %></li>
+
+          <li><%= link_to 'District', districts_path %></li>
+          <li><%= link_to 'Issue Status', statuses_path %></li>
+          <li><%= link_to 'Organizations', organizations_path %></li>
+          <li><%= link_to 'Posts', posts_path %></li>
+          <li><%= link_to 'Upload CSV Data', uploadcsv_appissues_path %></li>
+
+          <li><a href="#">Another action</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <%= render 'layouts/navigation_links' %>
+
+
+
+        </ul>
+      </li> <!-- START lock screen-->
+
+    </ul>
+    <!-- END Right Navbar-->
+  </div>
+  <!-- END Nav wrapper-->
+
+</nav>
+<!-- END Top Navbar-->

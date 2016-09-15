@@ -6,35 +6,194 @@ class AppissuesController < ApplicationController
   def index
     @appissues = Appissue.all
 
-    @communities=Appissue.select(:district, :community).where('structurecode = ?', 'CF').uniq
+    meetings = Appissue.select(:meetingname, :structure, :structurecounty, :structuredistrict, :meetingcode, :originalmeetingdate).order(:meetingcode).uniq
+    meetings.each do |meet|
+    s = self.retstruct(meet.structurecounty, meet.structuredistrict, meet.structure)
+    m=Meeting.create(name: meet.meetingname, real_start: meet.originalmeetingdate, old_id: meet.meetingcode, structure_id: s)
+     end
 
-    @communities.each do |c|
-      puts c.community
-      #district = District.find_by_name(c.district)
-      #Community.create(name: c.community, district_id: district.id )
-    end
-
-    @meetings = Appissue.select(:originalmeet, :meetingname, :structurecode, :county, :district, :community).order(:meetingname).uniq
-
-    @meetings.each do |m|
-
-      county = County.find_by_name(m.county)
-      district = District.find_by_name(m.district)
-      struct = Structure.find_by_name(m.structurecode )
-      community = Community.find_by_name(m.community)
-
-      Meeting.create(name: m.meetingname, meeting_on: m.originalmeet, structure_id: struct.id, county_id: county.id, district_id: district.id, community_id: community.id  )
-
-
-
-
-    end
 
 
 
 
 
   end
+
+
+  def retstruct(county, district, structure)
+    if structure == 'NSC'
+      s=1
+    else
+        if county == 'Nimba'
+          if structure == 'CSC'
+          s=2
+          elsif district
+            if district.include? 'Gbehlay'
+              if structure == 'DSC'
+              s=15
+              elsif structure == 'CF'
+              s=16
+              else
+              s=0
+              end
+            elsif district.include? 'Buu'
+              if structure == 'DSC'
+              s=17
+              elsif structure == 'CF'
+              s=18
+              else
+              s=0
+              end
+            elsif district.include? 'Wee'
+              if structure == 'DSC'
+              s=19
+              elsif structure == 'CF'
+              s=20
+              else
+              s=0
+              end
+            elsif district.include? 'Kpai'
+              if structure == 'DSC'
+              s=21
+              elsif structure == 'CF'
+              s=22
+              else
+              s=0
+              end
+            elsif district.include? 'Garr-B'
+              if structure == 'DSC'
+              s=23
+              elsif structure == 'CF'
+              s=24
+              else
+              s=0
+              end
+            elsif district.include? 'Yarm'
+              if structure == 'DSC'
+              s=25
+              elsif structure == 'CF'
+              s=26
+              else
+              s=0
+              end
+            else
+              s=0
+           end
+          end
+
+
+
+
+        elsif county == 'Bong'
+          if structure == 'CSC'
+            s=2
+          elsif district
+            if district.include? 'Kpaai'
+              if structure == 'DSC'
+              s=3
+              elsif structure == 'CF'
+              s=4
+              else
+              s=0
+              end
+            elsif district.include? 'Suak'
+              if structure == 'DSC'
+              s=5
+              elsif structure == 'CF'
+              s=6
+              else
+              s=0
+              end
+          end
+          else
+            s=0
+
+          end
+
+
+
+        elsif county == 'Lofa'
+          if structure == 'CSC'
+            s=7
+          elsif district
+            if district.include? 'Foya'
+              if structure == 'DSC'
+              s=8
+              elsif structure == 'CF'
+              s=9
+              else
+              s=0
+              end
+            elsif district.include? 'Voin'
+              if structure == 'DSC'
+              s=10
+              elsif structure == 'CF'
+              s=11
+              else
+              s=0
+              end
+            elsif district.include? 'Zor'
+              if structure == 'DSC'
+              s=12
+              elsif structure == 'CF'
+              s=13
+              else
+              s=0
+              end
+            end
+          else
+            s=0
+          end
+
+        elsif county == 'Grand Gedeh'
+          if structure == 'CSC'
+           s=27
+          elsif district
+            if district.include? 'Bhai'
+              if structure == 'DSC'
+              s=28
+              else
+              s=0
+              end
+            elsif district.include? 'Gbao'
+              if structure == 'DSC'
+              s=28
+              else
+              s=0
+              end
+            elsif district.include? 'Kono'
+              if structure == 'DSC'
+              s=28
+              else
+              s=0
+              end
+            end
+          else
+            s=0
+
+          end
+        end
+    end
+
+    return s
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   def uploadcsv

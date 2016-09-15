@@ -1,9 +1,15 @@
+
+
+
 <div class="container">
   <p id="notice"><%= notice %></p>
 
-  Meetings need to be created from within the Structure Record.
 
   <h2>Meetings List</h2>
+  <div class="pull-right">
+    <%= link_to 'New Meeting', new_meeting_path, :class => "btn btn-primary" %>
+  </div>
   <%= render 'meetings_table' %>
+
 
 </div>

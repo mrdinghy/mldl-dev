@@ -7,10 +7,10 @@
     </div>
     <div class="panel-body">
 
+      <!---<table id="meetingstable"  class="hover" cellspacing="0" width="100%">--->
 
+      <table id="meetingstable" class="table table-striped table-hover">
 
-
-      <table id="meetingstable"  class="hover" cellspacing="0" width="100%">
         <thead>
         <tr>
           <th>ID</th>
@@ -18,7 +18,7 @@
           <th>Meeting Date</th>
           <th>Time Start</th>
           <th>Name</th>
-          <% if @structure.nil? %><th>Structure</th> <% end %>
+         <th>Structure</th>
           <th>Agenda Issues</th>
 
 
@@ -31,7 +31,7 @@
 
         <% agendaitems = Issueaction.where('meeting_id = ? and actiontype = ?', meeting.id, Actiontype::AGENDA) %>
             <tr>
-              <td><%= link_to meeting.meetingid, meeting %></td>
+              <td><%= link_to meeting.id, meeting %></td>
               <td>
                 <%= meeting.status %>
               </td>
@@ -39,7 +39,12 @@
               <td><%=  meeting.real_start.strftime("%R") if meeting.real_start %></td>
 
               <td><%= meeting.name %></td>
-              <% if @structure.nil? %><td><%= link_to meeting.structure.name, meeting.structure %></td><% end %>
+                         <td>
+                           <% if meeting.structure_id.present? && meeting.structure_id.to_i > 0 %>
+                             <%= link_to meeting.structure.name, meeting.structure if meeting.structure_id %>
+                               <% end %>
+                               </td>
+
               <td><%= agendaitems.count if agendaitems %></td>
 
             </tr>

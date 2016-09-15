@@ -1,0 +1,88 @@
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".selectperson").select2();
+    });
+</script>
+
+<div class="field" id="e2">
+
+
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+          $(".chosen-select").select2();
+      });
+
+  </script>
+
+  <small>Select/Search Person</small><br>
+  <select name="person_id" class="chosen-select input-md form-control">
+    <option value = "">Select -></option>
+    <% @available_people.each do |p| %>
+
+      <option value="<%= p.id %>"><%= p.fullname %></option>
+     <% end %>
+    </select>
+
+
+
+</div>
+
+
+<br><br>
+<div class="field">
+
+  <label><input type="checkbox" name="addpeep" id="addpeep" value="1">   <small>Or click here to add new person to MLDL</small></label><br>
+
+</div>
+<div id="person_details" style="display:none;">
+  <div class="field">
+    <%= label_tag "First Name" %><br>
+    <input type="text" name="fname" />
+  </div>
+  <div class="field">
+    <%= label_tag "Last Name" %><br>
+    <input type="text" name="lname" />
+  </div>
+
+  <div class="field">
+    <%= label_tag "Organization" %><br>
+
+    <%= select_tag "organization_id", options_from_collection_for_select(Organization.all, "id", "name"), include_blank: true, :class => "form-control" %>
+
+  </div>
+
+
+
+
+  <div class="field">
+    <%= label_tag "Title" %><br>
+    <input type="text" name="title" />
+  </div>
+
+  <div class="field">
+    <%= label_tag "Email" %><br>
+    <input type="text" name="email" />
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+
+
+    var checkbox = document.getElementById('addpeep');
+    var details_div = document.getElementById('person_details');
+    checkbox.onchange = function() {
+        if(this.checked) {
+            details_div.style['display'] = 'block';
+        } else {
+            details_div.style['display'] = 'none';
+        }
+    };
+</script>
+
+

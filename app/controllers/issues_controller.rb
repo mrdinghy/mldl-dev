@@ -13,6 +13,13 @@ class IssuesController < ApplicationController
     @myactions = Issueaction.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymediations = Mediation.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymeetings = Meeting.where('structure_id=?', @issue.structure_id)
+
+
+    @mydisputants = Disputant.where('issue_id=?', @issue.id)
+    @disputant = Disputant.new
+    @available_people = Person.all
+
+
     @raisedby = Person.find(@issue.raised_by) if @issue.raised_by
     @issueaction = Issueaction.new
     @mediation = Mediation.new
@@ -119,7 +126,6 @@ class IssuesController < ApplicationController
   # PATCH/PUT /issues/1.json
   def update
 
-    @issue = Issue(issue_params)
 
 
 
@@ -132,8 +138,7 @@ class IssuesController < ApplicationController
 
 
     #end
-    puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    puts @issue
+
 
     @issue.save
 
@@ -331,12 +336,35 @@ end
   newissue.created_at = DateTime.new(2016,m,22,9,0,0)
     newissue.save!
 
+  end
+
+  def adddisputant
+    @disputant = Disputant.new
+    issue=Issue.find(params[:issue_id])
+    @disputant.issue_id = issue.id
+    if params[:adddisputant]
+      peep=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email], title: params[:title], organization_id: params[:organization_id])
+      @disuptant.person_id = peep.id
+    else
+      @disputant.person_id = params[:person_id]
+    end
+
+    respond_to do |format|
+      if @disputant.save
+        format.html { redirect_to issue, notice: 'Participation was successfully created.' }
+        format.json { render :show, status: :created, location: @participation }
+      else
+        format.html { render :new }
+        format.json { render json: @disputant.errors, status: :unprocessable_entity }
+      end
+    end
 
 
 
 
+  end
 
-end
+
 
 
 
@@ -349,7 +377,7 @@ end
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
       params.require(:issue).permit(:name, :description, :structure_id, :community, :yourname, :district_id, :location, :status_id, :status_note,
-                                    :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, structure_ids: [] )
+                                    :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, person_ids: [], structure_ids: [] )
     end
 end
 
