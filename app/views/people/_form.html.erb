@@ -19,6 +19,11 @@
           </div>
       <% end %>
 
+          <div class="field">
+            <%= f.label :salut %><br>
+            <%= f.text_field :salut %>
+          </div>
+
       <div class="field">
         <%= f.label :name_first %><br>
         <%= f.text_field :name_first %>
@@ -27,10 +32,17 @@
           <%= f.label :name_last %><br>
           <%= f.text_field :name_last %>
       </div>
+          <div class="field">
+            <%= f.label :suffix %><br>
+            <%= f.text_field :suffix %>
+          </div>
 
 
-
-
+          <div class="field">
+            <%= f.label :title %><br>
+            <%= f.text_field :title %>
+          </div>
+          <%= f.select(:gender, Gender.to_a, :include_blank => true, :class => "form-control") %>
 
           <div class="form-group">
             <%= f.label :organization_id, :class => "col-sm-2 control-label" %>

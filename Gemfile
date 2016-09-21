@@ -10,8 +10,8 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'simple_form'
-#gem 'momentjs-rails', '~> 2.9'
-#gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+gem 'momentjs-rails', '~> 2.9'
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem "paperclip", "3.5.4"
 gem "enumerate_it"
@@ -19,9 +19,11 @@ gem 'acts_as_commentable_with_threading'
 gem 'font-awesome-rails'
 gem "wysiwyg-rails"
 gem 'seed_dump'
+gem 'cancancan', '~> 1.10'
 gem 'prawn'
 gem 'time_splitter'
 gem 'date_time_attribute'
+gem 'roo', '~> 2.4.0'
 group :development, :test do
   gem 'byebug'
 end

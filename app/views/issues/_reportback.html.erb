@@ -12,7 +12,7 @@
           </ul>
         </div>
     <% end %>
-    <%= hidden_field_tag(:issue_id, @issue.id) %>
+    <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
     <%= hidden_field_tag(:actiontype_id, 2) %>
 

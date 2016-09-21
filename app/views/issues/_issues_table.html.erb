@@ -12,18 +12,19 @@
 
 
 
-  <table id="issuestable"  class="hover" cellspacing="0" width="100%">>
+  <table id="issuestable"  class="table table-striped table-hover" cellspacing="0" width="100%">
   <thead>
   <tr>
     <th>ID</th>
-    <th>Old ID</th>
-    <th></th>
+
+    <th>Status</th>
     <th>Name</th>
     <% if @structure.nil? %><th>Structure</th> <% end %>
     <th>Category</th>
 
     <th>District</th>
     <th>Disputants</th>
+    <th>Created</th>
 
 
   </tr>
@@ -31,26 +32,24 @@
 
   <tbody>
   <% @issues.each do |issue| %>
+  <% mydisputants = Disputant.where(:issue_id => issue.id) %>
       <tr>
         <td><%= link_to issue.issuecode, issue %></td>
-        <td><%= link_to issue.old_id, issue %></td>
-        <td>
 
-
-          <strong>
-            <% if issue.resolution_date %>
-                <span style="color: darkslategrey">Resolved</span>
-            <% else %>
-                <span style="color: lightseagreen">Open</span>
-            <% end %>
-          </strong>
-              </td>
+        <td><strong><%= issue.status_humanize %></strong></td>
         <td><%= issue.name %></td>
         <% if @structure.nil? %><td><%= issue.structure.name  if issue.structure_id %></td><% end %>
         <td><%= issue.category.name if issue.category_id %></td>
-        <td><%= issue.district.name if issue.district_id %></td>
-        <td><%= issue.disputant %></td>
+        <td><%#= issue.district.name if issue.district_id.blank %></td>
+        <td><%= issue.disputant %><br>
 
+        <small>People</small><br>
+          <% mydisputants.each do |d| %>
+          <%= d.person.fullname %><br>
+          <% end %>
+
+        </td>
+        <td><%= issue.created_at.strftime("%m/  %d/%Y") %></td>
 
 
       </tr>

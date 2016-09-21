@@ -3,20 +3,11 @@
 
 <br>
 
-<table>
 
-<% @meetings.each do |meet| %>
-<tr>
-  <td><%= meet.meetingname %></td>
-  <td><%= meet.originalmeetingdate.strftime("%m/%d/%Y") if meet.originalmeetingdate %></td>
-  <td><%= meet.meetingcode %></td>
+<% @uniquemeetings.each do |m| %>
+  <%= m.meetingcode %>
 
-
-</tr>
-
-<% end %>
-</table>
-
+    <% end %>
 
 
 

@@ -23,7 +23,17 @@ class Person < ActiveRecord::Base
   #has_one :user
 
   def fullname
-    fullname = self.name_first + " " + self.name_last
+    if !self.salut.blank?
+      fname = self.salut + " " + self.name_first
+    else
+      fname = self.name_first
+    end
+    if !self.suffix.blank?
+      lname = self.name_last + " " + self.suffix
+    else
+      lname = self.name_last
+    end
+    fullname = fname + " " + lname
     return fullname
   end
 end

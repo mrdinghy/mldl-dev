@@ -6,6 +6,8 @@ class Issue < ActiveRecord::Base
   belongs_to :category
   belongs_to :scope
 
+  extend EnumerateIt
+  has_enumeration_for :status, required: true, with: Status
 
   has_many :disputants, :dependent => :destroy
   has_many :people, :through => :disputants

@@ -1,9 +1,9 @@
 <% modal ||= false %>
 <% remote = modal ? true : false %>
-<%= form_for(@mediation) do |f| %>
-    <%= hidden_field_tag(:issue_id, @issue.id) %>
+<%= form_for(@issueaction) do |f| %>
+    <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
-    <%= hidden_field_tag(:actiontype,  Actiontype::MEDIATION) %>
+    <%= hidden_field(:issueaction, :actiontype,  :value => Actiontype::MEDIATION) %>
 
 
 
@@ -30,8 +30,8 @@
 <%# Added Bootstrap classes, and help-block container for error messages %>
     <div class="field">
       <%= f.label 'Note:' %><br>
+      <%= f.text_area :actionbody, cols: "120", rows: "12" %>
 
-      <%= f.text_area :mediation_notes,  cols: "120", rows: "12" %>
     </div>
     <div class="actions">
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>

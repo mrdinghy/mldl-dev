@@ -19,7 +19,7 @@ class MeetingsController < ApplicationController
     @issueaction = Issueaction.new
     @meetingdocs = SiteDocument.where('documentable_type = ? and documentable_id = ?', 'meeting', @meeting.id)
     @new_site_document = SiteDocument.new
-
+    @available_people = Person.all
   end
 
 
@@ -93,8 +93,6 @@ class MeetingsController < ApplicationController
   def update
 
  puts params[:meeting][:issue_ids]
-
-
 
 
  issuesadded =params[:meeting][:issue_ids].reject { |e| e.to_s.empty? }
@@ -173,7 +171,7 @@ class MeetingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def meeting_params
-      params.require(:meeting).permit(:meeting_on, :meeting_start, :meeting_end, :name, :structure_id, :location, :real_start, :real_start_hour, :real_start_min,
+      params.require(:meeting).permit(:meeting_on, :meeting_start, :meeting_end, :name, :structure_id, :location, :duration, :real_start, :real_start_hour, :real_start_min,
                                       :real_end, :real_end_hour, :real_end_min, issue_ids: [])
     end
 end

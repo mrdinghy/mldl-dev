@@ -31,7 +31,7 @@
 
         <% agendaitems = Issueaction.where('meeting_id = ? and actiontype = ?', meeting.id, Actiontype::AGENDA) %>
             <tr>
-              <td><%= link_to meeting.id, meeting %></td>
+              <td><%= link_to meeting.meetingid, meeting %></td>
               <td>
                 <%= meeting.status %>
               </td>

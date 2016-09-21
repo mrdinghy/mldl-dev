@@ -13,6 +13,7 @@ class CreateMeetings < ActiveRecord::Migration
       t.integer :attendees_females
       t.boolean :meeting_held
       t.string :old_id
+      t.integer :duration
 
       t.timestamps null: false
     end

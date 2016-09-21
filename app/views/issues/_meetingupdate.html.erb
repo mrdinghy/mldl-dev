@@ -12,16 +12,15 @@
           </ul>
         </div>
     <% end %>
-    <%= hidden_field_tag(:meeting_id, @meeting.id) %>
+    <%= hidden_field(:issueaction, :meeting_id, @meeting.id) %>
     <%= hidden_field_tag(:frommeeting, true) %>
-    <%= hidden_field_tag(:actiontype_id, 3) %>
 
 
-    <%=radio_button("actiontype", Actiontype::MEETING_RESULT_RESOLVED) %> Resolved<br>
-       <%=radio_button("actiontype",  Actiontype::MEETING_RESULT_ONGOING) %> Ongoing<br>
-    <%=radio_button("actiontype",  Actiontype::MEETING_RESULT_ESCALATED) %> Escalate Issue<br>
-    <%=radio_button("actiontype",  Actiontype::MEETING_RESULT_MEDIATION) %> Send to Mediation<br>
-    <%=radio_button("actiontype",  Actiontype::MEETING_RESULT_CANCELLED, "4") %> Cancel Issue<br>
+    <%=radio_button(:issueaction, :actiontype, Actiontype::MEETING_RESULT_RESOLVED) %> Resolved<br>
+    <%=radio_button(:issueaction, :actiontype,  Actiontype::MEETING_RESULT_ONGOING) %> Ongoing<br>
+    <%=radio_button(:issueaction,  :actiontype, Actiontype::MEETING_RESULT_ESCALATED) %> Escalate Issue<br>
+    <%=radio_button(:issueaction, :actiontype, Actiontype::MEETING_RESULT_MEDIATION) %> Send to Mediation<br>
+    <%=radio_button(:issueaction, :actiontype, Actiontype::MEETING_RESULT_CANCELLED, "4") %> Cancel Issue<br>
 
 
 

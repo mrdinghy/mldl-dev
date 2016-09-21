@@ -64,7 +64,7 @@ Rails.application.routes.draw do
   post 'addmediator', to: 'mediations#addmediator', as: 'addmediator'
   post 'addmemember', to: 'structures#addmembership', as: 'addmember'
   post 'addmanager', to: 'structures#addmanager', as: 'addmanager'
-
+  get 'seedpeeps', to: 'people#seedpeeps', as: 'seedpeeps'
   get 'seeder', to: 'issues#seeder', as: 'seeder'
   get '/tests2', :to => redirect('/tests2.html')
   root 'visitors#index'

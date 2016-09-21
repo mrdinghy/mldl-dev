@@ -1,72 +1,14 @@
-<% modal ||= false %>
-<% remote = modal ? true : false %>
-<script>
-    $(document).ready(function() { $("#selectmediator").select2(); });
-</script>
+
 
 
 <%= form_tag addmediator_path do %>
 
-
-
-
-
-
-
-    <div class="field" id="selectmediator">
-      <%= label_tag 'Select/Search Person' %><br>
-      <%= select_tag 'person_id', options_from_collection_for_select(Person.all, :id, :fullname), include_blank: true, :class => "form-control" %>
-
-    </div>
-
-
-
-    <div class="field">
-      <%= label_tag 'Add Person' %><br>
-      <label><input type="checkbox" name="addpeep" id="addpeep" value="1"> Click to add new person to system</label><br>
-
-    </div>
-
-    <div id="person_details" style="display:none;">
-      <div class="field">
-        <%= label_tag "First Name" %><br>
-        <input type="text" name="fname" />
-      </div>
-      <div class="field">
-        <%= label_tag "Last Name" %><br>
-        <input type="text" name="lname" />
-      </div>
-      <div class="field">
-        <%= label_tag "Title" %><br>
-        <input type="text" name="title" />
-      </div>
-      <div class="field">
-        <%= label_tag "Email" %><br>
-        <input type="text" name="email" />
-      </div>
-    </div>
-
-
+    <%= render 'people/addpeopletoobject' %>
 
     <%= hidden_field_tag(:mediation_id, @mediation.id) %>
     <div class="actions">
-      <%= submit_tag 'Submit' %>
+      <%= submit_tag 'Submit', :class => "btn btn-small btn-primary" %>
     </div>
 <% end %>
-
-
-<script type="text/javascript">
-
-    var checkbox = document.getElementById('addpeep');
-    var details_div = document.getElementById('person_details');
-    checkbox.onchange = function() {
-        if(this.checked) {
-            details_div.style['display'] = 'block';
-        } else {
-            details_div.style['display'] = 'none';
-        }
-    };
-</script>
-
 
 

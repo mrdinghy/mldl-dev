@@ -31,58 +31,7 @@ width: 800px;
 
 
 
-
-<select class="chosen-select input-md form-control">
-
-  <option>Dallas Cowboys</option>
-  <option>New York Giants</option>
-  <option>Philadelphia Eagles</option>
-  <option>Washington Redskins</option>
-
-  <option>Chicago Bears</option>
-  <option>Detroit Lions</option>
-  <option>Green Bay Packers</option>
-  <option>Minnesota Vikings</option>
-
-  <option>Atlanta Falcons</option>
-  <option>Carolina Panthers</option>
-  <option>New Orleans Saints</option>
-  <option>Tampa Bay Buccaneers</option>
-
-  <option>Arizona Cardinals</option>
-  <option>St. Louis Rams</option>
-  <option>San Francisco 49ers</option>
-  <option>Seattle Seahawks</option>
-
-  <option>Buffalo Bills</option>
-  <option>Miami Dolphins</option>
-  <option>New England Patriots</option>
-  <option>New York Jets</option>
-
-  <option>Baltimore Ravens</option>
-  <option>Cincinnati Bengals</option>
-  <option>Cleveland Browns</option>
-  <option>Pittsburgh Steelers</option>
-
-  <option>Houston Texans</option>
-  <option>Indianapolis Colts</option>
-  <option>Jacksonville Jaguars</option>
-  <option>Tennessee Titans</option>
-
-  <option>Denver Broncos</option>
-  <option>Kansas City Chiefs</option>
-  <option>Oakland Raiders</option>
-  <option>San Diego Chargers</option>
-
-</select>
-
-
-
-
-
-
 <!-- Page content-->
-  <div class="content-wrapper widerbox">
 
 
     <%= link_to 'Return to Structures', structures_path %>
@@ -92,130 +41,30 @@ width: 800px;
 
     <div class="pull-right">
       <%= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
-      <%= link_to 'New Meeting', '#new_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
+      <%= link_to "New Meeting", new_meeting_path(:structure_id => @structure.id), :class => "btn btn-success" %>
     </div>
-
-
-
-
-
-
 
   <div class="row">
 
-      <div class="col-sm-4">
 
-
-          <div class="panel panel-default">
-          <div class="panel-heading">
-
-            <%= link_to 'Edit', edit_structure_path(@structure), :class => "btn btn-small btn-primary pull-right"   %>
-          </div>
-          <div class="panel-body">
-            <div class="form-horizontal">
-
-
-
-
-              <div class="form-group mb">
-                <label class="col-sm-2 control-label mb">DateTimePicker</label>
-                <div class="col-sm-10">
-                  <div id="datetimepicker1" class="input-group date">
-                    <input type="text" class="form-control">
-                                 <span class="input-group-addon">
-                                    <span class="fa fa-calendar"></span>
-                                 </span>
-                  </div>
-                </div>
-              </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-              <div class="form-group">
-            <label class="col-sm-3">Type (Level)</label>
-            <div class="col-sm-9">
-            <strong> <%= @structure.structuretype_humanize if @structure.structuretype %></strong>
-            </div>
-            </div>
-
-            <div class="form-group">
-            <label class="col-sm-3">County</label>
-            <div class="col-sm-9">
-            <strong> <%= @structure.district.county.name if @structure.district_id %></strong>
-            </div>
-            </div>
-            <div class="form-group">
-            <label class="col-sm-3">District</label>
-            <div class="col-sm-9">
-            <strong> <%= @structure.district.name if @structure.district_id %></strong>
-            </div>
-            </div>
-
-              <div class="form-group">
-                <label class="col-sm-3">Parent Structure</label>
-                <div class="col-sm-9">
-                  <strong> <%= @parent.name if @structure.parent_id %></strong>
-                </div>
-              </div>
-
-              <div class="form-group">
-
-              <label class="col-sm-2">Default Meeting Location</label>
-            <div class="col-sm-9">
-            <strong> <%= @structure.default_location  %></strong>
-            </div>
-            </div>
-
-          </div>
-          </div>
-        </div>
-
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Management (Users)</h3>
-            <%#= link_to 'Add Manager', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
-          </div>
-          <div class="panel-body">
-
-            <% @mymanagers.each do |a| %>
-                <%= a.userrole.user.name %><br>
-            <% end %>
-
-            <small>Add Manager</small><br>
-            <%= render 'addmanager' %>
-          </div>
-      </div>
-
-
-
-
-
-
-        <%= link_to 'Delete', @structure, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
-</div>
-        <div class="col-sm-8">
+        <div class="col-sm-12">
 
 
 
 
           <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#viewissues">Issues</a></li>
+            <li><a data-toggle="tab" href="#viewgeneral">General</a></li>
             <li><a data-toggle="tab" href="#viewmeetings">Meetings</a></li>
             <li><a data-toggle="tab" href="#viewmediations">Mediations</a></li>
             <li><a data-toggle="tab" href="#viewmembers">Members</a></li>
           </ul>
 
           <div class="tab-content">
+            <div id="viewgeneral" class="tab-pane fade">
+              <h3><%= @structure.name %> - General</h3>
+              <%= render partial: 'structures/general' %>
+            </div>
             <div id="viewissues" class="tab-pane fade in active">
               <h3><%= @structure.name %> Issues</h3>
               <%= render partial: 'issues/issues_table' %>

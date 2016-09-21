@@ -1,0 +1,165 @@
+<div class="row">
+  <div class="col-sm-6">
+
+
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+
+        <%= link_to 'Edit', edit_structure_path(@structure), :class => "btn btn-small btn-primary pull-right"   %>
+      </div>
+      <div class="panel-body">
+        <div class="form-horizontal">
+
+
+          <div class="form-group">
+            <label class="col-sm-3">Type (Level)</label>
+            <div class="col-sm-9">
+              <strong> <%= @structure.structuretype_humanize if @structure.structuretype %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-3">County</label>
+            <div class="col-sm-9">
+              <strong> <%= @structure.district.county.name if @structure.district_id %></strong>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3">District</label>
+            <div class="col-sm-9">
+              <strong> <%= @structure.district.name if @structure.district_id %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-3">Parent Structure</label>
+            <div class="col-sm-9">
+              <strong> <%= @parent.name if @structure.parent_id %></strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+
+            <label class="col-sm-2">Default Meeting Location</label>
+            <div class="col-sm-9">
+              <strong> <%= @structure.default_location  %></strong>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Management (Users)</h3>
+        <%#= link_to 'Add Manager', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+      </div>
+      <div class="panel-body">
+
+        <% @mymanagers.each do |a| %>
+            <%= a.user.name %><br>
+
+        <% end %>
+        <hr><br><br>
+        <small>Add Manager</small><br>
+
+
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $(".selectmanager").select2();
+          });
+        </script>
+
+        <%= form_tag addmanager_path do |f| %>
+
+            Add Current System Managers to this Stucture
+            <div class="field">
+              <%#= debug @availablemanagers  %><br>
+              <%= select_tag 'user_id', options_from_collection_for_select(@availablemanagers, :id, :name), include_blank: true, :class => "selectmanager" %>
+
+
+            </div>
+
+
+
+            <%= hidden_field_tag(:structure_id, @structure.id) %>
+            <div class="actions">
+              <%= submit_tag 'Submit', :class => "btn btn-small btn-primary" %>
+            </div>
+        <% end %>
+
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+
+
+
+
+
+
+  <div class="col-sm-6">
+    <%= @structure.name %> Summary
+    <table id="structuresummary"  class="table table-striped hover" cellspacing="0" width="100%">
+
+      <tr><td>New Issues*</td><td><%= @newissues %></td></tr>
+      <tr><td>Ongoing</td> <td><%=  @ongoingissues %></td></tr>
+      <tr><td>In Mediation</td> <td><%=  @mediationissues %></td></tr>
+      <tr><td>Resolved</td> <td><%=  @resolvedissues %></td></tr>
+      <tr><td>Cancelled</td>  <td><%=   @cancelledissues %></td></tr>
+
+    </table>
+
+* Issues not yet addressed in Meeting or Mediation
+
+
+
+
+
+
+
+
+
+    <script>
+      $(document).ready(function() {
+        $('#structuresummary').DataTable();
+      } );
+    </script>
+  </div>
+
+
+
+
+
+
+
+
+</div>
+
+
+  <%= link_to 'Delete', @structure, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>

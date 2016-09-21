@@ -10,13 +10,14 @@
 
 
 
-    <table id="mediationstable"  class="hover" cellspacing="0" width="100%">
+    <table id="mediationstable"  class="table table-striped table-hover" cellspacing="0" width="100%">
   <thead>
   <tr>
-    <th>Name</th>
     <th>Issue</th>
+
     <th>Mediation start</th>
     <th>Mediation end</th>
+    <th>Mediators</th>
     <th>Mediation notes</th>
     <th colspan="3"></th>
   </tr>
@@ -24,15 +25,22 @@
 
   <tbody>
   <% @mediations.each do |mediation| %>
+      <% mymediators = Mediator.where(:mediation_id => mediation.id) %>
       <tr>
-        <td><%= mediation.name %></td>
-        <td><%= mediation.issue_id %></td>
-        <td><%= mediation.mediation_start %></td>
-        <td><%= mediation.mediation_end %></td>
+        <td><%= link_to mediation.issue.issuecode, mediation %></td>
+
+        <td><%= mediation.mediation_start.strftime("%m/  %d/%Y") if mediation.mediation_start %></td>
+        <td><%= mediation.mediation_end.strftime("%m/  %d/%Y") if mediation.mediation_end %></td>
+        <td>
+
+        <% mymediators.each do |med| %>
+            <%= med.person.fullname %><br>
+        <% end %>
+        </td>
+
+
         <td><%= mediation.mediation_notes %></td>
-        <td><%= link_to 'Show', mediation %></td>
-        <td><%= link_to 'Edit', edit_mediation_path(mediation) %></td>
-        <td><%= link_to 'Destroy', mediation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
       </tr>
   <% end %>
   </tbody>

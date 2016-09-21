@@ -30,6 +30,61 @@ Role.create(name: 'System Admin')
 Role.create(name: 'System Manager')
 Role.create(name: 'View Only')
 
+perms = Permission.create([
+{name: 'Structure-Create Issue'},
+{name: 'Structure-Create Meeting'},
+{name: 'Structure-Edit'},
+{name: 'Structure-Add Memebers'},
+{name: 'Meeting=Edit Agenda'},
+{name: 'Meeting-New Issue'},
+{name: 'Meeting-Add Participants'},
+{name: 'Meeting-Add Documents'},
+{name: 'Issue-Edit'},
+{name: 'Issue-Add Comment'},
+{name: 'Issue-Add to Agenda'},
+{name: 'Issue-Escalate'},
+{name: 'Issue-Mediation'},
+{name: 'Issue-Resolution'},
+{name: 'Issue-Cancel'},
+{name: 'Issue-Add Documents'},
+{name: 'Issue-Add Disputants'},
+{name: 'Medation-Edit'},
+{name: 'Mediation-Result'},
+{name: 'Mediation-Add Documents'},
+{name: 'Mediation-Add Mediators'},
+{name: 'People=Add'},
+{name: 'People-Edit'},
+{name: 'Admin Tasks'}
+
+                          ])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -43,6 +98,15 @@ Scope.create ([
                  {name: "Security Concern"}
              ])
 
+
+
+
+Resolutiontype.create ([
+                 {name: "Mediated by Structure"},
+                 {name: "Mediated by the community"},
+                 {name: "Mediated with MLDL support"},
+                 {name: "Other"}
+             ])
 
 
 Category.create([

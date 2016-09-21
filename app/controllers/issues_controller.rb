@@ -38,7 +38,9 @@ class IssuesController < ApplicationController
     @alldistricts = District.all
     @allpersons = Person.all
     @allusers = User.all
-
+    @alloldids = Issue.select(:id, :uuid).where('uuid is not NULL').uniq
+    @allnewids = Issue.select(:id)
+    @alldisputants = Disputant.select(:person_id).uniq
 
   end
 
@@ -51,6 +53,12 @@ class IssuesController < ApplicationController
     searchresults = Issue.where('district_id in (?)', params[:district_ids]) if !params[:district_ids].blank?
     searchresults = Issue.where('organization_id in (?)', params[:organization_ids]) if !params[:organization_ids].blank?
     searchresults = Issue.where('name like ? or description like ? or community like  ? ', "%#{searchterm}%", "%#{searchterm}%", "%#{searchterm}%") if !params[:search_term].blank?
+    searchresults = Issue.where('id =?', params[:new_id]) if !params[:new_id].blank?
+    searchresults = Issue.where('id in (?)', params[:old_id]) if !params[:old_id].blank?
+
+
+    disputants = Disputant.select(:issue_id).where('person_id = ?', params[:person_id]) if !params[:person_id].blank?
+    searchresults = Issue.where('id in (?)', disputants) if !params[:person_id].blank?
 
     @issues = searchresults
     render 'index'
@@ -80,23 +88,24 @@ class IssuesController < ApplicationController
   def create
     @issue = Issue.new(issue_params)
 
+
     if params[:meeting_id]
       @issue.structure_id = params[:structure_id]
       meeting = Meeting.find(params[:meeting_id])
 
-      @issue.save
+      @issue.save!
 
-      Issueaction.create(actiontype_id: 2, structure_id:  params[:structure_id], meeting_id: params[:meeting_id], issue_id: @issue.id)
+      Issueaction.create(actiontype: 2, structure_id:  params[:structure_id], meeting_id: params[:meeting_id], issue_id: @issue.id)
 
-     end
+    end
     if params[:structure_id]
        structure = Structure.find(params[:structure_id])
       @issue.structure_id = params[:structure_id]
 
       #Issueaction.create(structure_id: structure.id, issue_id: @issue.id, actiontype: 1, user_id: current_user.id)
     end
-
-    @issue.save
+    @issue.update_attributes!(status:Status::NEW)
+    @issue.save!
 
 
 
@@ -376,7 +385,7 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
-      params.require(:issue).permit(:name, :description, :structure_id, :community, :yourname, :district_id, :location, :status_id, :status_note,
+      params.require(:issue).permit(:name, :description, :structure_id, :community, :yourname, :district_id, :location, :status, :status_note,
                                     :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, person_ids: [], structure_ids: [] )
     end
 end

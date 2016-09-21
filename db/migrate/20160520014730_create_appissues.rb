@@ -1,7 +1,7 @@
 class CreateAppissues < ActiveRecord::Migration
   def change
     create_table :appissues do |t|
-      t.string :timestamp
+      t.date :originaltimestamp
       t.string :uuid
       t.string :yourname
       t.date :originalmeetingdate

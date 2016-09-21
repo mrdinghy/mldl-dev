@@ -15,6 +15,7 @@ class MediationsController < ApplicationController
     @mediator = Mediator.new
     @new_site_document = SiteDocument.new
     @issueaction = Issueaction.new
+    @available_people = Person.all
     @mediationdocs = SiteDocument.where('documentable_type = ? and documentable_id = ?', 'mediation', @mediation.id)
   end
 
@@ -35,13 +36,8 @@ class MediationsController < ApplicationController
     @mediation.save!
     issueaction= Issueaction.new
     issue = Issue.find(params[:issue_id])
-    issueaction.issue_id = params[:issue_id]
-    issueaction.user_id = current_user.id
-    issueaction.mediation_id = @mediation.id
 
-    issueaction.actiontype = Actiontype::MEDIATION
-    issueaction.structure_id = issue.structure_id
-    issueaction.save!
+    Issueaction.create(mediation_id: @mediation.id, issue_id: params[:issue_id], user_id: current_user.id, actiontype: Actiontype::MEDIATION, structure_id: issue.structure_id)
     respond_to do |format|
       if @mediation.save
         format.html { redirect_to issue, notice: 'Mediation was successfully created.' }
@@ -56,6 +52,8 @@ class MediationsController < ApplicationController
   # PATCH/PUT /mediations/1
   # PATCH/PUT /mediations/1.json
   def update
+    Issueaction.create(mediation_id: @mediation.id, issue_id: params[:issue_id], user_id: current_user.id, actiontype: params[:actiontype], structure_id: issue.structure_id)
+
     respond_to do |format|
       if @mediation.update(mediation_params)
         format.html { redirect_to @mediation, notice: 'Mediation was successfully updated.' }

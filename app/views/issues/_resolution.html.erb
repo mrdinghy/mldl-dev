@@ -12,9 +12,9 @@
           </ul>
         </div>
     <% end %>
-    <%= hidden_field_tag(:issue_id, @issue.id) %>
+    <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
-    <%= hidden_field_tag(:actiontype,  Actiontype::RESOLVED) %>
+    <%#= hidden_field(:issueaction, :actiontype,  Actiontype::RESOLVED) %>
 
 
 <%# Added Bootstrap classes, and help-block container for error messages %>

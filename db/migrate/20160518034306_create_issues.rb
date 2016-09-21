@@ -19,6 +19,15 @@ class CreateIssues < ActiveRecord::Migration
       t.text :resolution
       t.text :actioncommittee
       t.date :cancelled_at
+      t.integer :duration
+      t.date :originaltimestamp
+      t.string :originaluser
+      t.string :uuid
+      t.integer :resolutiontype_id
+      t.integer :status
+
+
+
 
 
       t.timestamps null: false

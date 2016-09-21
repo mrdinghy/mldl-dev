@@ -12,14 +12,27 @@ class StructuresController < ApplicationController
   # GET /structures/1.json
   def show
 
-    @issues= Issue.where('structure_id = ?', @structure.id)
+    @issues= Issue.where('structure_id = ?', @structure.id).order('created_at DESC')
+
+    @newissues=@issues.where(:status => Status::NEW).count
+    @ongoingissues=@issues.where(:status => Status::ONGOING).count
+    @mediationissues=@issues.where(:status => Status::MEDIATION).count
+    @resolvedissues=@issues.where(:status => Status::RESOLVED).count
+    @cancelledissues=@issues.where(:status => Status::CANCELLED).count
+
+
     @mediations = Mediation.all
     @mypeople= Membership.where('structure_id = ?', @structure.id)
     @mymanagers = Manager.where('structure_id = ?', @structure.id)
     @meetings = Meeting.where('structure_id = ?', @structure.id)
     @parent = Structure.find(@structure.parent_id) if @structure.parent_id
-    @availablemanagers = Userrole.where('role_id = ?', 2)
+    #@availablemanagers = Userrole.where('role_id = ?', 2)
 
+    @availablemanagers = []
+    users=Userrole.where('role_id = ?', 2)
+    users.each do |u|
+      @availablemanagers.append(User.find(u.user_id))
+    end
     @issue = Issue.new
     @meeting = Meeting.new
     @available_people = Person.all
@@ -113,13 +126,12 @@ class StructuresController < ApplicationController
   end
 
 
-
-
   def addmanager
+
     @manager = Manager.new
     structure=Structure.find(params[:structure_id])
     @manager.structure_id = structure.id
-    @manager.userrole_id = params[:userrole_id]
+    @manager.user_id = params[:user_id]
 
     respond_to do |format|
       if @manager.save
@@ -132,19 +144,6 @@ class StructuresController < ApplicationController
     end
 
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

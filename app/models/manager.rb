@@ -1,4 +1,4 @@
 class Manager < ActiveRecord::Base
   belongs_to :structure
-  belongs_to :userrole
+  belongs_to :user
 end

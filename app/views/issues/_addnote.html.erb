@@ -12,12 +12,12 @@
           </ul>
         </div>
     <% end %>
-    <%= hidden_field_tag(:issue_id, @issue.id) %>
+    <%= hidden_field_tag(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
-    <%= hidden_field_tag(:actiontype,  Actiontype::COMMENT) %>
+    <%= hidden_field_tag(:issueaction, :actiontype,  :value => Actiontype::COMMENT) %>
 
 
-<%# Added Bootstrap classes, and help-block container for error messages %>
+
     <div class="field">
 
       <%= f.text_area :actionbody, cols: "120", rows: "12" %>

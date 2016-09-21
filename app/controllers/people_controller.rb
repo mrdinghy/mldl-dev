@@ -9,7 +9,8 @@ class PeopleController < ApplicationController
     #self.fixmembership(@mypeople)
   end
 
-  def fixmembership(allpeeps)
+  def seedpeeps
+    allpeeps = Person.all
     allpeeps.each do |p|
       m = Membership.new
       m.person_id = p.id
@@ -17,8 +18,12 @@ class PeopleController < ApplicationController
       m.save!
     end
 
-
+    render 'people/index'
   end
+
+
+
+
 
 
   # GET /people/1
@@ -88,6 +93,6 @@ class PeopleController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      params.require(:person).permit(:name_first, :name_last, :email, :organization_id)
+      params.require(:person).permit(:name_first, :name_last, :gender, :title, :salut, :suffix, :email, :organization_id)
     end
 end

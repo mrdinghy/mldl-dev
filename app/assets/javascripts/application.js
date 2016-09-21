@@ -20,7 +20,8 @@
 //= require animo
 //= require chosen.jquery.min
 //= require moment
-//= require bootstrap-datetimepicker.min
+//= require bootstrap-datetimepicker
+//= require pickers
 //= require select2
 //= require jquery.dataTables.min
 //= require dataTables.colVis
@@ -30,16 +31,11 @@
 //= require index
 //= require skycons
 //= require app
-
-// require moment
-// require bootstrap-datetimepicker
-// require pickers
-
 // require froala_editor.min
 // require lists.min
-// require d3.v3
-// require rickshaw.min
-// require Chart
-// require Chart.bundle
+//= require d3.v3
+//= require rickshaw.min
+//= require Chart
+//= require Chart.bundle
 //= require_tree .
 

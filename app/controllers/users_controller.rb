@@ -19,6 +19,7 @@ class UsersController < ApplicationController
   def adjustroles
 
     @user = User.find(params[:user_id])
+    @role_list = Role.all
 
     #@userroles = Userrole.where('user_id = ?', @user.id)
 
@@ -53,7 +54,7 @@ class UsersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:name, :email, :structure_admin, :structure_manager, :system_admin, :system_manager)
+    params.require(:user).permit(:name, :email, role_ids: [])
   end
 
 

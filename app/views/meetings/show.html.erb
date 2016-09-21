@@ -54,51 +54,6 @@
 </script>
 
 
-<select class="chosen-select input-md form-control">
-
-  <option>Dallas Cowboys</option>
-  <option>New York Giants</option>
-  <option>Philadelphia Eagles</option>
-  <option>Washington Redskins</option>
-
-  <option>Chicago Bears</option>
-  <option>Detroit Lions</option>
-  <option>Green Bay Packers</option>
-  <option>Minnesota Vikings</option>
-
-  <option>Atlanta Falcons</option>
-  <option>Carolina Panthers</option>
-  <option>New Orleans Saints</option>
-  <option>Tampa Bay Buccaneers</option>
-
-  <option>Arizona Cardinals</option>
-  <option>St. Louis Rams</option>
-  <option>San Francisco 49ers</option>
-  <option>Seattle Seahawks</option>
-
-  <option>Buffalo Bills</option>
-  <option>Miami Dolphins</option>
-  <option>New England Patriots</option>
-  <option>New York Jets</option>
-
-  <option>Baltimore Ravens</option>
-  <option>Cincinnati Bengals</option>
-  <option>Cleveland Browns</option>
-  <option>Pittsburgh Steelers</option>
-
-  <option>Houston Texans</option>
-  <option>Indianapolis Colts</option>
-  <option>Jacksonville Jaguars</option>
-  <option>Tennessee Titans</option>
-
-  <option>Denver Broncos</option>
-  <option>Kansas City Chiefs</option>
-  <option>Oakland Raiders</option>
-  <option>San Diego Chargers</option>
-
-</select>
-
-
 
 <div class="content-wrapper widerbox">
 
@@ -132,8 +87,8 @@
 
 
                       <p>
-                      <strong>Meeting End:</strong>
-                      <%=  @meeting.real_end %>
+                      <strong>Meeting Duration:</strong>
+                      <%=  @meeting.duration %> Hours
                       </p>
 
                  </div>
@@ -183,7 +138,7 @@
               <div class="panel-heading">Agenda Issues</div>
               <div class="panel-body">
 
-                <table id="agendatable"  class="hover" cellspacing="0" width="100%">
+                <table id="agendatable"  class="table table-striped hover">
                   <thead>
                   <tr>
 
@@ -199,22 +154,23 @@
                   <tbody>
                   <% @meetingactions.each do |agenda| %>
                       <% issue = Issue.find(agenda.issue.id) %>
-                      <% results = Issueaction.where('issue_id =? and meeting_id = ? and actiontype > 0', agenda.issue_id, @meeting.id ) %>
+                      <% results = Issueaction.where('issue_id =? and meeting_id = ? and actiontype <> 2', agenda.issue_id, @meeting.id ) %>
+
                       <% modalid = '#meetingreport-' + agenda.issue.id.to_s %>
                       <tr>
 
-                        <td><%= link_to issue.name, issue %> [<%= issue.id %>]</td>
+                        <td><%= link_to issue.issuecode, issue %></td>
                         <td><%= issue.disputant %></td>
-                        <td>
+                        <td><small>
                           <% results.each do |r| %>
-                              <%= r.actiontype_humanize %><br>
+                             <%= r.actiontype_humanize %> : <%= r.created_at.strftime("%m/  %d/%Y") %><br>
                           <% end %>
 
-
+                          </small>
                         </td>
                         <td><%= issue.district.name if issue.district_id %></td>
                         <td>
-                          <% if results.count > 0 %>
+                          <% if results.count != 0 %>
                               <%= link_to 'Revise',  modalid, 'data-toggle' => 'modal', :class => "btn btn-success" %>
                           <% else %>
                               <%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %>
@@ -361,6 +317,15 @@
   </div>
 
 </div>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#agenda').DataTable();
+    } );
+</script>
+
 
 
 

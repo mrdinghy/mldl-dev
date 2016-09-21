@@ -37,7 +37,7 @@
 
 
       <div class = "col-sm-4">
-<h3>MLDL Structures</h3>
+<h4>MLDL Structures</h4>
 <div class="chkpanel">
 
         <% @allstructures.each do |item| %>
@@ -78,7 +78,15 @@
 
 
         <div class = "col-sm-4">
-<h3>Search String</h3>
+
+
+
+
+
+
+
+
+<h4>Search String</h4>
       <div class="field">
 
         <%= text_field_tag 'search_term' %><br>
@@ -89,22 +97,88 @@
 
         <%#= select_tag(:category_ids, Category.all, :id, :name) {:include_blank => "Select"}, { :multiple => true })%><br><br>
         <div class="field">
-          <h3>Categories</h3>
+          <h4>Categories</h4>
        <%= select_tag "category_ids", options_from_collection_for_select(Category.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
 </div>
          <div class="field">
-              <h3>Organizations</h3>
+              <h4>Organizations</h4>
         <%= select_tag "organization_ids", options_from_collection_for_select(Organization.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
             </div>
               <div class="field">
-                <h3>Districts <small>(where Issue Occured)</small></h3>
+                <h4>Districts <small>(where Issue Occured)</small></h4>
         <%= select_tag "district_ids", options_from_collection_for_select(District.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
               </div>
 
 </div>
 
       <div class="col-sm-4">
-        <h3>Search by Issue Actions</h3>
+
+
+
+        <div class="field">
+
+          <script type="text/javascript">
+              $(document).ready(function() {
+                  $(".chosen-select").select2();
+              });
+
+          </script>
+
+          <h4>Select/Search OldIds</h4><br>
+          <select name="old_id" class="chosen-select input-md form-control">
+            <option value = "">Select -></option>
+            <% @alloldids.each do |issue| %>
+
+                <option value="<%= issue.id %>"><%= issue.uuid %></option>
+            <% end %>
+          </select>
+
+
+
+        </div>
+
+        <div class="field">
+
+          <script type="text/javascript">
+              $(document).ready(function() {
+                  $(".chosen-select").select2();
+              });
+
+          </script>
+
+          <h4>Select/Search New IDs</h4><br>
+          <select name="new_id" class="chosen-select input-md form-control">
+            <option value = "">Select -></option>
+            <% @allnewids.each do |issue2| %>
+
+                <option value="<%= issue2.id %>"><%= issue2.id %></option>
+            <% end %>
+          </select>
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!---<h4>Search by Issue Actions</h4>
 
         Action types<br>
         <%#= select_tag "actiontype_ids", options_from_collection_for_select(Actiontype.keys.to_a), :include_blank => "Select", :multiple => true  %><br><br>
@@ -114,33 +188,48 @@
         <%#= select_tag(:actiontypes_ids, Actiontype.to_a, :include_blank => "Select", :multiple => true ) %>
         <%#= select_tag :actiontype_ids, Actiontype.to_a,  {:include_blank => "Select", :multiple => true }  %>
 
+--->
 
 
 
+        <%#= select_tag(:reportmonth, options_for_select(Month.to_a), :selected => :aug) %>
 
-        <%= select_tag(:reportmonth, options_for_select(Month.to_a), :selected => :aug) %>
-
-        <%= select_tag(:reportyear, options_for_select(['2014','2015', '2016']), :selected => 2016)  %>
+        <%#= select_tag(:reportyear, options_for_select(['2014','2015', '2016']), :selected => 2016)  %>
         <br><br>
 
-        <div class="field" id="issuedisputants">
-        <%= label_tag 'Select/Search Person' %><br>
-        <%= select_tag 'person_id', options_from_collection_for_select(Person.all, :id, :fullname), include_blank: true, :id => 'e1', :class => "form-control" %>
 
-      </div>
+        <div class="field">
 
-        <h3>Search by People</h3>
-        <%#= select_tag "people_ids", options_from_collection_for_select(Person.all, "id", :fullname), :include_blank => "Select", :multiple => true  %>
+          <script type="text/javascript">
+              $(document).ready(function() {
+                  $(".chosen-select").select2();
+              });
+
+          </script>
+
+          <h4>Select/Search Disputants</h4><br>
+          <select name="person_id" class="chosen-select input-md form-control">
+            <option value = "">Select -></option>
+            <% @alldisputants.each do |disp| %>
+
+                <option value="<%= disp.person_id %>"><%= disp.person.fullname %></option>
+            <% end %>
+          </select>
 
 
 
-        <h3>Search by MLDL Managers</h3>
-        <%= select_tag "user_ids", options_from_collection_for_select(User.all, "id", :name), :include_blank => "Select", :multiple => true  %><br><br>
-        ><br><br>
+        </div>
 
+
+
+
+<hr>
         <div class="actions">
       <%= submit_tag 'Search', :class => "btn btn-primary" %>
     </div>
+    <br><BR>    <div class="actions">
+          <%= button_tag "Reset", type: :reset, :class => 'btn btn-default' %>
+        </div>
 </div>
 <% end %>
 

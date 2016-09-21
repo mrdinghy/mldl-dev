@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913185310) do
+ActiveRecord::Schema.define(version: 20160920140107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "appissues", force: :cascade do |t|
-    t.string   "timestamp"
+    t.date     "originaltimestamp"
     t.string   "uuid"
     t.string   "yourname"
     t.date     "originalmeetingdate"
@@ -150,12 +150,18 @@ ActiveRecord::Schema.define(version: 20160913185310) do
     t.text     "resolution"
     t.text     "actioncommittee"
     t.date     "cancelled_at"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "duration"
+    t.date     "originaltimestamp"
+    t.string   "originaluser"
+    t.string   "uuid"
+    t.integer  "resolutiontype_id"
+    t.integer  "status"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "managers", force: :cascade do |t|
-    t.integer  "userrole_id"
+    t.integer  "user_id"
     t.integer  "structure_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
@@ -191,6 +197,7 @@ ActiveRecord::Schema.define(version: 20160913185310) do
     t.integer  "attendees_females"
     t.boolean  "meeting_held"
     t.string   "old_id"
+    t.integer  "duration"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
   end
@@ -246,6 +253,12 @@ ActiveRecord::Schema.define(version: 20160913185310) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "permissions", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "posts", force: :cascade do |t|
     t.date     "start_date"
     t.date     "end_date"
@@ -255,6 +268,19 @@ ActiveRecord::Schema.define(version: 20160913185310) do
     t.boolean  "is_featured"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "resolutiontypes", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rolepermissions", force: :cascade do |t|
+    t.integer  "role_id"
+    t.integer  "permission_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "roles", force: :cascade do |t|

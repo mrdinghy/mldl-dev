@@ -24,66 +24,69 @@ class IssueactionsController < ApplicationController
   # POST /issueactions
   # POST /issueactions.json
   def create
-puts '------------------user--------------------------------'
 
+puts '------------------actiontype----------------------------'
+puts params[:actiontype]
+puts '------------------------------------------------------'
     @issueaction = Issueaction.new(issueaction_params)
-    issue = Issue.find(params[:issue_id])
-    @issueaction.issue_id = params[:issue_id]
-    @issueaction.user_id = current_user.id
-    @issueaction.structure_id = issue.structure_id
-    @issueaction.actiontype = params[:actiontype] if params[:actiontype]
-    @issueaction.meeting_id = params[:meeting_id] if params[:meeting_id]
-    @issueaction.mediation_id = params[:mediation_id] if params[:mediatiion_id]
+    issue = Issue.find(params[:issueaction][:issue_id])
 
-    if params[:meeting_id]
+
+    if params[:issueaction][:meeting_id]
 
            if @issueaction.meeting_result_escalated?   #escalate from meeting
-               @issueaction.laststructure_id = params[:issue_id]
-               issue.structure_id = params[:parent_id]
+               @issueaction.laststructure_id = params[:issueaction][:issue_id]
+               issue.structure_id = params[:issueaction][:parent_id]
             end
 
             if @issueaction.meeting_result_resolved?  #resovled from meeting
               issue.resolution_date = DateTime.now
               issue.resolution = params[:issueaction][:actionbody]
+              issue.status = Status::RESOLVED
 
             end
             if @issueaction.meeting_result_ongoing?  #unresolved - remains open
+              issue.status_id = Status::ONGOING
 
             end
 
 
             if @issueaction.meeting_result_mediation? #INTO MEDIATION from meeting
 
+              Mediation.create(issue_id: params[:issueaction][:issue_id], mediation_start: params[:mediation][:mediation_start])
+              issue.status = Status::MEDIATION
+
             end
 
             if @issueaction.meeting_result_cancelled?  #cancelled from meeting
               issue.cancelled_at = DateTime.now
+              issue.status = Status::CANCELLED
 
             end
 
-  elsif params[:mediation_id]
+  elsif params[:issueaction][:mediation_id]
+          if @issueaction.mediation_result_ongoing?  #unresolved - remains open
+            issue.status = Status::ONGOING
+          end
+          if @issueaction.mediation_result_escalated?   #escalate from meeting
+            @issueaction.laststructure_id = params[:issueaction][:issue_id]
+            issue.structure_id = params[:issueaction][:parent_id]
+          end
+
+          if @issueaction.mediation_result_resolved?
+            issue.resolution_date = DateTime.now
+            issue.resolution = params[:issueaction][:actionbody]
+            issue.status = Status::RESOLVED
 
 
-    if @issueaction.mediation_result_escalated?   #escalate from meeting
-      @issueaction.laststructure_id = params[:issue_id]
-      issue.structure_id = params[:parent_id]
-    end
-
-    if @issueaction.mediation_result_resolved?  #resovled from meeting
-      issue.resolution_date = DateTime.now
-      issue.resolution = params[:issueaction][:actionbody]
-
-    end
-    if @issueaction.mediation_result_ongoing?  #unresolved - remains open
-
-    end
+          end
 
 
 
-    if @issueaction.mediation_result_cancelled?  #cancelled from meeting
-      issue.cancelled_at = DateTime.now
-
-    end
+          if @issueaction.mediation_result_cancelled?  #cancelled from meeting
+            issue.cancelled_at = DateTime.now
+            issue.status = Status::CANCELLED
+          end
 
 
 
@@ -91,30 +94,43 @@ puts '------------------user--------------------------------'
           if @issueaction.comment?   #create Note
 
           end
+
+          if @issueaction.agenda?   #create Note
+            issue.status = Status::ONGOING
+          end
           if @issueaction.escalated?   #escalate ISSUE
-            @issueaction.laststructure_id = issue.id
-            issue.structure_id = params[:parent_id]
+            @issueaction.laststructure_id = params[:issueaction][:issue_id]
+            issue.structure_id = params[:issueaction][:parent_id]
           end
 
           if @issueaction.resolved?  #resovled ISSUE
             issue.resolution_date = DateTime.now
             issue.resolution = params[:issueaction][:actionbody]
+            issue.status = Status::RESOLVED
+
           end
 
           if @issueaction.cancelled?  #cancelled ISSUE
             issue.cancelled_at = DateTime.now
+            issue.status = Status::CANCELLED
           end
           if @issueaction.reopened?  #REOPEN ISSUE
             @issueaction.old_resolution_date = issue.resolution_date
             issue.resolution_date = nil
             issue.cancelled_at = nil
+            issue.status = Status::ONGOING
           end
 
           if @issueaction.mediation?  #INTO MEDIATION
+            Mediation.create(issue_id: params[:issueaction][:issue_id], mediation_start: params[:mediation][:mediation_start])
+            issue.status = Status::MEDIATION
+
           end
 
     end
+
    issue.save
+   @issueaction.user_id = current_user.id
    @issueaction.save
 
 

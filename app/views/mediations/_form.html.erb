@@ -2,8 +2,8 @@
 
   <div class="panel panel-default">
 
-    <div class="panel-heading"><h2><%= @panelheader %></h2>
-      <%if params[:action] == "edit" %><h2><strong><%= @mediation.name %></strong></h2><% end %></div>
+    <div class="panel-heading">
+      <%if params[:action] == "edit" %><h3><strong><%= @mediation.mediationcode %></strong></h3><% end %></div>
 
     <div class="panel-body">
 
@@ -25,32 +25,30 @@
 
 
 
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
+            <%if params[:action] == "new" %>
+                <div class="field">
+                    <script type="text/javascript">
+                    $(document).ready(function() {
+                    $(".chosen-select").select2();
+                    });
+
+                    </script>
+
+                    <small>Select/Search Isssue</small><br>
+                    <select name="issue_id" class="chosen-select input-md form-control">
+                    <option value = "">Select -></option>
+                    <% Issue.all.each do |issue| %>
+                        <option value="<%= issue.id %>"><%= issue.name %></option>
+                    <% end %>
+                    </select>
+
+                </div>
+            <% else %>
+
+            <% end %>
 
 
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(".chosen-select").select2();
-        });
-
-    </script>
-
-    <small>Select/Search Isssue</small><br>
-    <select name="person_id" class="chosen-select input-md form-control">
-      <option value = "">Select -></option>
-      <% Issue.all.each do |issue| %>
-
-          <option value="<%= issue.id %>"><%= issue.name %></option>
-      <% end %>
-    </select>
-
-  </div>
-            <div class="form-group">
+                <div class="form-group">
               <%= f.label 'Mediation Start', :class => "col-sm-2 control-label" %>
               <div class='col-sm-1 input-group date' id='mediationstart'>
                 <%= f.input :mediation_start, :as => :datetime_picker, :class => "form-control", :label => false %>
@@ -66,7 +64,7 @@
 
 
             <div class="form-group">
-              <%= f.label 'Completion End', :class => "col-sm-2 control-label" %>
+              <%= f.label 'Medation Completed', :class => "col-sm-2 control-label" %>
               <div class='col-sm-1 input-group date' id='mediationend'>
                 <%= f.input :mediation_end, :as => :datetime_picker, :class => "form-control", :label => false %>
 
@@ -81,9 +79,14 @@
 
             <div class="field">
     <%= f.label :mediation_notes %><br>
-    <%= f.text_area :mediation_notes %>
+
+    <%= f.text_area :mediation_notes, cols: "120", rows: "12" %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit :class => 'btn btn-primary' %>
   </div>
 <% end %>
+</div>
+
+        </div>
+      </div>

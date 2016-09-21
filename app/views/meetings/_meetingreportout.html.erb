@@ -22,11 +22,11 @@
           </div>
       <% end %>
       <h3><%= thisissue.name %></h3>
-      <%= hidden_field_tag(:meeting_id, @meeting.id) %>
-      <%= hidden_field_tag(:issue_id, thisissue.id) %>
+      <%= hidden_field(:issueaction, :meeting_id, :value => @meeting.id) %>
+      <%= hidden_field(:issueaction, :issue_id, :value => thisissue.id) %>
       <%= hidden_field_tag(:parent_id, thisissue.structure.parent_id) %>
 
-      <%= hidden_field_tag(:structure_id, @meeting.structure_id) %>
+      <%= hidden_field(:issueaction, :structure_id, :value => @meeting.structure_id) %>
       <%= hidden_field_tag(:frommeeting, 1) %>
 
   <div class="row">

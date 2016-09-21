@@ -27,7 +27,7 @@ class Meeting < ActiveRecord::Base
     structure = self.structure.structuretype_humanize
     structurename = self.structure.name
 
-    meetingid = (mdate + '-' + structure[0,2] + '-'  + structurename)
+    meetingid = ('MTG ' + mdate + '-' + structure[0,2] + '-'  + self.id.to_s)
     return meetingid
   end
 

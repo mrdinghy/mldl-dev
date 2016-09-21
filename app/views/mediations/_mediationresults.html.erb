@@ -1,4 +1,4 @@
-v
+
 
 
 <% modal ||= false %>
@@ -21,19 +21,21 @@ v
             </ul>
           </div>
       <% end %>
-      <h3>Mediation: <%= @mediation.issue.name %></h3>
-      <%= hidden_field_tag(:mediation_id, @mediation.id) %>
-      <%= hidden_field_tag(:issue_id, @mediation.issue_id) %>
-      <%= hidden_field_tag(:parent_id, @mediation.issue.structure.parent_id) %>
+      <h3>Issue: <%= @mediation.issue.issuecode %></h3>
+      <h4><%= @mediation.issue.name %></strong></h4>
 
-      <%= hidden_field_tag(:structure_id, @mediation.issue.structure_id) %>
+      <%= hidden_field(:issueaction, :mediation_id, :value => @mediation.id) %>
+      <%= hidden_field_tag(:issueaction, :issue_id, :value => @mediation.issue_id) %>
+      <%#= hidden_field_tag(:issueaction, :parent_id, @mediation.issue_id) %>
+
+      <%= hidden_field(:issueaction, :structure_id, :value => @mediation.issue.structure_id) %>
       <%= hidden_field_tag(:frommediation, 1) %>
 
       <div class="row">
         <div class="col-sm-9">
-          Report Notes from Mediation for this Issue:<br>
+          Action Notes for  Mediation Result (optional):<br>
 
-          <%= f.text_area :actionbody, cols: "100", rows: "12" %>
+          <%= f.text_area :actionbody, cols: "75", rows: "12" %>
 
 
         </div>
@@ -46,10 +48,10 @@ v
 
 
 
-            <%= radio_button :actiontype, 'Resolved', Actiontype::MEDIATION_RESULT_RESOLVED %> Resolved<br>
-            <%= radio_button(:actiontype,  'Ongoing', Actiontype::MEDIATION_RESULT_ONGOING) %> Ongoing<br>
-            <%= radio_button(:actiontype,  'Escalate Issue', Actiontype::MEDIATION_RESULT_ESCALATED) %> Escalate Issue<br>
-            <%= radio_button(:actiontype,  'Cancel Issue', Actiontype::MEDIATION_RESULT_CANCELLED) %> Cancel Issue<br>
+            <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_RESOLVED) %> Resolved<br>
+            <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_ONGOING) %> Ongoing<br>
+            <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_ESCALATED) %> Escalate Issue<br>
+            <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_CANCELLED) %> Cancel Issue<br>
 
 
 

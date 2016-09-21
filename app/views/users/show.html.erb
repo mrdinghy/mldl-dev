@@ -1,12 +1,42 @@
-<h3>User</h3>
-<p>Name: <%= @user.name if @user.name %></p>
-<p>Email: <%= @user.email if @user.email %></p>
-
-<H3>User Roles</H3>
 
 
-<%= 'Structure Admin' if @user.structure_admin %>
-<%= 'Structure Manager' if @user.structure_manager %>
-<%= 'Structure Admin' if @user.system_admin %>
-<%= 'Structure Admin' if @user.system_manager %>
+<div class="content-wrapper widerbox">
 
+  <div class="row">
+
+
+    <div class="col-sm-10">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+
+
+        </div>
+        <div class="panel-body">
+          <h3>User</h3>
+            <p>Name: <%= @user.name if @user.name %></p>
+            <p>Email: <%= @user.email if @user.email %></p>
+
+            <strong>User Roles</strong><BR>
+          <% userroles = Userrole.where(user_id: @user.id) %>
+
+            <% userroles.each do |ur| %>
+              <% mystructures = Manager.where('user_id = ?', ur.id) %>
+
+
+              <%= ur.role.name %><br>
+              <ul>
+              <% mystructures.each do |mgmt| %>
+                 <li><%= link_to mgmt.structure.name, mgmt.structure %></li>
+              <% end %>
+              </ul>
+
+
+
+            <% end %>
+
+
+         </div>
+          </div>
+        </div>
+</div>
+    </div>
