@@ -14,7 +14,7 @@
     <% end %>
     <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
-    <%#= hidden_field(:issueaction, :actiontype,  Actiontype::RESOLVED) %>
+    <%= hidden_field(:issueaction, :actiontype, :value =>  Actiontype::RESOLVED) %>
 
 
 <%# Added Bootstrap classes, and help-block container for error messages %>

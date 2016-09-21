@@ -591,6 +591,26 @@
 
 
 
+<div class="modal fade" id="cancel_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-cancel">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Cancel Issue</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'cancellation', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 <div class="modal fade" id="mediation_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-mediation">
@@ -659,26 +679,6 @@
 </div>
 
 
-
-<div class="modal fade" id="cancel_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-resolve">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small>Cancel Issue</small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
-      </div>
-      <div class="modal-body">
-        <%= render 'cancellation', modal: true %>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-
-    </div>
-  </div>
-</div>
 
 <div class="modal fade" id="reopen_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-reopen">

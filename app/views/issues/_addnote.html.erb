@@ -1,20 +1,10 @@
 <% modal ||= false %>
 <% remote = modal ? true : false %>
 <%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'new_note_form'}) do |f| %>
-    <% if @issue.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@location.errors.count, "error") %> prohibited this location from being saved:</h2>
 
-          <ul>
-            <% @issue.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
     <%= hidden_field_tag(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
-    <%= hidden_field_tag(:issueaction, :actiontype,  :value => Actiontype::COMMENT) %>
+    <%= hidden_field_tag(:issueaction, :actiontype, :value => Actiontype::COMMENT) %>
 
 
 
