@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-5">
 
 
 
@@ -123,33 +123,68 @@
 
 
 
-  <div class="col-sm-6">
+  <div class="col-sm-7">
     <%= @structure.name %> Summary
-    <table id="structuresummary"  class="table table-striped hover" cellspacing="0" width="100%">
+    <table id="datatables1"  class="table table-striped hover">
 
+        <thead>
+        <tr>
+          <th>Status</th>
+          <th>Number</th>
+
+        </tr>
+        </thead>
+      <tbody>
       <tr><td>New Issues*</td><td><%= @newissues %></td></tr>
       <tr><td>Ongoing</td> <td><%=  @ongoingissues %></td></tr>
       <tr><td>In Mediation</td> <td><%=  @mediationissues %></td></tr>
       <tr><td>Resolved</td> <td><%=  @resolvedissues %></td></tr>
       <tr><td>Cancelled</td>  <td><%=   @cancelledissues %></td></tr>
-
+      </tbody>
     </table>
 
-* Issues not yet addressed in Meeting or Mediation
+
+
+      <%= @structure.name %> Issues by Category
+      <table id="datatables1"  class="table table-striped hover" width=""100%">
+
+        <thead>
+        <tr>
+          <th>Status</th>
+          <th>New Issues*</th>
+          <th>Ongoing</th>
+          <th>Mediation</th>
+          <th>Resolved</th>
+          <th>Cancelled</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @allcats.each do |c| %>
+
+            <% catissues = Issue.where('category_id = ?', c.id ) %>
+
+            <% newissues=catissues.where(:status => Status::NEW).count %>
+            <% ongoingissues=catissues.where(:status => Status::ONGOING).count %>
+            <% mediationissues=catissues.where(:status => Status::MEDIATION).count %>
+            <% resolvedissues=catissues.where(:status => Status::RESOLVED).count %>
+            <% cancelledissues=catissues.where(:status => Status::CANCELLED).count %>
+            <tr><td><%= c.name %></td>
+              <td><%= newissues %></td>
+               <td><%=  ongoingissues %></td>
+               <td><%=  mediationissues %></td>
+               <td><%=  resolvedissues %></td>
+               <td><%=  cancelledissues %></td>
+            </tr>
+         <% end %>
+        </tbody>
+      </table>
+
+      * Issues not yet addressed in Meeting or Mediation
 
 
 
 
 
-
-
-
-
-    <script>
-      $(document).ready(function() {
-        $('#structuresummary').DataTable();
-      } );
-    </script>
   </div>
 
 

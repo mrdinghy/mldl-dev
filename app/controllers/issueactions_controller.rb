@@ -35,7 +35,9 @@ puts '------------------------------------------------------'
     if params[:issueaction][:meeting_id]
 
            if @issueaction.meeting_result_escalated?   #escalate from meeting
-               @issueaction.laststructure_id = params[:issueaction][:issue_id]
+
+
+               @issueaction.laststructure_id = issue.structure_id
                issue.structure_id = params[:issueaction][:parent_id]
             end
 
@@ -69,7 +71,7 @@ puts '------------------------------------------------------'
             issue.status = Status::ONGOING
           end
           if @issueaction.mediation_result_escalated?   #escalate from meeting
-            @issueaction.laststructure_id = params[:issueaction][:issue_id]
+            @issueaction.laststructure_id = issue.structure_id
             issue.structure_id = params[:issueaction][:parent_id]
           end
 
@@ -91,6 +93,9 @@ puts '------------------------------------------------------'
 
 
   else
+
+
+
           if @issueaction.comment?   #create Note
 
           end
@@ -99,7 +104,10 @@ puts '------------------------------------------------------'
             issue.status = Status::ONGOING
           end
           if @issueaction.escalated?   #escalate ISSUE
-            @issueaction.laststructure_id = params[:issueaction][:issue_id]
+
+
+
+            @issueaction.laststructure_id = issue.structure_id
             issue.structure_id = params[:issueaction][:parent_id]
           end
 

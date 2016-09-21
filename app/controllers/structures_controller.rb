@@ -19,7 +19,7 @@ class StructuresController < ApplicationController
     @mediationissues=@issues.where(:status => Status::MEDIATION).count
     @resolvedissues=@issues.where(:status => Status::RESOLVED).count
     @cancelledissues=@issues.where(:status => Status::CANCELLED).count
-
+    @allcats = Category.all
 
     @mediations = Mediation.all
     @mypeople= Membership.where('structure_id = ?', @structure.id)
