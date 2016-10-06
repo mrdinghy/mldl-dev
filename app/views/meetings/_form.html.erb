@@ -26,12 +26,6 @@
 
 
 
-    <div class="form-group">
-      <%= f.label :name, :class => "col-sm-3 control-label" %>
-      <div class="col-sm-9">
-        <%= f.text_field :name, :size => 100, :class => "form-control" %>
-     </div>
-    </div>
 
 
             <div class="form-group">
@@ -64,29 +58,24 @@
 
 
 --->
-            <div class="content-wrapper widerbox">
-              <div class="form-group mb">
-                <label class="col-sm-2 control-label mb">DateTimePicker</label>
-                <div class="col-sm-10">
-                  <div id="datetimepicker1" class="input-group date">
 
-                    <%= f.input :real_start, :as => :datetime_picker, :class => "form-control", :label => false %>
-
-
-
-                                <!--- <span class="input-group-addon">
-                                    <span class="fa fa-calendar"></span>
-                                 </span>--->
-                  </div>
+            <div class="form-group">
+              <%= f.label 'Meeting Start', :class => "col-sm-3 control-label" %>
+              <div class="col-sm-3" id="sandbox-container">
+                <div class="input-group date">
+                  <input type="text" class="form-control" width="80">
                 </div>
+
               </div>
-              <script type="text/javascript">
-                  $(function () {
-                      $('#datetimepicker1').datetimepicker();
-                  });
-              </script>
 
+              <%= f.label 'Time Start', :class => "col-sm-1 control-label" %>
+              <div class="col-sm-3 id="sandbox-container">
+                <div class="input-group date">
+                  <input id="stepExample1" type="text" class="time" />
+                </div>
 
+              </div>
+            </div>
 
 
                 <% if params[:action] == 'edit' %>
@@ -157,32 +146,8 @@
 </div>
         </div>
       </div>
-
 <script>
-    $(document).ready(function() {
-        $("#dataStart").datepicker({
-            minDate: '+1d',
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'mm/dd/yy',
-            onSelect: function(date){
-                var dates = date.split('/');
-                var lastDate = new Date(dates[2], dates[0], 0);
-                var y = lastDate.getFullYear(), m = lastDate.getMonth(), d = lastDate.getDate();
-                m = ('0'+ (m+1)).slice(-2);
-
-                $('#dataEnd').val(m+'/'+d+'/'+y);
-
-                var start = $('#dataStart').datepicker('getDate');
-                $('#dataEnd').datepicker({dateFormat: 'mm/dd/yy'}).datepicker('setDate', m+'/'+d+'/'+y);
-                var end = $('#dataEnd').datepicker('getDate');
-                var days   = ((end - start)/1000/60/60/24)+1;
-
-                $('#calculated').text(days);
-            }
-        });
-
-
+    $('#sandbox-container input').datepicker({
     });
-
+    $('#stepExample1').timepicker({ 'step': 15 });
 </script>

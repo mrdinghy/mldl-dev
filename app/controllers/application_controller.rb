@@ -8,8 +8,7 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :authenticate_user!
-  protect_from_forgery with: :null_session
-
+  protect_from_forgery with: :exception
 
   #allstructs = Structure.pluck(:id)
   #delophans = Issue.where('structure_id not in (?)', allstructs).delete_all

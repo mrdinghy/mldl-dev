@@ -12,8 +12,12 @@
       <%= form_for(@issue) do |f| %>
 <div class="form-horizontal">
   <% if @issue.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@issue.errors.count, "error") %> prohibited this issue from being saved:</h2>
+
+
+
+
+    <div id="error_explanation" role="alert" class="alert alert-danger">
+      <strong><%= pluralize(@issue.errors.count, "error") %> prohibited this issue from being saved:</strong><br>
 
       <ul>
       <% @issue.errors.full_messages.each do |message| %>
@@ -140,12 +144,9 @@
   <div class="form-group">
     <%= f.label :structure_id, :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <% if params[:structure_id] %>
-          <%= f.hidden_field :structure_id, :value => params[:structure_id] %>
-          <%= @issue.structure.name %>
-      <% else %>
+
           <%= f.collection_select(:structure_id, Structure.all, :id, :name, include_blank: true, :class => "form-control") %>
-      <% end %>
+
      </div>
   </div>
 

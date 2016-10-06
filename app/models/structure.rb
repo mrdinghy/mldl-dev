@@ -17,6 +17,18 @@ class Structure < ActiveRecord::Base
   #has_many :userroles, :through => :managers
 
 
+  def ismanager(thisuser)
+    s = Manager.where('structure_id = ? and user_id =?', self.id, thisuser).count
+    puts 'here is the odk========================='
+    puts
+    if s != 0
+      return true
+    else
+      return false
+    end
+  end
+
+
 
 
   def current_meetings_held

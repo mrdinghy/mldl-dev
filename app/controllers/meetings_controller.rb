@@ -10,6 +10,10 @@ class MeetingsController < ApplicationController
   # GET /meetings/1
   # GET /meetings/1.json
   def show
+
+    if @meeting.structure.ismanager(current_user.id) or current_user.mldlrole == 1
+      @canedit = true
+    end
     @meetingactions = Issueaction.where('meeting_id = ? and actiontype = ?', @meeting.id, Actiontype::AGENDA)
     @participants = Participation.where('meeting_id = ?', @meeting.id)
     #@mymeetings = Meeting.where('structure_id=?', @meeting.structure_id)

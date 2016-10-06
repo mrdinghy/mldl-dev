@@ -1,29 +1,19 @@
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(".selectperson").select2();
-    });
-</script>
-
 <div class="field" id="e2">
 
 
 
-  <script type="text/javascript">
-      $(document).ready(function() {
-          $(".chosen-select").select2();
-      });
-
-  </script>
 
   <small>Select/Search Person</small><br>
-  <select name="person_id" class="chosen-select input-md form-control">
+  <select name="person_id" class="chosen-select">
     <option value = "">Select -></option>
     <% @available_people.each do |p| %>
 
-      <option value="<%= p.id %>"><%= p.fullname %></option>
-     <% end %>
-    </select>
+        <option value="<%= p.id %>"><%= p.fullname %></option>
+    <% end %>
+  </select>
+
+
 
 
 
@@ -69,12 +59,23 @@
 
 
 
-
+<script type="text/javascript">
+    var config = {
+        '.chosen-select'           : {},
+        '.chosen-select-deselect'  : {allow_single_deselect:true},
+        '.chosen-select-no-single' : {disable_search_threshold:10},
+        '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+        '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+</script>
 <script type="text/javascript">
 
 
 
-    var checkbox = document.getElementById('addpeep');
+var checkbox = document.getElementById('addpeep');
     var details_div = document.getElementById('person_details');
     checkbox.onchange = function() {
         if(this.checked) {

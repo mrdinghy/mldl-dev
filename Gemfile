@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 ruby '2.2.3'
 gem 'rails', '4.2.5'
-gem 'rake', '11.2.2'
 gem 'pg'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -11,14 +10,18 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'simple_form'
 gem 'momentjs-rails', '~> 2.9'
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+gem 'simple-form-datepicker'
+#gem 'bootstrap-datepicker-rails'
+#gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem "paperclip", "3.5.4"
 gem "enumerate_it"
 gem 'acts_as_commentable_with_threading'
 gem 'font-awesome-rails'
 gem "wysiwyg-rails"
+gem 'chosen-rails'
 gem 'seed_dump'
+gem 'therubyracer'
 gem 'cancancan', '~> 1.10'
 gem 'prawn'
 gem 'time_splitter'

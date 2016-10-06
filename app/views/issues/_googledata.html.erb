@@ -1,0 +1,80 @@
+
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+    <h3 class="panel-title">Data Migrated from Google Apps </h3>
+  </div>
+
+
+
+  <div class="panel-body">
+
+
+
+    <table id="googledata"  class="table" cellspacing="0" width="100%">
+      
+
+      <tbody>
+      <% @gapps.each do |ga| %>
+       
+
+
+<tr><td>TimeStamp</td><td><%= ga.originaltimestamp %></td></tr>
+<tr><td>Issue ID</td><td><%= ga.issueid %></td></tr>
+<tr><td>UUID</td><td><%= ga.uuid %></td></tr>
+<tr><td>Issue Desc</td><td><%= ga.issuedescription %></td></tr>
+<tr><td>Issue Name</td><td><%= ga.issuename %></td></tr>
+<tr><td>Issue Notes</td><td><%= ga.issuenotes %></td></tr>
+<tr><td>Status Notes</td><td><%= ga.statusnotes %></td></tr>
+<tr><td>Original User</td><td><%= ga.yourname %></td></tr>
+<tr><td>Original Meet Date</td><td><%= ga.originalmeetingdate %></td></tr>
+<tr><td>Meeting Code</td><td><%= ga.meetingcode %></td></tr>
+<tr><td>Meeting Name</td><td><%= ga.meetingname %></td></tr>
+<tr><td>Structure</td><td><%= ga.structure %></td></tr>
+<tr><td>Structure County</td><td><%= ga.structurecounty %></td></tr>
+<tr><td>Structure District</td><td><%= ga.structuredistrict %></td></tr>
+<tr><td>Status</td><td><%= ga.status %></td></tr>
+<tr><td>Issue District</td><td><%= ga.issuedistrict %></td></tr>
+<tr><td>Issue Community</td><td><%= ga.community %></td></tr>
+<tr><td>Category</td><td><%= ga.category %></td></tr>
+<tr><td>Raised By</td><td><%= ga.raisedby %></td></tr>
+<tr><td>Disputant</td><td><%= ga.disputant %></td></tr>
+<tr><td>Duration (days)</td><td><%= ga.duration %></td></tr>
+<tr><td>Action Plan Committee</td><td><%= ga.actionplancommittee %></td></tr>
+<tr><td>Action Plan Desc</td><td><%= ga.actionplandescription %></td></tr>
+<tr><td>ACtion Plan Notes</td><td><%= ga.actionplannotes %></td></tr>
+<tr><td>Ongoing/Resolved</td><td><%= ga.ongoing_resolved %></td></tr>
+<tr><td>Report Ongoing</td><td><%= ga.report_ongoing %></td></tr>
+<tr><td>Resolution Date</td><td><%= ga.resolutiondate %></td></tr>
+<tr><td>Resolution Type</td><td><%= ga.resolutiontype %></td></tr>
+
+<tr><td>Resolution</td><td><%= ga.resolution %></td></tr>
+<tr><td>Update Type</td><td><%= ga.updatetype %></td></tr>
+
+<tr><td>Update Date</td><td><%= ga.updatedate %></td></tr>
+<tr><td>Update Desc</td><td><%= ga.updatedescription %></td></tr>
+<tr><td>Mediation Date</td><td><%= ga.mediationdate %></td></tr>
+<tr><td>Mediation Outcome</td><td><%= ga.mediationoutcome %></td></tr>
+
+<tr><td>Referral Date</td><td><%= ga.referraldate %></td></tr>
+<tr><td>Referred To</td><td><%= ga.referredto %></td></tr>
+<tr><td>Referral Note</td><td><%= ga.referralnote %></td></tr>
+
+
+      <% end %>
+      </tbody>
+    </table>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+

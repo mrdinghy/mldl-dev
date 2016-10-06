@@ -10,12 +10,22 @@ class IssuesController < ApplicationController
   # GET /issues/1
   # GET /issues/1.json
   def show
+
+    if @issue.structure.ismanager(current_user.id) or current_user.mldlrole == 1
+      @canedit=true
+    end
     @myactions = Issueaction.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymediations = Mediation.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymeetings = Meeting.where('structure_id=?', @issue.structure_id)
-
-
     @mydisputants = Disputant.where('issue_id=?', @issue.id)
+
+    @numberactions = @myactions.count
+    @numbermediations = @mymediations.count
+    @numberdisputants = @mydisputants.count
+
+
+
+
     @disputant = Disputant.new
     @available_people = Person.all
 
@@ -27,7 +37,30 @@ class IssuesController < ApplicationController
     @new_site_document = SiteDocument.new
     parent_id = @issue.structure.parent_id if @issue.structure.parent_id
     @parent = Structure.find(parent_id) if parent_id
+    @gapps = Appissue.where('issueid = ?', @issue.old_id)
+
+
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = IssuePdf.new(@issue)
+        send_data pdf.render, filename: "order_#{@issue.issuecode}.pdf",
+                  type: "application/pdf",
+                  disposition: "inline"
+      end
+    end
+
+
+
+
+
+
   end
+
+
+
+
 
 
   def searchissues
@@ -73,9 +106,9 @@ class IssuesController < ApplicationController
   # GET /issues/new
   def new
     @issue = Issue.new
-    @issue.structure_id = params[:structure_id] if params[:structure_id]
-    if params[:meeting_id]
-        @meeting = Meeting.find(params[:meeting_id])
+
+    if params[:structure_id]
+      @issue.update_attributes(:structure_id => params[:structure_id])
     end
   end
 
@@ -83,38 +116,33 @@ class IssuesController < ApplicationController
   def edit
   end
 
+  def resolution
+    @issue = Issue.find(params[:issue_id])
+    render 'resolutionform'
+  end
+
+
+
+
+
+
+
   # POST /issues
   # POST /issues.json
   def create
     @issue = Issue.new(issue_params)
-
-
-    if params[:meeting_id]
-      @issue.structure_id = params[:structure_id]
-      meeting = Meeting.find(params[:meeting_id])
-
-      @issue.save!
-
-      Issueaction.create(actiontype: 2, structure_id:  params[:structure_id], meeting_id: params[:meeting_id], issue_id: @issue.id)
-
-    end
-    if params[:structure_id]
-       structure = Structure.find(params[:structure_id])
-      @issue.structure_id = params[:structure_id]
-
-      #Issueaction.create(structure_id: structure.id, issue_id: @issue.id, actiontype: 1, user_id: current_user.id)
-    end
-    @issue.update_attributes!(status:Status::NEW)
-    @issue.save!
-
-
+    @issue.update_attributes(status:Status::NEW)
 
     respond_to do |format|
       if @issue.save
         if params[:meeting_id]
+          Issueaction.create(actiontype: 2, structure_id:  params[:structure_id], meeting_id: params[:meeting_id], issue_id: @issue.id)
+          meeting = Meeting.find(params[:meeting_id])
            format.html { redirect_to meeting, notice: 'Issue was successfully created.' }
            format.json { render :show, status: :created, location: meeting }
         elsif params[:structure_id]
+          Issueaction.create(structure_id: structure.id, issue_id: @issue.id, actiontype: 1, user_id: current_user.id)
+          structure = Structure.find(params[:structure_id])
           format.html { redirect_to structure, notice: 'Issue was successfully created.' }
           format.json { render :show, status: :created, location: structure }
         else
@@ -125,17 +153,35 @@ class IssuesController < ApplicationController
 
 
       else
-        format.html { render :new }
+        if params[:structure_id]
+          format.html { render :action => :new, :params => {:structure_id => params[:structure_id]}}
+        else
+          format.html { render :new }
+        end
+
         format.json { render json: @issue.errors, status: :unprocessable_entity }
       end
     end
   end
 
+
+
+
+
+
+
   # PATCH/PUT /issues/1
   # PATCH/PUT /issues/1.json
   def update
 
+     if params[:resolution]
 
+
+       @issue.update_attributes!(:status => Status::RESOLVED)
+
+
+
+     end
 
 
    # if params[:addraiser]
@@ -386,7 +432,7 @@ end
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
       params.require(:issue).permit(:name, :description, :structure_id, :community, :yourname, :district_id, :location, :status, :status_note,
-                                    :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, person_ids: [], structure_ids: [] )
+                                    :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, person_ids: [], meeting_ids: [] )
     end
 end
 

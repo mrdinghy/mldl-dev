@@ -10,6 +10,10 @@ class MediationsController < ApplicationController
   # GET /mediations/1
   # GET /mediations/1.json
   def show
+
+    if @mediation.issue.structure.ismanager(current_user.id) or current_user.mldlrole == 1
+      @canedit=true
+    end
     @issue=Issue.find(@mediation.issue_id)
     @mediators = Mediator.where('mediation_id = ?', @mediation.id)
     @mediator = Mediator.new
@@ -22,6 +26,11 @@ class MediationsController < ApplicationController
   # GET /mediations/new
   def new
     @mediation = Mediation.new
+    if params[:issue_id]
+
+      @issue = Issue.find(params[:issue_id])
+
+    end
   end
 
   # GET /mediations/1/edit
@@ -32,10 +41,9 @@ class MediationsController < ApplicationController
   # POST /mediations.json
   def create
     @mediation = Mediation.new(mediation_params)
-    @mediation.issue_id = params[:issue_id]
     @mediation.save!
     issueaction= Issueaction.new
-    issue = Issue.find(params[:issue_id])
+    issue = Issue.find(@mediation.issue_id)
 
     Issueaction.create(mediation_id: @mediation.id, issue_id: params[:issue_id], user_id: current_user.id, actiontype: Actiontype::MEDIATION, structure_id: issue.structure_id)
     respond_to do |format|

@@ -9,4 +9,17 @@ class Issueaction < ActiveRecord::Base
   has_enumeration_for :actiontype, create_helpers: true
 
 
+
+  def resolutiontype_id
+  end
+
+
+
+
+  def resolution
+  end
+
+  def resolution_date
+  end
+
 end

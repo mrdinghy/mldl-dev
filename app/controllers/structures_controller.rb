@@ -12,6 +12,10 @@ class StructuresController < ApplicationController
   # GET /structures/1.json
   def show
 
+puts current_user.mldlrole
+    if @structure.ismanager(current_user.id) or current_user.mldlrole == 1
+         @canedit = true
+    end
     @issues= Issue.where('structure_id = ?', @structure.id).order('created_at DESC')
 
     @newissues=@issues.where(:status => Status::NEW).count
@@ -27,12 +31,12 @@ class StructuresController < ApplicationController
     @meetings = Meeting.where('structure_id = ?', @structure.id)
     @parent = Structure.find(@structure.parent_id) if @structure.parent_id
     #@availablemanagers = Userrole.where('role_id = ?', 2)
-
-    @availablemanagers = []
-    users=Userrole.where('role_id = ?', 2)
-    users.each do |u|
-      @availablemanagers.append(User.find(u.user_id))
-    end
+    @availablemanagers = User.where('mldlrole =? ', 2)
+    #@availablemanagers = []
+    #users=Userrole.where('role_id = ?', 2)
+    #users.each do |u|
+    #  @availablemanagers.append(User.find(u.user_id))
+    #end
     @issue = Issue.new
     @meeting = Meeting.new
     @available_people = Person.all

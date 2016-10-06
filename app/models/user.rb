@@ -4,8 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  #extend EnumerateIt
-  #has_enumeration_for :role
+  extend EnumerateIt
+  has_enumeration_for :mldlrole
 
   #belongs_to :person
 
@@ -23,16 +23,7 @@ class User < ActiveRecord::Base
     return namesake
   end
 
-  def mystructure(structure_id)
-    sids = Manage.select(:structure_id).where('user_id = ?', self.id)
-    sids_array = sids.collect{|s| s.structure_id}
-    if sids.include?(structure_id)
-    return true
-    else
-      return false
-    end
 
-  end
 
 
 

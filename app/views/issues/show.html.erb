@@ -1,7 +1,7 @@
 
 <style>
 
-  .modal-addnote, .modal-escalate, .modal-resolve, .modal-mediation, .modal-cancel, .modal-reopen, .modal-agenda {
+  .modal-comment, .modal-escalate, .modal-resolve, .modal-mediation, .modal-cancel, .modal-reopen, .modal-agenda {
     width: 800px;
   }
 
@@ -30,8 +30,9 @@
       <div class="panel panel-default">
         <div class="panel-heading">
 
-
+          <% if @canedit %>
           <%= link_to 'Edit', edit_issue_path(@issue), :class => "btn btn-primary pull-right" %>
+              <% end %>
         </div>
         <div class="panel-body">
         <div class="form-horizontal">
@@ -99,12 +100,11 @@
               </div>
             </div>
 
-
+          <% if @canedit %>
 
 
             <%= link_to 'Delete', @issue, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
-
-
+              <% end %>
 
 
 
@@ -142,11 +142,14 @@
 
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#viewresolution">Resolution</a></li>
-        <li><a data-toggle="tab" href="#viewhistory">History</a></li>
-        <li><a data-toggle="tab" href="#viewdisputants">Disputants</a></li>
-        <li><a data-toggle="tab" href="#viewmediations">Mediations</a></li>
+        <li><a data-toggle="tab" href="#viewhistory">History<div class="pull-right label label-info"><%= @numberactions if @numberactions > 0 %></div></a></li>
+        <li><a data-toggle="tab" href="#viewdisputants">Disputants<div class="pull-right label label-info"><%= @numberdisputants if @numberdisputants > 0 %></div></a></li>
+        <li><a data-toggle="tab" href="#viewmediations">Mediations<div class="pull-right label label-success"><%= @numbermediations if @numbermediations > 0 %></div></a></li>
 
         <li><a data-toggle="tab" href="#viewdocuments">Documents</a></li>
+        <% if !@issue.old_id.nil? %>
+        <li><a data-toggle="tab" href="#viewolddata">Original Data</a></li>
+                <% end %>
       </ul>
 
       <div class="tab-content">
@@ -226,8 +229,8 @@
 
 
 
-                <% if @issue.issueactions.any? %>
-                    <% @issue.issueactions.each do |action| %>
+                <% if @myactions.any? %>
+                    <% @myactions.each do |action| %>
 
                         <tr>
                           <td><%= action.created_at.strftime("%m/%d/%Y") if action.created_at %></td>
@@ -409,11 +412,11 @@
 
 
             </div>
-
+            <% if @canedit %>
             <hr>
             <small>Link Person to Structure</small><br>
             <%= render 'adddisputant' %>
-
+           <% end %>
 
 
 
@@ -472,9 +475,8 @@
 
         <div id="viewdocuments" class="tab-pane fade in">
           <h3>Documents</h3>
-          <div class="form-group">
-            <label class="col-sm-4">Documents</label>
-            <div class="col-sm-8">
+
+
               <table class="table">
 
                 <% @issuedocs.each do |doc| %>
@@ -491,29 +493,47 @@
                 <% end %>
               </table>
 
-              <%= simple_form_for @new_site_document do |form| %>
-                  <%= form.hidden_field :documentable_id, :value => @issue.id %>
-                  <%= form.hidden_field :documentable_type, :value => 'issue' %>
-                  <%= form.input :document, as: :file, :label => false %>
-                  <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+
+              <br><BR>
+
+              <% if @canedit %>
+                  <%= simple_form_for @new_site_document do |form| %>
+                      <%= form.hidden_field :documentable_id, :value => @issue.id %>
+                      <%= form.hidden_field :documentable_type, :value => 'issue' %>
+                      <%= form.input :document, as: :file, :label => false %>
+                      <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+                  <% end %>
               <% end %>
 
-            </div>
-          </div>
 
 
 
          </div>
 
+
+        <div id="viewolddata" class="tab-pane fade in">
+
+                <%= render 'googledata' %>
+
+          <%= debug @gapps %>
+        </div>
+
+
+
+
+
       </div>
       </div>
       <div class="col-sm-1">
+        <%= link_to 'Add Comment', '#comment_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
 
+
+        <% if @canedit %>
             <% if @issue.status == Status::RESOLVED or @issue.status == Status::CANCELLED %>
                 <%= link_to 'Reopen Issue', '#reopen_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
             <% else %>
 
-                <%= link_to 'Add Comment', '#new_comment_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+
                 <% if @issue.status != Status::MEDIATION %>
                     <% if @mymeetings.count == 0 %>
                         <button class="btn btn-small btn-default">Add to Meeting Agenda</button> <strong>No Meetings Scheduled</strong><br><br>
@@ -524,18 +544,28 @@
 
 
                     <%= link_to parentlink, '#escalate_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                    <% if @issue.openmediation != 0 %>
+                        <button class="btn btn-defaut">Open mediation in progress</button>
+                    <% else %>
 
-                    <%= link_to 'Mediation', '#mediation_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                        <%= link_to 'Create Mediation', new_mediation_path(:issue_id => @issue.id), :class => "btn btn-success"  %>
+                      <% end %>
+
+
+                    <%#= link_to 'Mediation', new_mediation_path'#mediation_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
                     <% if @issue.status == Status::ONGOING %>
                         <%#= link_to 'Resolution', new_issueaction_path(:issue_id => @issue.id, :actiontype_id => 1), :class => "btn btn-success" %><br><br>
 
-                        <%= link_to 'Resolution', '#resolution_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-                        <%= link_to 'Cancel Issue', '#cancel_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                        <%#= link_to 'Resolution', resolution_path(:issue_id => @issue.id), :class => "btn btn-success" %><br><br>
+
+                        <%= link_to 'Resolution', '#resolution_modal', 'data-toggle' => 'modal', :class => "btn btn-inverse" %><br><br>
+                        <%= link_to 'Cancel Issue', '#cancel_modal', 'data-toggle' => 'modal', :class => "btn btn-danger" %><br><br>
                     <% end %>
                 <% end %>
 
 
             <% end %>
+        <% end %>
         <button class="btn btn-default">Print Issue Form</button><br><br>
 </div>
 
@@ -569,13 +599,41 @@
 
 
 
-<div class="modal fade" id="new_comment_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-addnote">
+
+
+
+<div class="modal fade" id="cancel_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-cancel">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small>Add Comment to Issue</small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
+        <h4 class="modal-title" id="myModalLabel">Cancel Issue </h4>
+        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
+        Alert: After cancellation, only system administrator can "reopen" this Issue.
+      </div>
+      <div class="modal-body">
+        <%= render 'cancellation', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="comment_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-comment">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Record general update / comment </h4>
+        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
+
       </div>
       <div class="modal-body">
         <%= render 'addnote', modal: true %>
@@ -591,25 +649,6 @@
 
 
 
-<div class="modal fade" id="cancel_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-cancel">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small>Cancel Issue</small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
-      </div>
-      <div class="modal-body">
-        <%= render 'cancellation', modal: true %>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-
-    </div>
-  </div>
-</div>
 
 
 <div class="modal fade" id="mediation_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -641,8 +680,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small><%= parentlink %></small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
+
+        <h4 class="modal-title" id="myModalLabel"><%= parentlink %> (Ad-Hoc)</h4>
+        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
+        Alert: This referral will not be referenced to a Meeting or Mediation result.
       </div>
       <div class="modal-body">
         <%= render 'escalate', modal: true %>
@@ -663,8 +704,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small>Resolve Issue</small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
+        <h4 class="modal-title" id="myModalLabel">Issue Resolution (Ad-Hoc)</h4>
+        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
+        Alert: This resolution will not be referenced to any Meeting or Mediation.
       </div>
       <div class="modal-body">
         <%= render 'resolution', modal: true %>
@@ -685,8 +727,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small>Reopen Issue</small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
+        <h4 class="modal-title" id="myModalLabel">Reopen Issue (change to "ongoing" status)</h4>
+        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
       </div>
       <div class="modal-body">
         <%= render 'reopen', modal: true %>
@@ -712,6 +754,8 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Add Issue to Meeting Agenda</h4>
+        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
+        Note: A meeting selection is required. Only meetings sponsored by the Issue's Structure (CF, DSC, CSC) are available.
       </div>
       <div class="modal-body">
         <%= render 'addagenda', modal: true %>
@@ -744,6 +788,9 @@
     })
 
     $('#new_report_form').on('submit', function() {
+        $('#new_report_model').modal('hide');
+
+    $('#new_comment_form').on('submit', function() {
         $('#new_report_model').modal('hide');
     })
 

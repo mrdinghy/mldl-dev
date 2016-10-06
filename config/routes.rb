@@ -41,6 +41,11 @@ Rails.application.routes.draw do
   resources  :people_structures
   resources :comments, :path_prefix => '/:commentable_type/:commentable_id'
 
+
+  post 'addtoagenda', to: 'issuesactions#create_meetingagenda', as: 'addtoagenda'
+
+  get 'resolution', to: 'issues#resolution', as: 'resolution'
+
   get 'publish', to: 'visitors#publish', as: 'publish'
   get 'moveup', to: 'sections#moveup', as: 'moveup'
   get 'movedown', to: 'sections#movedown', as: 'movedown'

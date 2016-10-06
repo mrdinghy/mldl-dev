@@ -4,7 +4,9 @@ class AppissuesController < ApplicationController
   # GET /appissues
   # GET /appissues.json
   def index
+      Appissue.where('issue_id in (?)', [501,363,176,177]).destroy_all
       @uniquemeetings = Appissue.select(:meetingname, :structure, :structurecounty, :structuredistrict, :meetingcode, :originalmeetingdate).order(:meetingcode).uniq
+
       @uniquemeetings.each do |meet|
 
        if !meet.originalmeetingdate.blank? and !meet.structurecounty.blank? and !meet.structuredistrict.blank? and !meet.structure.blank? and !meet.meetingcode.blank?
@@ -43,18 +45,15 @@ class AppissuesController < ApplicationController
            else
              rd = issue.resolutiondate
            end
-           vstatus = 3
+           vstatus = 3   #status is resolved
          else
-           vstatus = 2
+           vstatus = 2   #status is ongoing
 
          end
 
          if cat == 0
            cat = nil
          end
-
-
-
 
 
          mldlissue = Issue.create(
@@ -78,6 +77,79 @@ class AppissuesController < ApplicationController
 
 
 
+
+         thismeeting = Meeting.where('old_id = ?', issue.meetingcode).first
+
+         # creates an Agenda action for each issues link to a meeting
+         if thismeeting.nil?
+           meetid=0
+         else
+           meetid=thismeeting.id
+         end
+         if !issue.originalmeetingdate.nil?
+           agenda = Issueaction.create(issue_id: mldlissue.id, actiontype: 2, user_id: 1, meeting_id: meetid)
+           agenda.created_at = issue.originalmeetingdate
+           agenda.save
+         end
+
+
+
+         if !issue.mediationdate.nil?
+           addmed = Mediation.create(issue_id: mldlissue.id, mediation_start: issue.mediationdate)
+           medaction=Issueaction.create(issue_id: mldlissue.id, actiontype: 7, user_id: 1, mediation_id: addmed.id)
+
+           medaction.created_at = issue.mediationdate
+
+           medaction.save
+         end
+
+         if !issue.statusnotes.blank?
+           statusnote = Issueaction.create(issue_id: mldlissue.id,actiontype: 3, actionbody: issue.statusnotes, user_id: 1)
+
+           if !issue.originalmeetingdate.nil?
+             statusnote.created_at = issue.originalmeetingdate
+           else
+             statusnote.created_at = issue.originaltimestamp
+           end
+
+           #statusnote.save
+         end
+
+         if !issue.actionplannotes.blank?
+           actplan = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.actionplannotes, user_id: 1)
+           if !issue.originalmeetingdate.nil?
+             actplan.created_at = issue.originalmeetingdate
+           else
+             actplan.created_at = issue.originaltimestamp
+           end
+
+           #actplan.save
+         end
+
+
+
+
+         if !issue.updatedescription.blank? and !issue.updatetype.nil?
+
+           if issue.updatetype.include? 'Resolution'
+             acttype=5
+           elsif issue.updatetype.include? 'Referred'
+             acttype=6
+
+           elsif issue.updatetype.include? 'Mediation'
+             acttype=7
+           else
+             acttype=3
+           end
+
+           updater = Issueaction.create(issue_id: mldlissue.id, actiontype: acttype, actionbody: issue.updatedescription, user_id: 1)
+           if !issue.updatedate.nil?
+             updater.created_at = issue.updatedate
+           else
+             updater.created_at = issue.originaltimestamp
+           end
+           #updater.save
+         end
 
 
 

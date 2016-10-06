@@ -1,12 +1,10 @@
-<% userroles = Userrole.where(user_id: user.id) %>
+<% structures = Manager.where('user_id = ?', user.id) %>
 <td><%= link_to user.name, user %></td>
 <td><%= link_to user.email, user %></td>
-
+<td><%= user.mldlrole_humanize %><br>
 <td>
-<% userroles.each do |ur| %>
-  <%= ur.role.name %><br>
+  <% structures.each do |st| %>
+      <%= st.structure.name %><br>
 <% end %>
-
 </td>
-
 <td><%= link_to 'Edit Roles', adjustroles_path(:user_id => user.id) %></td>

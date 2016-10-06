@@ -1,4 +1,6 @@
 class District < ActiveRecord::Base
+
+  validates :name, presence: true
   has_many :issues
   has_many :structures
   belongs_to :county

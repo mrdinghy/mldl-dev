@@ -1,70 +1,44 @@
-
-
-
 <% modal ||= false %>
 <% remote = modal ? true : false %>
+<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'mediateresult_form'}) do |f| %>
+
+    <%= hidden_field(:issueaction, :issue_id, :value => @mediation.issue_id) %>
+    <%= hidden_field_tag(:frommediation, true) %>
+    <%= hidden_field(:issueaction, :mediation_id, :value => @mediation.id) %>
+
+<%# Added Bootstrap classes, and help-block container for error messages %>
+    <div class="field">
+      <%= f.label 'Note:' %><br>
+      This Note will be saved in the Issue history table.
+      <%= f.text_area :actionbody,  cols: "120", rows: "12" %>
+    </div>
 
 
-<%# thisissue = Issue.find(issue_id) %>
+    <div class="field">
+      <div style="font-size: 16px">
 
-
-<%= form_for(@issueaction) do |f| %>
-    <div class="form-horizontal">
-      <% if @issueaction.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= pluralize(@issueaction.errors.count, "error") %> prohibited this action from being saved:</h2>
-
-            <ul>
-              <% @issueaction.errors.full_messages.each do |message| %>
-                  <li><%= message %></li>
-              <% end %>
-            </ul>
-          </div>
-      <% end %>
-      <h3>Issue: <%= @mediation.issue.issuecode %></h3>
-      <h4><%= @mediation.issue.name %></strong></h4>
-
-      <%= hidden_field(:issueaction, :mediation_id, :value => @mediation.id) %>
-      <%= hidden_field_tag(:issueaction, :issue_id, :value => @mediation.issue_id) %>
-      <%#= hidden_field_tag(:issueaction, :parent_id, @mediation.issue_id) %>
-
-      <%= hidden_field(:issueaction, :structure_id, :value => @mediation.issue.structure_id) %>
-      <%= hidden_field_tag(:frommediation, 1) %>
-
-      <div class="row">
-        <div class="col-sm-9">
-          Action Notes for  Mediation Result (optional):<br>
-
-          <%= f.text_area :actionbody, cols: "75", rows: "12" %>
-
-
-        </div>
-
-        <div class="col-sm-3">
-          <div style="font-size: 16px">
-
-            <h3>Mediation Result</h3>
+        <h3>Mediation Result</h3>
 
 
 
 
-            <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_RESOLVED) %> Resolved<br>
-            <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_ONGOING) %> Ongoing<br>
-            <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_ESCALATED) %> Escalate Issue<br>
-            <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_CANCELLED) %> Cancel Issue<br>
+        <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_RESOLVED) %> Resolved<br>
+        <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_ONGOING) %> Ongoing<br>
+        <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_ESCALATED) %> Escalate Issue<br>
+        <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_CANCELLED) %> Cancel Issue<br>
 
 
 
 
-          </div>
-        </div>
       </div>
+    </div>
 
 
 
 
-      <div class="pull-right"><%= f.submit :class => "btn btn-primary" %></div>
-      <br><br>
+
+
+    <div class="actions">
+      <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
     </div>
 <% end %>
-

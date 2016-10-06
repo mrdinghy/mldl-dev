@@ -12,19 +12,18 @@
  */
  @import "bootstrap-sprockets";
  @import "bootstrap";
+ @import "bootstrap-datepicker3.min";
+ @import "jquery.timepicker";
+ @import "chosen";
  @import "font-awesome";
  @import "simple-line-icons";
  @import "animate.min";
- @import "chosen.min";
- @import "bootstrap-datetimepicker.min";
- @import "select2";
- @import "dataTables.colVis";
  @import "dataTables.bootstrap";
  @import "index";
  @import "app";
 /*
 
-
+@import "bootstrap-datetimepicker.min";
 
  @import "jquery.dataTables";
  @import "dataTables.jqueryui";

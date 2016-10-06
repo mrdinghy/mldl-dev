@@ -44,7 +44,9 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">General</h3>
-          <%= link_to 'Edit', edit_mediation_path(@mediation), :class => "btn btn-primary pull-right" %>
+          <% if @canedit %>
+            <%= link_to 'Edit', edit_mediation_path(@mediation), :class => "btn btn-primary pull-right" %>
+          <% end %>
         </div>
 
         <div class="panel-body">
@@ -96,29 +98,24 @@
 
                 <% end %>
               </table>
-
-              <%= simple_form_for @new_site_document do |form| %>
-                  <%= form.hidden_field :documentable_id, :value => @mediation.id %>
-                  <%= form.hidden_field :documentable_type, :value => 'mediation' %>
-                  <%= form.input :document, as: :file, :label => false %>
-                  <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+              <% if @canedit %>
+                <%= simple_form_for @new_site_document do |form| %>
+                    <%= form.hidden_field :documentable_id, :value => @mediation.id %>
+                    <%= form.hidden_field :documentable_type, :value => 'mediation' %>
+                    <%= form.input :document, as: :file, :label => false %>
+                    <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+                <% end %>
               <% end %>
 
             </div>
           </div>
 
 
-
-
-
-          <%= link_to 'Edit', edit_mediation_path(@mediation) %> |
-          <%= link_to 'Back', mediations_path %>
-
-
-          <div class="pull-right">
-
-            <%= link_to 'Delete', @mediation, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
-          </div>
+          <% if @canedit %>
+                <div class="pull-right">
+                  <%= link_to 'Delete', @mediation, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+                </div>
+           <% end %>
         </div>
 
       </div>
@@ -152,11 +149,11 @@
           </table>
 
 
-
-          <hr>
-          <small>Add Mediator</small><br>
-          <%= render 'addmediator' %>
-
+          <% if @canedit %>
+            <hr>
+            <small>Add Mediator</small><br>
+            <%= render 'addmediator' %>
+          <% end %>
 
 
 
@@ -183,9 +180,9 @@
 
 
 
-
-      <%= link_to 'Mediation Result', '#mediation_result_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-
+      <% if @canedit %>
+        <%= link_to 'Mediation Result', '#mediation_result_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+      <% end %>
       <button class="btn btn-default">Print Mediation Report</button><br>
 
 

@@ -1,16 +1,16 @@
 <% modal ||= false %>
 <% remote = modal ? true : false %>
-<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'new_note_form'}) do |f| %>
+<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'comment_form'}) do |f| %>
 
-    <%= hidden_field_tag(:issueaction, :issue_id, :value => @issue.id) %>
+    <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
-    <%= hidden_field_tag(:issueaction, :actiontype, :value => Actiontype::COMMENT) %>
+    <%= hidden_field(:issueaction, :actiontype, :value => Actiontype::COMMENT) %>
 
-
-
+<%# Added Bootstrap classes, and help-block container for error messages %>
     <div class="field">
-
-      <%= f.text_area :actionbody, cols: "120", rows: "12" %>
+      <%= f.label 'Note:' %><br>
+      This Note will be saved in the Issue history table.
+      <%= f.text_area :actionbody,  cols: "120", rows: "12" %>
     </div>
     <div class="actions">
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>

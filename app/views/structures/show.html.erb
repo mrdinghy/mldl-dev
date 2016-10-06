@@ -32,17 +32,20 @@ width: 800px;
 
 
 <!-- Page content-->
-
+<%= debug @canedit %>
 
     <%= link_to 'Return to Structures', structures_path %>
 
     <h4 class="page-header"><span style="color: #999">Structure: </span><%= @structure.name %></h4>
     <!-- START row-->
-
+<% if @canedit %>
     <div class="pull-right">
-      <%= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
+      <%= link_to 'New Issue', new_issue_path(:structure_id => @structure.id), :class => "btn btn-success"  %>
+      <%#= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
       <%= link_to "New Meeting", new_meeting_path(:structure_id => @structure.id), :class => "btn btn-success" %>
     </div>
+<% end %>
+
 
   <div class="row">
 
@@ -106,11 +109,12 @@ width: 800px;
                   </table>
 
                   <hr>
-                  <small>Link Person to Structure</small><br>
-                  <%= render 'addmember' %>
+                  <% if @canedit %>
+                    <small>Link Person to Structure</small><br>
+                    <%= render 'addmember' %>
 
 
-
+                  <% end %>
 
                   <script type="text/javascript">
                     $(document).ready(function() {
@@ -179,6 +183,8 @@ width: 800px;
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <small>Add New Issue to Structure</small><br>
         <h4 class="modal-title" id="myModalLabel"><%= @structure.name %></h4>
+
+        <div id="error_explanation" style="display:none;">
       </div>
       <div class="modal-body">
         <%= render 'addstructureissue', modal: true %>

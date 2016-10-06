@@ -71,10 +71,11 @@
 
         <div class="col-sm-10">
           <div class="panel panel-default">
-            <div class="panel-heading">
-
-              <%= link_to 'Edit/Set Agenda', edit_meeting_path(@meeting), :class => "btn btn-primary pull-right" %>
-            </div>
+            <% if @canedit %>
+                <div class="panel-heading">
+                  <%= link_to 'Edit/Set Agenda', edit_meeting_path(@meeting), :class => "btn btn-primary pull-right" %>
+                </div>
+            <% end %>
             <div class="panel-body">
                  <div class="col-sm-4">
 
@@ -192,8 +193,10 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title">Participants</h3>
-                <%= link_to 'Add Participant', '#new_participant_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
-              </div>
+                <% if @canedit %>
+                    <%= link_to 'Add Participant', '#new_participant_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+                <% end %>
+                </div>
               <div class="panel-body">
 
                 <table class="table">
@@ -214,10 +217,10 @@
                   <% end %>
                   </tbody>
                 </table>
-
-             <small>Add Participant to Meeting</small><br>
-             <%= render 'addparticipant' %>
-
+                <% if @canedit %>
+                     <small>Add Participant to Meeting</small><br>
+                     <%= render 'addparticipant' %>
+                 <% end %>
 
 
 
@@ -253,14 +256,14 @@
 
               <% end %>
             </table>
-
-            <%= simple_form_for @new_site_document do |form| %>
-                <%= form.hidden_field :documentable_id, :value => @meeting.id %>
-                <%= form.hidden_field :documentable_type, :value => 'meeting' %>
-                <%= form.input :document, as: :file, :label => false %>
-                <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+            <% if @canedit %>
+                <%= simple_form_for @new_site_document do |form| %>
+                    <%= form.hidden_field :documentable_id, :value => @meeting.id %>
+                    <%= form.hidden_field :documentable_type, :value => 'meeting' %>
+                    <%= form.input :document, as: :file, :label => false %>
+                    <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+                <% end %>
             <% end %>
-
 
 
 
@@ -293,9 +296,9 @@
 
 
 
-
-        <%= link_to 'New Issue', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-
+        <% if @canedit %>
+            <%= link_to 'New Issue', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+        <% end %>
         <button class="btn btn-default">Print Attendance Sheet</button><br>
         <button class="btn btn-default">Print Meeting Form</button><br>
         <button class="btn btn-default">Print Issue Forms</button><br>
@@ -310,12 +313,12 @@
 
 
   </div>
-
+  <% if @canedit %>
   <div>
 
     <%= link_to 'Delete', @meeting, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
   </div>
-
+    <% end %>
 </div>
 
 

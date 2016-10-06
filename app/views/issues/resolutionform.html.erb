@@ -1,0 +1,216 @@
+<div class="container">
+
+  <div class="panel panel-default">
+
+    <div class="panel-heading"><h2><%= @panelheader %></h2>
+      <h2><strong><%= @issue.name %></strong></h2>
+
+      <div class="panel-body">
+
+
+
+        <%= form_for(@issue) do |f| %>
+            <div class="form-horizontal">
+              <% if @issue.errors.any? %>
+
+
+
+
+                  <div id="error_explanation" role="alert" class="alert alert-danger">
+                    <strong><%= pluralize(@issue.errors.count, "error") %> prohibited this issue from being saved:</strong><br>
+
+                    <ul>
+                      <% @issue.errors.full_messages.each do |message| %>
+                          <li><%= message %></li>
+                      <% end %>
+                    </ul>
+                  </div>
+              <% end %>
+
+              <%= hidden_field_tag(:resolution, true) %>
+
+
+              <div class="form-group">
+                <%= f.label :name, :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= @issue.name %>
+
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label 'Community of Origin', :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= @issue.community %>
+
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <%= f.label 'District', :class => "col-sm-2" %>
+                <div class="col-sm-10">
+                  <%= @issue.district.name %>
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <%= f.label 'Disputants', :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= @issue.disputant> "form-control" %>
+
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <%= f.label 'Raised by', :class => "col-sm-2 control-label" %>
+                <div class="col-sm-4">
+                  <%= @issue.raised_by.fullname if !@issue.raised_by.nil?%>
+
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <%= f.label :category_id, :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= @issue.category.name if @issue.category_id %>
+
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <%= f.label :description, :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= @issue.description %>
+
+                </div>
+              </div>
+
+
+
+
+              <div class="form-group">
+                <%= f.label :structure_id, :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+
+                  <%= @issue.structure.name %>
+
+                </div>
+              </div>
+
+
+
+
+
+
+              <div class="form-group">
+                <%= f.label :status_note, :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= @issue.status_note %>
+
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :actionplan, :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= @issue.actionplan %>
+
+                </div>
+              </div>
+
+              <div class="form-group">
+                <%= f.label 'Action Plan Committee', :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= @issue.actioncommittee %>
+
+                </div>
+              </div>
+
+
+
+
+              <div class="form-group">
+                <%= f.label 'Resolution Date', :class => "col-sm-2 control-label" %>
+                <div class='col-sm-1 input-group date' id='mediationstart'>
+                  <%= f.text_field :resolution_date, :as => :datetime_picker, :class => "form-control", :label => false %>
+                  <%#= f.input :real_start, as: :date_time_picker %>
+                </div>
+              </div>
+
+              <script type="text/javascript">
+                  $(function () {
+                      $('#mediationstart').datetimepicker();
+                  });
+              </script>
+
+
+              <div class="form-group">
+                <%= f.label :resolutiontype, :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+
+                  <%= f.collection_select(:resolutiontype_id, Resolutiontype.all, :id, :name, include_blank: true, :class => "form-control") %>
+
+                </div>
+              </div>
+
+
+
+
+
+              <div class="form-group">
+                <%= f.label :resolution, :class => "col-sm-2 control-label" %>
+                <div class="col-sm-10">
+                  <%= f.text_area :resolution, :id => "descedit", :cols => "100", :rows => "5" %>
+
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+              <div class="form-group">
+                <div class = "col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                  <%= f.submit :class => "btn btn-primary" %>
+
+                </div>
+              </div>
+
+            </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+      var checkbox = document.getElementById('addraiser');
+      var details_div = document.getElementById('person_details');
+      checkbox.onchange = function() {
+          if(this.checked) {
+              details_div.style['display'] = 'block';
+          } else {
+              details_div.style['display'] = 'none';
+          }
+      };
+  </script>
+
+

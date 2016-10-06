@@ -24,11 +24,7 @@ Assignment.create(userrole_id: 4, structure_id: 10)
 Assignment.create(userrole_id: 3, structure_id: 10)
 
 
-Role.create(name: 'Structure Admin')
 Role.create(name: 'Structure Manager')
-Role.create(name: 'System Admin')
-Role.create(name: 'System Manager')
-Role.create(name: 'View Only')
 
 perms = Permission.create([
 {name: 'Structure-Create Issue'},
