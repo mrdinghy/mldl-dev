@@ -4,7 +4,10 @@ class Category < ActiveRecord::Base
 
 
 
-
+  def allissuescategories(category_id)
+    qq=Issue.where(:category_id => category_id)
+    return qq
+  end
 
 
 

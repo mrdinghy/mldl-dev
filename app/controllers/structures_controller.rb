@@ -1,5 +1,8 @@
 class StructuresController < ApplicationController
+
   before_action :set_structure, only: [:show, :edit, :update, :destroy]
+
+  include Issuereporting
 
   # GET /structures
   # GET /structures.json
@@ -11,24 +14,42 @@ class StructuresController < ApplicationController
   # GET /structures/1
   # GET /structures/1.json
   def show
+    @yloop = [2013,2014,2015,2016]
+    @qloop = [1,4,7,10]
 
-puts current_user.mldlrole
     if @structure.ismanager(current_user.id) or current_user.mldlrole == 1
          @canedit = true
     end
     @issues= Issue.where('structure_id = ?', @structure.id).order('created_at DESC')
 
-    @newissues=@issues.where(:status => Status::NEW).count
-    @ongoingissues=@issues.where(:status => Status::ONGOING).count
-    @mediationissues=@issues.where(:status => Status::MEDIATION).count
-    @resolvedissues=@issues.where(:status => Status::RESOLVED).count
-    @cancelledissues=@issues.where(:status => Status::CANCELLED).count
+    cats= Category.all
+    flotter = '['
+    cats.each do |c|
+
+       slice1 = '{ "label": "' + c.name + '", "color": "#4acab4","data": 30}'
+
+        if c == Category.last
+          slice2 = slice1
+        else
+          slice2 = slice1 + ','
+        end
+      flotter = flotter + slice2
+
+    end
+
+@piefinal = flotter + ']'
+
+
     @allcats = Category.all
+    @alldistricts = District.all
 
     @mediations = Mediation.all
     @mypeople= Membership.where('structure_id = ?', @structure.id)
     @mymanagers = Manager.where('structure_id = ?', @structure.id)
-    @meetings = Meeting.where('structure_id = ?', @structure.id)
+
+    @meetings = Meeting.where(structure_id: @structure.id)
+    #@openmeetings = @mymeetings.where(meeting_held: true)
+
     @parent = Structure.find(@structure.parent_id) if @structure.parent_id
     #@availablemanagers = Userrole.where('role_id = ?', 2)
     @availablemanagers = User.where('mldlrole =? ', 2)
@@ -57,7 +78,6 @@ puts current_user.mldlrole
   def edit
 
   end
-
 
 
 

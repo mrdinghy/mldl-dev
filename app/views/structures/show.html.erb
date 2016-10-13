@@ -32,19 +32,29 @@ width: 800px;
 
 
 <!-- Page content-->
-<%= debug @canedit %>
+<div class="container">
 
     <%= link_to 'Return to Structures', structures_path %>
-
     <h4 class="page-header"><span style="color: #999">Structure: </span><%= @structure.name %></h4>
     <!-- START row-->
-<% if @canedit %>
-    <div class="pull-right">
-      <%= link_to 'New Issue', new_issue_path(:structure_id => @structure.id), :class => "btn btn-success"  %>
-      <%#= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
-      <%= link_to "New Meeting", new_meeting_path(:structure_id => @structure.id), :class => "btn btn-success" %>
-    </div>
-<% end %>
+
+
+
+
+
+
+
+      <div class="pull-right">
+        <% if @canedit %>
+            <div class="pull-right">
+              <%= link_to 'New Issue', new_issue_path(:structure_id => @structure.id), :class => "btn btn-success"  %>
+              <%#= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
+              <%= link_to "New Meeting", new_meeting_path(:structure_id => @structure.id), :class => "btn btn-success" %>
+            </div>
+        <% end %>
+
+      </div>
+
 
 
   <div class="row">
@@ -56,7 +66,8 @@ width: 800px;
 
 
           <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#viewissues">Issues</a></li>
+            <li class="active"><a data-toggle="tab" href="#viewdash">Dashboard</a></li>
+            <li><a data-toggle="tab" href="#viewissues">Issues</a></li>
             <li><a data-toggle="tab" href="#viewgeneral">General</a></li>
             <li><a data-toggle="tab" href="#viewmeetings">Meetings</a></li>
             <li><a data-toggle="tab" href="#viewmediations">Mediations</a></li>
@@ -64,11 +75,17 @@ width: 800px;
           </ul>
 
           <div class="tab-content">
+            <div id="viewdash" class="tab-pane fade in active">
+              <h3><%= @structure.name %> - Dashboard</h3>
+              <%= render partial: 'structures/dashboard' %>
+            </div>
+
             <div id="viewgeneral" class="tab-pane fade">
               <h3><%= @structure.name %> - General</h3>
               <%= render partial: 'structures/general' %>
             </div>
-            <div id="viewissues" class="tab-pane fade in active">
+
+            <div id="viewissues" class="tab-pane">
               <h3><%= @structure.name %> Issues</h3>
               <%= render partial: 'issues/issues_table' %>
             </div>
@@ -229,6 +246,37 @@ width: 800px;
 
 
 <script>
+  $(function(){
+
+  var options = {
+    series: {
+      pie: {
+        show: true,
+        innerRadius: 0,
+        label: {
+          show: true,
+          radius: 0.8,
+          formatter: function (label, series) {
+            return '<div class="flot-pie-label">' +
+                      //label + ' : ' +
+                    Math.round(series.percent) +
+                    '%</div>';
+          },
+          background: {
+            opacity: 0.8,
+            color: '#222'
+          }
+        }
+      }
+    }
+  };
+
+  var chart = $('.chart-pie');
+  if(chart.length)
+    $.plot("#placeholder", <%= @piestatic %>, options);
+  });
+
+
 
 
     $('#new_mgmt_modal').on('submit', function() {

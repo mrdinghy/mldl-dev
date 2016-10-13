@@ -45,9 +45,12 @@
    max-width: 95%;
    margin-left: auto;
    margin-right: auto;
+   background-color: #f5f7fa;
  }
 
-
+ .container {
+   width: 99%
+ }
 
 .navbar-default {
   background-color: teal;
@@ -57,3 +60,44 @@
 .navbar-default .navbar-nav > li > a {
   color: #fff;
 }
+
+
+
+ .statusbox  {
+   background-color: #ffffff;
+   border: 2px solid #cccccc;
+   font-size: 16pt;
+   font-weight: bold;
+ }
+
+
+
+ .tabstatusbox  {
+   background-color: #ffffff;
+   border: 2px solid #cccccc;
+   font-size: 10pt;
+   font-weight: bold;
+ }
+
+ .btn-ongoing {
+   color: #BFC9CA;
+  }
+ .btn-resolved {
+   color: #A93226;
+      }
+ .btn-mediation {
+   color:#148F77;
+       }
+ .btn-cancelled {
+   color: #EB984E;
+      }
+ .btn-new {
+      color: #2E86C1;
+
+ }
+ .btn-agenda {
+
+  color: #154360;
+
+
+ }

@@ -3,6 +3,7 @@ class CreateStructures < ActiveRecord::Migration
     create_table :structures do |t|
       t.string :name
       t.integer :structuretype
+      t.string :short
       t.integer :district_id
       t.integer :county_id
       t.integer :parent_id

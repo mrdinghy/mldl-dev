@@ -136,11 +136,11 @@
         </tr>
         </thead>
       <tbody>
-      <tr><td>New Issues*</td><td><%= @newissues %></td></tr>
-      <tr><td>Ongoing</td> <td><%=  @ongoingissues %></td></tr>
-      <tr><td>In Mediation</td> <td><%=  @mediationissues %></td></tr>
-      <tr><td>Resolved</td> <td><%=  @resolvedissues %></td></tr>
-      <tr><td>Cancelled</td>  <td><%=   @cancelledissues %></td></tr>
+      <tr><td><span class="btn-new">New Issues*</span></td><td><%= @newissues %></td></tr>
+      <tr><td><button class="btn btn-ongoing">Ongoing</button></td> <td><%=  @ongoingissues %></td></tr>
+      <tr><td><button class="btn btn-mediation">In Mediation</button></td> <td><%=  @mediationissues %></td></tr>
+      <tr><td><button class="btn btn-resolved">Resolved</button></td> <td><%=  @resolvedissues %></td></tr>
+      <tr><td><button class="btn btn-cancelled">Cancelled</button></td>  <td><%=   @cancelledissues %></td></tr>
       </tbody>
     </table>
 

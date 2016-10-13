@@ -20,9 +20,12 @@ class Issue < ActiveRecord::Base
   has_many :disputants, :dependent => :destroy
   has_many :people, :through => :disputants
 
+  has_many :agendas, :dependent => :destroy
+  has_many :meetings, :through => :agendas
+
+
 
   has_many :issueactions, :dependent => :destroy
-  has_many :meetings, :through => :issueactions
   has_many :users, :through => :issueactions
 
   has_many :site_documents
@@ -32,13 +35,31 @@ class Issue < ActiveRecord::Base
 
 
   def issuecode()
-    structure = self.structure.structuretype_humanize
-    structurename = self.structure.name
+    short = self.structure.short
 
-    id= (structurename + '-' + self.id.to_s )
-    return id
+    meetingid = (short + '-'  + self.id.to_s)
+    return meetingid
+
   end
 
+  def issuestatus(status)
+    puts 'YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY'
+    puts status
+    if status == Status::ONGOING
+      vclass='ongoing'
+    elsif status == Status::RESOLVED
+      vclass='resolved'
+    elsif status == Status::CANCELLED
+      vclass='cancelled'
+    elsif status == Status::MEDIATION
+      vclass='mediation'
+    elsif status == Status::NEW
+      vclass='new'
+    else
+      vclass = 'default'
+    end
+    return vclass
+  end
 
 
   def onagenda(meeting_id)

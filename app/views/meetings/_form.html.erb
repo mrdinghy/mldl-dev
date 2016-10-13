@@ -63,7 +63,11 @@
               <%= f.label 'Meeting Start', :class => "col-sm-3 control-label" %>
               <div class="col-sm-3" id="sandbox-container">
                 <div class="input-group date">
-                  <input type="text" class="form-control" width="80">
+                  <% @the_date = Time.now.to_date %>
+
+                  <%= f.date_select :meeting_on, :default => @the_date %>
+
+                  <%#= f.text_field :meeting_on, :class => "form-control", :width => "80", :default => @the_date %>
                 </div>
 
               </div>
@@ -71,7 +75,8 @@
               <%= f.label 'Time Start', :class => "col-sm-1 control-label" %>
               <div class="col-sm-3 id="sandbox-container">
                 <div class="input-group date">
-                  <input id="stepExample1" type="text" class="time" />
+                  <%= f.time_select :starts_at, :ignore_date => true, :default => {:hour => '07', :minute => '00'} %>
+
                 </div>
 
               </div>

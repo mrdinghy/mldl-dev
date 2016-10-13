@@ -40,8 +40,12 @@ class MediationsController < ApplicationController
   # POST /mediations
   # POST /mediations.json
   def create
+
     @mediation = Mediation.new(mediation_params)
-    @mediation.save!
+    @mediation.update_attributes!(:mediation_start => params[:mediation_start])
+
+   @mediation.save!
+
     issueaction= Issueaction.new
     issue = Issue.find(@mediation.issue_id)
 
@@ -60,8 +64,9 @@ class MediationsController < ApplicationController
   # PATCH/PUT /mediations/1
   # PATCH/PUT /mediations/1.json
   def update
-    Issueaction.create(mediation_id: @mediation.id, issue_id: params[:issue_id], user_id: current_user.id, actiontype: params[:actiontype], structure_id: issue.structure_id)
-
+    #Issueaction.create(mediation_id: @mediation.id, issue_id: params[[:issue_id], user_id: current_user.id, actiontype: params[:actiontype], structure_id: issue.structure_id)
+    @mediation.update_attributes!(:mediation_start => params[:mediation_start])
+    @mediation.update_attributes!(:mediation_end => params[:mediation_end])
     respond_to do |format|
       if @mediation.update(mediation_params)
         format.html { redirect_to @mediation, notice: 'Mediation was successfully updated.' }
@@ -135,6 +140,6 @@ class MediationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def mediation_params
-      params.require(:mediation).permit(:name, :issue_id, :mediation_start, :mediation_end, :mediation_notes)
+      params.require(:mediation).permit(:name, :issue_id, :mediate_start, :mediate_end, :mediation_notes)
     end
 end

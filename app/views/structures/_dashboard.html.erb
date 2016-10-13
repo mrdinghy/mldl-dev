@@ -1,0 +1,122 @@
+
+
+<div class="row">
+  <div class="col-sm-2">
+    <div class="panel panel-default">
+      <h4>by Status</h4>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <span class="badge"><%= @structure.ourissues.count %></span>
+            Total Issues
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%= @structure.ournewissues.count %></span>
+            New
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%= @structure.ourongoingissues.count %></span>
+            Ongoing
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%= @structure.ourmediationissues.count %></span>
+            In Mediation
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%= @structure.ourresolvedissues.count %></span>
+            Resolved
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <h4>by Category</h4>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% @allcats.each do |c| %>
+              <li class="list-group-item">
+                <span class="badge"><%= @structure.ourissuescategories(c.id).count %></span>
+                <%= c.name %>
+              </li>
+
+          <% end %>
+
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <h4>by District </h4>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% @alldistricts.each do |d| %>
+              <% if @structure.ourissuesdistricts(d.id).count != 0 %>
+                  <li class="list-group-item">
+                    <span class="badge"><%= @structure.ourissuesdistricts(d.id).count %></span>
+                    <%= d.name %>
+                  </li>
+              <% end %>
+          <% end %>
+
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <h4>Activity by Quarter </h4>
+      <div class="panel-body">
+  <table class="table">
+    <thead>
+    <td>Year</td>
+    <td>Qtr</td>
+    <td>Begin Open</td>
+    <td>New in Qtr</td>
+    <td>Resolved in Qt</td>
+    </tr>
+    </thead>
+    <% @yloop.each do |y|  %>
+        <% @qloop.each do |q| %>
+
+            <% d0= y.to_s + '-' + q.to_s + '-01 08:00:00' %>
+
+            <% d2= Time.parse(d0) %>
+            <tr>
+              <td><%= y %></td>
+              <td><%= @structure.qtrname(q) %></td>
+
+              <td><%= @structure.quarter_prioropen(d2,@structure.id) %></td>
+              <td><%= @structure.quarter_issue_total(d2,@structure.id) %></td>
+              <td><%= @structure.quarter_issue_resolved(d2,@structure.id) %></td>
+
+
+
+
+            </tr>
+
+        <% end %>
+    <% end %>
+
+  </table>
+</div>
+ </div>
+
+
+
+
+</div>
+
+
+    </div>

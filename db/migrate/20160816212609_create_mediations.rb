@@ -6,6 +6,7 @@ class CreateMediations < ActiveRecord::Migration
       t.datetime :mediation_start
       t.datetime :mediation_end
       t.text :mediation_notes
+      t.integer :result
 
       t.timestamps null: false
     end

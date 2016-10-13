@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :agendas
   resources :userroles
   resources :actiontypes
   resources :mediators

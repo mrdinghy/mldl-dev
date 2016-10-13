@@ -31,6 +31,11 @@
 
       border: 1px #fff solid;
   }
+        .short {
+            color: #cccccc;
+            font-size: 22px;
+            font-weight: bold;
+        }
 </style>
 
 
@@ -51,11 +56,12 @@
     <div class="row">
       <% @csc_structures.each do |csc| %>
 
-          <% dsc_structures = Structure.where('county_id = ? and structuretype = ?', csc.county_id, Structuretype::DSC ) %>
+          <%# csc.getdistricts(csc.county_id) %>
 
           <div class="col-sm-3">
             <div class="col-sm-12 cscbox">
-              <strong><%= link_to csc.name, csc %></strong>
+
+              <span class="short"><%= csc.short %></span> <strong><%= link_to csc.name, csc %></strong>
 
 
               <div class="pull-right">
@@ -66,12 +72,13 @@
               </div>
 
             </div>
-            <% dsc_structures.each do |dsc| %>
-                <% cf_structures = Structure.where('district_id = ? and structuretype = ?', dsc.district_id, Structuretype::CF ) %>
+            <% csc.getdistricts(csc.county_id).each do |dsc| %>
+
 
                 <div class="col-sm-2">&nbsp;</div>
                 <div class="col-sm-10 dscbox">
-                  <strong><%= link_to dsc.name, dsc %></strong>
+
+                  <span class="short"><%= dsc.short %></span>      <strong><%= link_to dsc.name, dsc %></strong>
 
                   <div class="pull-right">
 
@@ -83,11 +90,11 @@
                   </div>
                 </div>
 
-                <% cf_structures.each do |cf| %>
+                <% csc.getcfs(dsc.district_id).each do |cf| %>
 
                     <div class="col-sm-4">&nbsp;</div>
                     <div class="col-sm-8 cfbox">
-                      <strong><%= link_to cf.name, cf %></strong>
+                      <span class="short"><%= cf.short %></span><strong><%= link_to cf.name, cf %></strong>
 
                       <div class="pull-right">
                         <%= fa_icon "users", :style => "color: green" %>

@@ -4,6 +4,7 @@ class Structure < ActiveRecord::Base
   belongs_to :district
 
 
+
   #enum structuretype: [ :cf, :dsc, :csc, :nsc ]
   extend EnumerateIt
   has_enumeration_for :structuretype, required: true, with: Structuretype
@@ -15,6 +16,22 @@ class Structure < ActiveRecord::Base
 
   #has_many :managers, :dependent => :destroy
   #has_many :userroles, :through => :managers
+
+
+
+
+
+  def getdistricts(county_id)
+    dscs = Structure.where(county_id: county_id, structuretype: Structuretype::DSC )
+    return dscs
+  end
+  def getcfs(district_id)
+    dscs = Structure.where(district_id: district_id, structuretype: Structuretype::CF )
+    return dscs
+  end
+
+
+
 
 
   def ismanager(thisuser)
@@ -29,15 +46,209 @@ class Structure < ActiveRecord::Base
   end
 
 
+  def ourissues()
+    myissues= Issue.where(structure_id: self.id).order('created_at DESC')
+    return myissues
+  end
+
+  def ournewissues()
+    q= self.ourissues()
+    qq=q.where(:status => Status::NEW)
+    return qq
+  end
+  def ourongoingissues()
+    q= self.ourissues()
+    qq=q.where(:status => Status::ONGOING)
+    return qq
+  end
+
+  def ouropenissues()
+    q= self.ourissues()
+    openids = [Status::ONGOING, Status::NEW, Status::MEDIATION]
+    puts '=====================openids========================='
+    puts openids
+    qq=q.where(status: openids)
+
+    return qq
+  end
+  def ourmediationissues()
+    q= self.ourissues()
+    qq=q.where(:status => Status::MEDIATION)
+    return qq
+  end
+  def ourresolvedissues()
+    q= self.ourissues()
+    qq=q.where(:status => Status::RESOLVED)
+    return qq
+  end
+
+  def ourcancelledissues()
+    q= self.ourissues()
+    qq=q.where(:status => Status::CANCELLED)
+    return qq
+  end
 
 
-  def current_meetings_held
+
+
+  def ourissuescategories(category_id)
+    q= self.ourissues()
+    qq=q.where(:category_id => category_id)
+    return qq
+  end
+
+  def ourissuesdistricts(district_id)
+    q= self.ourissues()
+    qq=q.where(:district_id => district_id)
+    return qq
+  end
+
+
+
+  def ourmeetings()
+    q= self.ourissues()
+    meetings = Meeting.where(:structure_id => self.id)
+    return meetings
+  end
+
+
+  def meetingsheld
+    meetings = Meeting.where(:structure_id => self.id, :meeting_held => :true).count
+
+    return meetings
+  end
+  def upcomingmeetings
     meetings = Meeting.where(:structure_id => self.id, :meeting_held => :true).count
 
     return meetings
   end
 
 
+  def firstissue
+    mldlstart = Issue.select(:created_at).order(:created_at)
+    return mldlstart.first.created_at
+  end
+def lastissue
+  mldlstart = Issue.select(:created_at).order(:created_at)
+  return mldlstart.last.created_at
+
+end
+
+  def quarter_prioropen(d2,s1)
+    qstart= d2.beginning_of_quarter
+    qlast= d2.end_of_quarter
+    qmonth1 = qstart.month
+    qmonth2 = qmonth1 + 1
+    qmonth3 = qmonth1 + 2
+    all = Issue.where('created_at < ?', qstart)
+    all2 = all.where('resolution_date >= ? or resolution_date is null', qstart)
+    all3 = all2.where('cancelled_at >= ? or cancelled_at is NULL', qstart)
+    if s1 != 0
+      all3 = all3.where(structure_id: s1)
+    end
+
+    number =  all3.count
+    return number
+  end
+
+
+
+
+  def qtrname(q)
+    if q == 1
+      s='1st'
+    elsif q == 4
+      s='2nd'
+    elsif q == 7
+      s='3rd'
+    elsif q == 10
+      s='4th'
+    else
+      s='n/a'
+    end
+    return s
+  end
+
+
+  def quarter_resolved(d2,s1)
+    qstart= d2.beginning_of_quarter
+    qlast= d2.end_of_quarter
+    qmonth1 = qstart.month
+    qmonth2 = qmonth1 + 1
+    qmonth3 = qmonth1 + 2
+    all = Issue.where('resolution_date >= ? and resolution_date <= ?', qstart, qlast)
+    if s1 != 0
+      all = all.where(structure_id: s1)
+    end
+
+    return all
+  end
+
+
+def quarter_issues(d2,s1)
+  qstart= d2.beginning_of_quarter
+  qlast= d2.end_of_quarter
+  qmonth1 = qstart.month
+  qmonth2 = qmonth1 + 1
+  qmonth3 = qmonth1 + 2
+  all = Issue.where('extract(year from created_at) = ?', qstart.year)
+  number = all.where('extract(month from created_at) in (?)', [qmonth1,qmonth2,qmonth3])
+  if s1 != 0
+    number = number.where(structure_id: s1)
+  end
+
+  return number
+end
+
+  def quarter_agendas(d2,s1)
+    qstart= d2.beginning_of_quarter
+    qlast= d2.end_of_quarter
+    qmonth1 = qstart.month
+    qmonth2 = qmonth1 + 1
+    qmonth3 = qmonth1 + 2
+    all = Agenda.where('extract(year from created_at) = ?', qstart.year)
+    number = all.where('extract(month from created_at) in (?)', [qmonth1,qmonth2,qmonth3])
+    #number =  Issue.where(created_at: @qstart..@qend).count
+    if s1 != 0
+      number = number.where(structure_id: s1)
+    end
+    return number
+  end
+
+
+
+  def quarter_issue_total(d2,s1)
+    number = self.quarter_issues(d2,s1).count
+    return number
+
+  end
+
+
+
+
+  def quarter_agenda_total(d2,s1)
+    number = self.quarter_agendas(d2,s1).count
+    return number
+    return all
+  end
+
+
+
+def quarter_issue_resolved(d2,s1)
+  all = self.quarter_resolved(d2,s1).count
+
+  return all
+
+end
+
+
+
+  def quarter_agenda_resolved(d2,s1)
+    all = self.quarter_agendas(d2,s1)
+    number = all.where(status: Result::RESOLVED).count
+    return number
+    return all
+  end
 
 
 
@@ -64,9 +275,17 @@ class Structure < ActiveRecord::Base
 
   def openissues(thisyear,thismonth,structure_id,district)
     qnumber = self.qissues(thisyear,thismonth,structure_id,district)
+    qopen = qnumber.where('status = ? OR status = ?', Status::ONGOING, Status::NEW  )
+    return qopen
+  end
+
+  def openmeetings(thisyear,thismonth,structure_id,district)
+    qnumber = self.qissues(thisyear,thismonth,structure_id,district)
     qopen = qnumber.where('resolution_date is NULL and cancelled_at is NULL')
     return qopen
   end
+
+
   def resolvedissues(thisyear,thismonth,structure_id,district)
     qnumber = self.qissues(thisyear,thismonth,structure_id,district)
     qresolved = qnumber.where('resolution_date is NOT NULL')

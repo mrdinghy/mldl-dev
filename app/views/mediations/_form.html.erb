@@ -14,6 +14,9 @@
 
           <% if params[:issue_id] %>
                <%= hidden_field(:mediation, :issue_id, :value => params[:issue_id]) %>
+          <% else %>
+              <%= hidden_field(:mediation, :issue_id, :value => @mediation.issue_id) %>
+
             <% end %>
           <div class="form-horizontal">
             <% if @mediation.errors.any? %>
@@ -34,7 +37,10 @@
               <%= f.label 'Mediation Start', :class => "col-sm-3 control-label" %>
               <div class="col-sm-3" id="sandbox-container">
                 <div class="input-group date">
-                  <input type="text" class="form-control" width="80">
+                  <!---<input  name="mediate_start" type="text" class="form-control" width="80">--->
+                  <%= f.date_select :mediate_start, :default => Date.today %>
+
+                  <%# f.input :mediate_start, :class => "form-control", :width => "80"%>
                 </div>
 
               </div>
@@ -44,7 +50,9 @@
               <%= f.label 'Mediation End', :class => "col-sm-3 control-label" %>
               <div class="col-sm-3" id="sandbox2-container">
                 <div class="input-group date">
-                  <input type="text" class="form-control" width="80">
+                  <%#= f.input :mediate_end, :class => "form-control", :width => "80" %>
+                  <%= f.date_select :mediate_end, :default => Date.today %>
+                  <!--- <input  name="mediate_end" type="text" class="form-control" width="80">--->
                 </div>
 
               </div>

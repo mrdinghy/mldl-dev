@@ -7,7 +7,7 @@
 
 
 </style>
-
+<% statusbox1 = 'btn btn-'+@issue.issuestatus(@issue.status) %>
 <% parentstructure = Structure.find(@issue.structure.parent_id) %>
 <% parentlink = 'Refer Issue to ' + parentstructure.name %>
 
@@ -15,8 +15,22 @@
 <div class="container">
 
       <%#= link_to 'Return to Issues', issues_path %><br>
-      <h3><span style="color: #999">Issue: </span><%= @issue.issuecode %>
-        <span style="color: #999">Status: </span><%= @issue.status_humanize %><br>
+  <button class="statusbox <%= statusbox1  %>"><%= @issue.status_humanize %></button>
+  <% if @openagendas.count != 0 %>
+  <% @openagendas.each do |ag| %>
+      <button class="btn-agenda">On Agenda</button>
+      <%= link_to ag.meeting.meetingid, ag.meeting %>
+
+  <% end %>
+      <% end %>
+  <% if @openmediations.count != 0 %>
+      <% @openmediations.each do |md| %>
+          <%= link_to 'View Current Mediation', md %>
+
+      <% end %>
+  <% end %>
+  <h3><span style="color: #999">Issue: </span><%= @issue.issuecode %>
+
         <span style="color: #999"></span><%= @issue.name %>
         </h3>
 
@@ -41,7 +55,7 @@
 
 
             <div class="form-group">
-              <label class="col-sm-4">Distupants</label>
+              <label class="col-sm-4">Disputants</label>
               <div class="col-sm-8">
                 <%= @issue.disputant %>
               </div>
@@ -50,7 +64,7 @@
             <div class="form-group">
               <label class="col-sm-4">Raised by (Person)</label>
               <div class="col-sm-8">
-                <%= link_to @raised_by.fullname, @raised_by if @issue.raised_by %>
+                <%= link_to @issue.person.fullname, @raised_by if @issue.raised_by %>
               </div>
             </div>
 
@@ -136,7 +150,7 @@
  </div>
 
 
-    <div class="col-sm-8">
+    <div class="col-sm-7">
 
 
 
@@ -144,6 +158,7 @@
         <li class="active"><a data-toggle="tab" href="#viewresolution">Resolution</a></li>
         <li><a data-toggle="tab" href="#viewhistory">History<div class="pull-right label label-info"><%= @numberactions if @numberactions > 0 %></div></a></li>
         <li><a data-toggle="tab" href="#viewdisputants">Disputants<div class="pull-right label label-info"><%= @numberdisputants if @numberdisputants > 0 %></div></a></li>
+        <li><a data-toggle="tab" href="#viewmeetings">Agendas<div class="pull-right label label-success"><%= @numberagendas if @numberagendas > 0 %></div></a></li>
         <li><a data-toggle="tab" href="#viewmediations">Mediations<div class="pull-right label label-success"><%= @numbermediations if @numbermediations > 0 %></div></a></li>
 
         <li><a data-toggle="tab" href="#viewdocuments">Documents</a></li>
@@ -240,7 +255,7 @@
 
                             <% if action.actiontype == Actiontype::AGENDA %>
                                 <% thismeeting= Meeting.find(action.meeting_id) %>
-                                <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  if action.meeting_id %></strong>  <br>
+                                <strong>Meeting: <%= link_to thismeeting.meeting_on.strftime("%m/%d/%Y"), thismeeting  if action.meeting_id %></strong>  <br>
                             <% end %>
 
                             <% if action.actiontype == Actiontype::ESCALATED or
@@ -259,7 +274,7 @@
                                 <% if action.meeting_id %>
                                     <% thismeeting= Meeting.find(action.meeting_id) %>
                                     <strong>Resolved in Meeting!: </strong>  <br>
-                                    <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
+                                    <strong>Meeting: <%= link_to thismeeting.meeting_on.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
                                 <% elsif action.mediation_id %>
                                     <% thismediation= Mediation.find(action.mediation_id) %>
                                     <strong>Resolved in Mediation!: </strong>  <br>
@@ -296,7 +311,7 @@
                                 <% if action.meeting_id %>
                                     <% thismeeting= Meeting.find(action.meeting_id) %>
                                     <strong>Unresolved in  Meeting!: </strong>  <br>
-                                    <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
+                                    <strong>Meeting: <%= link_to thismeeting.meeting_on.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
                                 <% elsif action.mediation_id %>
                                     <% thismediation= Mediation.find(action.mediation_id) %>
                                     <strong>Unresolved in Mediation!: </strong>  <br>
@@ -315,7 +330,7 @@
                                 <% if action.meeting_id %>
                                     <% thismeeting= Meeting.find(action.meeting_id) %>
                                     <strong>Sent to Mediation from Meeting!: </strong>  <br>
-                                    <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
+                                    <strong>Meeting: <%= link_to thismeeting.meetingid, thismeeting  %></strong>  <br>
                                 <% else %>
                                     <strong>Issue Sent to Mediation!: </strong>  <br>
                                 <% end %>
@@ -411,15 +426,15 @@
               </table>
 
 
-            </div>
+
             <% if @canedit %>
             <hr>
-            <small>Link Person to Structure</small><br>
+            <small>Link Person to Issue</small><br>
             <%= render 'adddisputant' %>
            <% end %>
 
 
-
+            </div>
           </div>
         </div>
 
@@ -447,8 +462,8 @@
 
                     <tr>
                       <td><%= link_to 'View', med %></td>
-                      <td><%= med.mediation_start.strftime("%m/%d/%Y") if med.mediation_start %></td>
-                      <td><%= med.mediation_end.strftime("%m/%d/%Y") if med.mediation_end %></td>
+                      <td><%= med.mediate_start.strftime("%m/%d/%Y") if med.mediate_start %></td>
+                      <td><%= med.mediate_end.strftime("%m/%d/%Y") if med.mediate_end %></td>
                       <td></td>
 
 
@@ -470,6 +485,45 @@
           </div>
 
         </div>
+
+
+        <div id="viewmeetings" class="tab-pane fade in">
+          <h3>Meetings</h3>
+
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+
+
+            </div>
+            <div class="panel-body">
+
+
+              <%= render 'agendas/agendas_table' %>
+
+
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -524,7 +578,9 @@
 
       </div>
       </div>
-      <div class="col-sm-1">
+      <div class="col-sm-2">
+
+
         <%= link_to 'Add Comment', '#comment_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
 
 
@@ -534,34 +590,65 @@
             <% else %>
 
 
-                <% if @issue.status != Status::MEDIATION %>
-                    <% if @mymeetings.count == 0 %>
-                        <button class="btn btn-small btn-default">Add to Meeting Agenda</button> <strong>No Meetings Scheduled</strong><br><br>
-                    <% else %>
+                <% if @openmediations.count == 0 %>
+                    <% if @openagendas.count == 0 %>
 
-                        <%= link_to 'Add to Meeting Agenda', '#new_agenda_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                    <%= form_for(@issueaction, multipart: true, remote: false) do |f| %>
+                        <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
+                        <%= hidden_field(:issueaction, :actiontype, :value => Actiontype::AGENDA) %>
+
+                        Add To Meeting Agenda<br>
+                        <%= f.select :meeting_id, options_for_select(@mymeetings.collect{|m| [m.meetingid, m.id]}), {:include_blank => true,:class=>'user-id-widget', size: 5} %>
+
+
+                        <%= f.submit 'Submit', :class => "btn btn-small btn-primary" %>
+
+
+                    <% end %>
+                     <br><Br>
+
+
+                        <% if @issue.status != Status::MEDIATION %>
+
+
+
+                            <%= link_to parentlink, '#escalate_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                            <% if @issue.openmediation != 0 %>
+                                <button class="btn btn-defaut">Open mediation in progress</button>
+                            <% else %>
+                                <%= link_to 'Mediation', '#mediation_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                                <%#= link_to 'Create Mediation', new_mediation_path(:issue_id => @issue.id), :class => "btn btn-success"  %>
+                            <% end %>
+
+                        <% end %>
+                        <% if @issue.status == Status::ONGOING %>
+                            <%#= link_to 'Resolution', new_issueaction_path(:issue_id => @issue.id, :actiontype_id => 1), :class => "btn btn-success" %><br><br>
+
+                            <%#= link_to 'Resolution', resolution_path(:issue_id => @issue.id), :class => "btn btn-success" %><br><br>
+
+                            <%= link_to 'Resolution', '#resolution_modal', 'data-toggle' => 'modal', :class => "btn btn-inverse" %><br><br>
+                            <%= link_to 'Cancel Issue', '#cancel_modal', 'data-toggle' => 'modal', :class => "btn btn-danger" %><br><br>
+                        <% end %>
+
+
+
+
+
+
+      <% end %>
                     <% end %>
 
 
-                    <%= link_to parentlink, '#escalate_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-                    <% if @issue.openmediation != 0 %>
-                        <button class="btn btn-defaut">Open mediation in progress</button>
-                    <% else %>
-
-                        <%= link_to 'Create Mediation', new_mediation_path(:issue_id => @issue.id), :class => "btn btn-success"  %>
-                      <% end %>
 
 
-                    <%#= link_to 'Mediation', new_mediation_path'#mediation_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-                    <% if @issue.status == Status::ONGOING %>
-                        <%#= link_to 'Resolution', new_issueaction_path(:issue_id => @issue.id, :actiontype_id => 1), :class => "btn btn-success" %><br><br>
 
-                        <%#= link_to 'Resolution', resolution_path(:issue_id => @issue.id), :class => "btn btn-success" %><br><br>
 
-                        <%= link_to 'Resolution', '#resolution_modal', 'data-toggle' => 'modal', :class => "btn btn-inverse" %><br><br>
-                        <%= link_to 'Cancel Issue', '#cancel_modal', 'data-toggle' => 'modal', :class => "btn btn-danger" %><br><br>
-                    <% end %>
-                <% end %>
+
+
+
+
+
+
 
 
             <% end %>
@@ -577,16 +664,18 @@
 
 
 
-<div class="modal fade" id="addDisputant" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-adddisputant">
+
+
+<div class="modal fade" id="reopen_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-reopen">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small>Add New Person linked to this Issue</small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @issue.id %></h4>
+        <h4 class="modal-title" id="myModalLabel">Reopen Issue (change to "ongoing" status)</h4>
+        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
       </div>
       <div class="modal-body">
-
+        <%= render 'reopen', modal: true %>
       </div>
 
       <div class="modal-footer">
@@ -596,7 +685,6 @@
     </div>
   </div>
 </div>
-
 
 
 
@@ -719,29 +807,6 @@
     </div>
   </div>
 </div>
-
-
-
-<div class="modal fade" id="reopen_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-reopen">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Reopen Issue (change to "ongoing" status)</h4>
-        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
-      </div>
-      <div class="modal-body">
-        <%= render 'reopen', modal: true %>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
 
 
 

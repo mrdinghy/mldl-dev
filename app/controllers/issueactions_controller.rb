@@ -27,203 +27,180 @@ class IssueactionsController < ApplicationController
 
   def create
     @issueaction = Issueaction.new(issueaction_params)
+    @issueaction.update_attributes!(:user_id => current_user.id)
     @issue = Issue.find(params[:issueaction][:issue_id])
 
-    if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
-        meeting = Meeting.find(params[:issueaction][:meeting_id])
-    end
-    if !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
-       mediation = Meeting.find(params[:issueaction][:meeting_id])
-    end
 
-
-    if @issueaction.agenda?   #create Note
-      if params[:issueaction][:meeting_id].blank?
-        flash[:error] = 'When adding Issue to Meeting Agenda you need to select valid meeting-try again'
-        respond_to do |format|
-          format.html { redirect_to @issue }
+    if params[:issueaction][:meeting_id].present?
+        @meeting = Meeting.find(params[:issueaction][:meeting_id])
+        goto = @meeting
+        if !params[:agenda_id].nil? and !params[:agenda_id].blank?
+          @agenda = Agenda.find(params[:agenda_id])
         end
+
+
+    elsif params[:issueaction][:mediation_id].present?
+
+       @mediation = Mediation.find(params[:issueaction][:mediation_id])
+       goto = @mediation
+    else
+       goto = @issue
+    end
+
+
+      #create AGenda------------------------------------------------
+
+   if @issueaction.agenda?
+
+
+        if @issueaction.save
+          @agenda = Agenda.create(issue_id: params[:issueaction][:issue_id], meeting_id: params[:issueaction][:meeting_id])
+        end
+
+
+      #create Comment ------------------------------------------------------------
+    elsif @issueaction.comment?
+      if params[:issueaction][:actionbody].blank?
+        flash[:error] = 'No comment provided. Not saved'
+        nocomment = 1
       else
-        @issue.update_attributes!(:status => Status::ONGOING)
-        respond_to do |format|
-          if @issueaction.save
-            meet = Meeting.find(params[:issueaction][:meeting_id])
-            format.html { redirect_to @issue, notice: 'issueaction was successfully created.' }
-            format.json { render :show, status: :created, location: @issueaction }
-          end
+        if @issueaction.save
+           sendnotice = 'Comment Saved Successuflly'
         end
+
       end
 
-    elsif @issueaction.comment?   #create Note ------------------------------------------------------------
-     if params[:issueaction][:actionbody].blank?
-       flash[:error] = 'No comment provided. Not saved'
-        respond_to do |format|
-          format.html { redirect_to @issue }
-        end
-      else
-        respond_to do |format|
-          if @issueaction.save
-            format.html { redirect_to @issue, notice: 'issueaction was successfully created.' }
-            format.json { render :show, status: :created, location: @issueaction }
-          end
-        end
-      end
-     elsif @issueaction.meeting_result_ongoing?  #unresolved - remains open
-        @issue.update_attributes!(status: Status::ONGOING)
-         respond_to do |format|
-          if @issueaction.save
-           format.html { redirect_to meeting, notice: 'issueaction was successfully created.' }
-            format.json { render :show, status: :created, location: @issueaction }
-          end
-        end
 
-    elsif @issueaction.mediation_result_ongoing?  #unresolved - remains open
+
+
+      #create ongoing----------------------------------------------------
+
+    elsif @issueaction.ongoing?
       @issue.update_attributes!(status: Status::ONGOING)
-      respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to @issue, notice: 'issueaction was successfully created.' }
-          format.json { render :show, status: :created, location: @issueaction }
-        end
-      end
-
-    elsif @issueaction.cancelled?  #unresolved - remains open
-      @issue.update_attributes!(cancelled_at: DateTime.now)
-      @issue.update_attributes!(status: Status::CANCELLED)
-      respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to @issue, notice: 'issueaction was successfully created.' }
-          format.json { render :show, status: :created, location: @issueaction }
-        end
-      end
-
-    elsif @issueaction.meeting_result_cancelled?  #cancelled from meeting
-      @issue.update_attributes!(cancelled_at: DateTime.now)
-      @issue.update_attributes!(status: Status::CANCELLED)
-
-      respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to meeting, notice: 'Mediation created successfully.' }
-          format.json { render :show, status: :created, location: @issueaction }
-        end
-      end
 
 
-    elsif @issueaction.mediation_result_cancelled?  #cancelled from meeting
-      @issue.update_attributes!(cancelled_at: DateTime.now)
-      @issue.update_attributes!(status: Status::CANCELLED)
-      respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to @issue, notice: 'Mediation created successfully.' }
-          format.json { render :show, status: :created, location: @issueaction }
-        end
-      end
-
-     elsif @issueaction.escalated?   #create REferral------------------------------------------------------------
-        @issueaction.update_attributes!(laststructure_id: @issue.structure_id)
-        @issue.update_attributes!(structure_id: params[:issueaction][:parent_id])
-        @issue.update_attributes!(status: Status::NEW)
-       respond_to do |format|
-          if @issueaction.save
-           format.html { redirect_to @issue, notice: 'issueaction was successfully created.' }
-            format.json { render :show, status: :created, location: @issueaction }
-          end
-        end
-
-    elsif @issueaction.meeting_result_escalated?   #create meeting result REferral------------------------------------------------------------
-      @issueaction.update_attributes!(laststructure_id: @issue.structure_id)
-      @issue.update_attributes!(structure_id: params[:issueaction][:parent_id])
-      @issue.update_attributes!(status: Status::NEW)
-      respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to meeting, notice: 'issueaction was successfully created.' }
-          format.json { render :show, status: :created, location: @issueaction }
-        end
-      end
-
-    elsif @issueaction.mediation_result_escalated?   #create meeting result REferral------------------------------------------------------------
-      @issueaction.update_attributes!(laststructure_id: @issue.structure_id)
-      @issue.update_attributes!(structure_id: params[:issueaction][:parent_id])
-      @issue.update_attributes!(status: Status::NEW)
-      respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to @issue, notice: 'issueaction was successfully created.' }
-          format.json { render :show, status: :created, location: @issueaction }
-        end
-      end
-
-
-
-    elsif @issueaction.mediation?   #create REferral------------------------------------------------------------
-
-
-      @issue.update_attributes!(:status => Status::MEDIATION)
-    respond_to do |format|
       if @issueaction.save
-        mediate = Mediation.create(issue_id: params[:issueaction][:issue_id], mediation_start: params[:mediation][:mediation_start])
-        format.html { redirect_to mediate, notice: 'Mediation created successfully.' }
-        format.json { render :show, status: :created, location: @issueaction }
+        if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
+          @agenda.update_attributes!(:result => Result::ONGOING, :addressed => true)
+        elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
+          @mediation.update_attributes!(:result => Result::ONGOING, :mediate_end => Date.today)
+        end
+        sendnotice = 'Issue Remains Open'
+
       end
-    end
-    elsif @issueaction.meeting_result_mediation?   #create REferral------------------------------------------------------------
-      puts 'meet med params ====================================================================================='
-puts params[:issueaction][:issue_id]
 
-      puts 'meet med params ====================================================================================='
 
+      #create Cancelled-----------------------------------------------------
+
+    elsif @issueaction.cancelled?
+      @issue.update_attributes!(cancelled_at: DateTime.now)
+      @issue.update_attributes!(status: Status::CANCELLED)
+
+
+      if @issueaction.save
+        if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
+          @agenda.update_attributes!(:result => Result::CANCELLED, :addressed => true)
+        elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
+          @mediation.update_attributes!(:result => Result::CANCELLED, :mediate_end => Date.today)
+        end
+        sendnotice = 'Issue Cancelled Successfully.'
+
+      end
+
+
+
+      #create Referral------------------------------------------------------
+
+    elsif @issueaction.escalated?
+      @issueaction.update_attributes!(laststructure_id: @issue.structure_id)
+      @issue.update_attributes!(:status => Status::ONGOING, structure_id: @issue.structure.parent_id)
+
+
+      if @issueaction.save
+        if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
+          @agenda.update_attributes!(:result => Result::ESCALATED, :addressed => true)
+        elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
+          @mediation.update_attributes!(:result => Result::ESCALATED, :mediate_end => Date.today)
+        end
+        sendnotice = 'Issue Referred Up Successfully.'
+      end
+
+
+      #create Mediation-------------------------------------------------------
+
+    elsif @issueaction.mediation?
       @issue.update_attributes!(:status => Status::MEDIATION)
-      respond_to do |format|
-        if @issueaction.save
-          mediate = Mediation.create(issue_id: params[:issueaction][:issue_id], mediation_start: params[:mediation][:mediation_start])
-          format.html { redirect_to meeting, notice: 'Mediation created successfully.' }
-          format.json { render :show, status: :created, location: @issueaction }
+      @mediation = Mediation.new
+      @mediation.update_attributes!(:mediate_start => Date.today, :issue_id => params[:issueaction][:issue_id])
+      @mediation.save!
+
+      if @issueaction.save
+        if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
+          @agenda.update_attributes!(:result => Result::MEDIATION, :addressed => true)
+
         end
+        sendnotice = 'Medation Record Created successfully.'
       end
 
-    elsif @issueaction.resolved?   #create Resolution------------------------------------------------------------
+
+
+      #create Resolution------------------------------------------------------------
+
+   elsif @issueaction.resolved?
+
+
       @issue.update_attributes!(:status => Status::RESOLVED, resolution_date: params[:issueaction][:resolution_date], resolutiontype_id: params[:issueaction][:resolution_date], resolution: params[:issueaction][:resolution])
-         respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to @issue, notice: 'Issue Resolved successfully.' }
-          format.json { render :show, status: :created, location: @issueaction }
+    if @issueaction.save
+        if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
+          @agenda.update_attributes!(:result => Result::RESOLVED, :addressed => true)
+          @agenda.save!
+        elsif params[:issueaction][:mediation_id].present?
+
+
+          @mediation.update_attributes!(:result => Result::RESOLVED, :mediate_end => Date.today)
+          #puts params[:mediation_end]
+          puts '[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['
+          @mediation.save!
+
+
         end
+        sendnotice = 'Issue Resolved successfully.'
       end
 
-    elsif @issueaction.meeting_result_resolved?   #create Resolution------------------------------------------------------------
-      @issue.update_attributes!(:status => Status::RESOLVED, resolution_date: params[:issueaction][:resolution_date], resolutiontype_id: params[:issueaction][:resolution_date], resolution: params[:issueaction][:resolution])
-      respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to meeting, notice: 'Issue Resolved successfully.' }
-          format.json { render :show, status: :created, location: @issueaction }
-        end
-      end
 
-    elsif @issueaction.mediation_result_resolved?   #create Resolution------------------------------------------------------------
-      @issue.update_attributes!(:status => Status::RESOLVED, resolution_date: params[:issueaction][:resolution_date], resolutiontype_id: params[:issueaction][:resolution_date], resolution: params[:issueaction][:resolution])
-      respond_to do |format|
-        if @issueaction.save
-          format.html { redirect_to @issue, notice: 'Issue Resolved successfully.' }
-          format.json { render :show, status: :created, location: @issueaction }
-        end
-      end
 
-      elsif @issueaction.reopened?  #REOPEN ISSUE
-        @issueaction.update_attributes!(old_resolution_date: @issue.resolution_date)
-        @issue.update_attributes!(resolution_date: nil)
-        @issue.update_attributes!(cancelled_at: nil)
-        @issue.update_attributes!(status: Status::ONGOING)
-        respond_to do |format|
+
+      #create REOPEN--------------------------------------------------------
+      # need to save comment with Old resoltion statement and clear out current
+        elsif @issueaction.reopened?
+          @issueaction.update_attributes!(old_resolution_date: @issue.resolution_date)
           if @issueaction.save
-            format.html { redirect_to @issue, notice: 'Issue Reopened successfully.' }
-            format.json { render :show, status: :created, location: @issueaction }
+            @issue.update_attributes!(resolution_date: nil)
+            @issue.update_attributes!(cancelled_at: nil)
+            @issue.update_attributes!(status: Status::ONGOING)
+            sendnotice = 'Issue Resolved successfully.'
           end
-        end
+
 
 
 
 
     end
 
-@issue.save!
+
+
+      @issue.save!
+
+    respond_to do |format|
+
+      format.html { redirect_to goto, notice: 'Issue Resolved successfully.' }
+      format.json { render :show, status: :created, location: @issueaction }
+    end
+
+
+
+
+
   end
 
   def createagenda

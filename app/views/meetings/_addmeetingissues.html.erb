@@ -58,7 +58,13 @@
 
 
 
+      <div class="form-group">
+        <%= f.label 'Community', :class => "col-sm-2 control-label" %>
+        <div class="col-sm-10">
+          <%= f.text_field :community, :size => 100, :class => "form-control" %>
 
+        </div>
+      </div>
 
 
 
@@ -71,7 +77,7 @@
 
 
       <%= hidden_field_tag(:meeting_id, @meeting.id) %>
-      <%= hidden_field_tag(:structure_id, @meeting.structure_id) %>
+      <%= hidden_field(:issue, :structure_id, :value => @meeting.structure_id) %>
       <%= hidden_field_tag(:frommeeting, 1) %>
       <div class="form-group">
         <div class = "col-sm-2 control-label"></div>

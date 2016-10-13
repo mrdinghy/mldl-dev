@@ -33,8 +33,8 @@
             <tr>
               <td><%= link_to meeting.meetingid, meeting %></td>
               <td><%= meeting.status %></td>
-              <td><%=  meeting.real_start.strftime("%m/  %d/%Y") if meeting.real_start %></td>
-              <td><%=  meeting.real_start.strftime("%R") if meeting.real_start %></td>
+              <td><%=  meeting.meeting_on.strftime("%m/  %d/%Y") if meeting.meeting_on %></td>
+              <td><%=  meeting.starts_at.strftime("%R") if meeting.starts_at %></td>
 
               <td><%= meeting.name %></td>
                          <td>

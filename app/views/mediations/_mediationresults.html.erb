@@ -13,32 +13,41 @@
       <%= f.text_area :actionbody,  cols: "120", rows: "12" %>
     </div>
 
+    <div class="form-group">
+      <%= f.label 'Mediation End Date' %>
+      <div class="col-sm-3" id="sandbox-container">
+        <div class="input-group date">
+          <% @the_date = Time.now.to_date %>
+
+          <%= date_select("mediate_end", "mediate_end", :default => @the_date) %>
+
+          <!---<input  name = "mediation_end" type="text" class="form-control" width="80">--->
+          <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+
+        <small> If Resolved will be Resolution Date</small>
+        </div>
+
+      </div>
+
 
     <div class="field">
       <div style="font-size: 16px">
 
         <h3>Mediation Result</h3>
-
-
-
-
-        <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_RESOLVED) %> Resolved<br>
-        <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_ONGOING) %> Ongoing<br>
-        <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_ESCALATED) %> Escalate Issue<br>
-        <%= radio_button(:issueaction, :actiontype, Actiontype::MEDIATION_RESULT_CANCELLED) %> Cancel Issue<br>
-
-
-
-
-      </div>
+        <%= radio_button(:issueaction, :actiontype, Actiontype::RESOLVED) %> Resolved<br>
+        <%= radio_button(:issueaction, :actiontype, Actiontype::ONGOING) %> Ongoing<br>
+        <%= radio_button(:issueaction, :actiontype, Actiontype::ESCALATED) %> Escalate Issue<br>
+        <%= radio_button(:issueaction, :actiontype, Actiontype::CANCELLED) %> Cancel Issue<br>
+     </div>
     </div>
 
 
-
-
-
-
-    <div class="actions">
+  <div class="actions">
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
     </div>
 <% end %>
+
+<script>
+    $('#sandbox-container input').datepicker({
+    });
+</script>

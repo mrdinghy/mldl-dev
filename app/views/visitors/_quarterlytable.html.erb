@@ -1,0 +1,38 @@
+<div class="col-sm-3">
+  <div class="panel panel-default">
+    <h4>Activity by Quarter </h4>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+        <td>Year</td>
+        <td>Qtr</td>
+        <td>Begin Open</td>
+        <td>New in Qtr</td>
+        <td>Resolved in Qt</td>
+        </tr>
+        </thead>
+        <% @yloop.each do |y|  %>
+            <% @qloop.each do |q| %>
+
+                <% d0= y.to_s + '-' + q.to_s + '-01 08:00:00' %>s
+
+                <% d2= Time.parse(d0) %>
+                <tr>
+                  <td><%= y %></td>
+                  <td><%#= self.qtrname(q) %></td>
+
+                  <td><%= Visitor.beginissues(d2,0) %></td>
+                  <td><%#= @structure.quarter_issue_total(d2,0) %></td>
+                  <td><%#= @structure.quarter_issue_resolved(d2,0) %></td>
+
+
+
+
+                </tr>
+
+            <% end %>
+        <% end %>
+
+      </table>
+    </div>
+  </div>

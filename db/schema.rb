@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160928142951) do
+ActiveRecord::Schema.define(version: 20161010194416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "agendas", force: :cascade do |t|
+    t.integer  "meeting_id"
+    t.integer  "issue_id"
+    t.text     "agenda_note"
+    t.integer  "result"
+    t.boolean  "addressed"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "appissues", force: :cascade do |t|
     t.date     "originaltimestamp"
@@ -173,8 +183,11 @@ ActiveRecord::Schema.define(version: 20160928142951) do
     t.datetime "mediation_start"
     t.datetime "mediation_end"
     t.text     "mediation_notes"
+    t.integer  "result"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.date     "mediate_end"
+    t.date     "mediate_start"
   end
 
   create_table "mediators", force: :cascade do |t|
@@ -186,10 +199,7 @@ ActiveRecord::Schema.define(version: 20160928142951) do
 
   create_table "meetings", force: :cascade do |t|
     t.date     "meeting_on"
-    t.time     "meeting_start"
-    t.time     "meeting_end"
-    t.datetime "real_start"
-    t.datetime "real_end"
+    t.time     "starts_at"
     t.string   "name"
     t.string   "location"
     t.integer  "structure_id"
@@ -332,6 +342,7 @@ ActiveRecord::Schema.define(version: 20160928142951) do
   create_table "structures", force: :cascade do |t|
     t.string   "name"
     t.integer  "structuretype"
+    t.string   "short"
     t.integer  "district_id"
     t.integer  "county_id"
     t.integer  "parent_id"

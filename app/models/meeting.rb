@@ -1,8 +1,10 @@
 class Meeting < ActiveRecord::Base
 
   belongs_to :structure
-  has_many :issueactions, :dependent => :destroy
-  has_many :issues, :through => :issueactions
+  #has_many :issueactions, :dependent => :destroy
+
+  has_many :agendas, :dependent => :destroy
+  has_many :issues, :through => :agendas
 
   has_many :participations, :dependent => :destroy
   has_many :people, :through => :participations
@@ -10,24 +12,14 @@ class Meeting < ActiveRecord::Base
 
   has_many :site_documents
 
-  extend TimeSplitter::Accessors
-  split_accessor :real_start
-  split_accessor :real_end
-
-
 
   def meetingid
-    if !self.real_start.nil?
-    mdate = self.real_start.strftime("%F").to_s
 
-    else
-      mdate = "????"
-    end
-
-    structure = self.structure.structuretype_humanize
+    mdate = self.meeting_on.strftime("%Y-%m").to_s
+    structure = self.structure.short
     structurename = self.structure.name
 
-    meetingid = ('MTG ' + mdate + '-' + structure[0,2] + '-'  + self.id.to_s)
+    meetingid = ('MTG ' + mdate + '-' + structure + '-'  + self.id.to_s)
     return meetingid
   end
 

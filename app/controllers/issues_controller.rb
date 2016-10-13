@@ -15,12 +15,17 @@ class IssuesController < ApplicationController
       @canedit=true
     end
     @myactions = Issueaction.where('issue_id=?', @issue.id).order('created_at DESC')
+    @myagendas = Agenda.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymediations = Mediation.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymeetings = Meeting.where('structure_id=?', @issue.structure_id)
+    @openagendas = Agenda.where('issue_id = ? and addressed is null', @issue.id)
+    @openmediations = Mediation.where('issue_id = ? and mediate_end is null', @issue.id)
+
     @mydisputants = Disputant.where('issue_id=?', @issue.id)
 
     @numberactions = @myactions.count
     @numbermediations = @mymediations.count
+    @numberagendas = @myagendas.count
     @numberdisputants = @mydisputants.count
 
 
@@ -32,6 +37,7 @@ class IssuesController < ApplicationController
 
     @raisedby = Person.find(@issue.raised_by) if @issue.raised_by
     @issueaction = Issueaction.new
+    @agenda = Agenda.new
     @mediation = Mediation.new
     @issuedocs = SiteDocument.where('documentable_type = ? and documentable_id = ?', 'issue', @issue.id)
     @new_site_document = SiteDocument.new
@@ -72,7 +78,7 @@ class IssuesController < ApplicationController
     @allpersons = Person.all
     @allusers = User.all
     @alloldids = Issue.select(:id, :uuid).where('uuid is not NULL').uniq
-    @allnewids = Issue.select(:id)
+    @allnewids = Issue.select(:id, :structure_id).where('structure_id is not NULL').uniq
     @alldisputants = Disputant.select(:person_id).uniq
 
   end
@@ -130,13 +136,18 @@ class IssuesController < ApplicationController
   # POST /issues
   # POST /issues.json
   def create
-    @issue = Issue.new(issue_params)
-    @issue.update_attributes(status:Status::NEW)
+    #@issue = Issue.new(issue_params)
+    #@issue.update_attributes(status:Status::NEW)
+    #if params[:issue][:structure_id].present?
+      #@issue.update_attributes(:structure_id => params[:issue][:structure_id])
+
+    #end
 
     respond_to do |format|
       if @issue.save
         if params[:meeting_id]
-          Issueaction.create(actiontype: 2, structure_id:  params[:structure_id], meeting_id: params[:meeting_id], issue_id: @issue.id)
+          Issueaction.create(actiontype: 2, structure_id:  params[:issue][:structure_id], meeting_id: params[:meeting_id], issue_id: @issue.id)
+          Agenda.create(meeting_id: params[:meeting_id], issue_id: @issue.id)
           meeting = Meeting.find(params[:meeting_id])
            format.html { redirect_to meeting, notice: 'Issue was successfully created.' }
            format.json { render :show, status: :created, location: meeting }
@@ -174,31 +185,10 @@ class IssuesController < ApplicationController
   # PATCH/PUT /issues/1.json
   def update
 
-     if params[:resolution]
-
-
-       @issue.update_attributes!(:status => Status::RESOLVED)
-
-
-
-     end
-
-
-   # if params[:addraiser]
-    #  peep=Person.create(name_first: params[:fname], name_last: params[:lname], email: params[:email], title: params[:title])
-
-
-     # @issue.raised_by = peep.id
-
-
-
-    #end
-
-
-    @issue.save
+    puts '=================dfasfdfsdfsd====================adfasddsff================='
 
     respond_to do |format|
-      if @issue.save
+      if @issue.update(issue_params)
         format.html { redirect_to @issue, notice: 'Issue was successfully updated.' }
         format.json { render :show, status: :ok, location: @issue }
       else
@@ -431,7 +421,7 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
-      params.require(:issue).permit(:name, :description, :structure_id, :community, :yourname, :district_id, :location, :status, :status_note,
+      params.require(:issue).permit(:name, :description, :structure_id, :community, :yourname, :district_id, :location, :status, :status_note, :resolution, :resolutiontype_id,
                                     :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, person_ids: [], meeting_ids: [] )
     end
 end

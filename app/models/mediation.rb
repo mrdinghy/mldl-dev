@@ -6,6 +6,8 @@ class Mediation < ActiveRecord::Base
   has_many :people, :through => :mediatiors
 
 
+  extend EnumerateIt
+  has_enumeration_for :result, create_helpers: true
 
   def mediationcode()
     issue = self.issue

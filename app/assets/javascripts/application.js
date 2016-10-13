@@ -32,6 +32,14 @@
 //= require index
 //= require skycons
 //= require app
+//= require jquery.flot
+//= require jquery.flot.tooltip.min
+//= require jquery.flot.resize
+//= require jquery.flot.pie
+//= require jquery.flot.time
+//= require jquery.flot.categories
+//= require jquery.flot.spline.min
+//= require demo-flot
 // require froala_editor.min
 // require lists.min
 //= require d3.v3

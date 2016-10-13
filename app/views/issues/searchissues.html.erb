@@ -100,10 +100,10 @@
           <h4>Categories</h4>
        <%= select_tag "category_ids", options_from_collection_for_select(Category.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
 </div>
-         <div class="field">
+         <!---<div class="field">
               <h4>Organizations</h4>
-        <%= select_tag "organization_ids", options_from_collection_for_select(Organization.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
-            </div>
+        <%#= select_tag "organization_ids", options_from_collection_for_select(Organization.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
+            </div>--->
               <div class="field">
                 <h4>Districts <small>(where Issue Occured)</small></h4>
         <%= select_tag "district_ids", options_from_collection_for_select(District.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
@@ -119,7 +119,7 @@
 
 
 
-          <h4>Select/Search OldIds</h4><br>
+          <h4>Select/Search Old Issue Ids</h4><br>
           <select name="old_id" class="chosen-select input-md form-control">
             <option value = "">Select -></option>
             <% @alloldids.each do |issue| %>
@@ -136,12 +136,12 @@
 
 
 
-          <h4>Select/Search New IDs</h4><br>
+          <h4>Select/Search New Issue IDs</h4><br>
           <select name="new_id" class="chosen-select input-md form-control">
             <option value = "">Select -></option>
             <% @allnewids.each do |issue2| %>
 
-                <option value="<%= issue2.id %>"><%= issue2.id %></option>
+                <option value="<%= issue2.id %>"><%= issue2.issuecode %></option>
             <% end %>
           </select>
 

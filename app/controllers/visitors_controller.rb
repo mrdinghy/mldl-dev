@@ -6,7 +6,10 @@
     @countystructures = Structure.where('structuretype in (?)', [:nsc,:csc] ).order( 'structuretype_id DESC')
     @structures = Structure.all
     @counties = County.all
-
+    @allcats = Category.all
+    @alldistricts = District.all
+    @yloop = [2013,2014,2015,2016]
+    @qloop = [1,4,7,10]
 
 
 
@@ -61,10 +64,38 @@
     @resolved = resolved
 
 
-end
+    @allissues= Issue.all
+    @allnewissues = @allissues.where(:status => Status::NEW)
+    @allongoingissues = @allissues.where(:status => Status::ONGOING)
+    openids = [Status::ONGOING, Status::NEW, Status::MEDIATION]
+    @allopenissues = @allissues.where(status: openids)
+
+    @allmediationissues = @allissues.where(:status => Status::MEDIATION)
+    @allresolvedissues = @allissues.where(:status => Status::RESOLVED)
 
 
-    def qissues(thisyear,thismonth,structure,district)
+
+   end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   def qissues(thisyear,thismonth,structure,district)
 
       all = Issue.all
       all = all.where('extract(year from created_at) = ? and extract(month from created_at) = ?', thisyear, thismonth)     if thisyear != 0
@@ -122,6 +153,23 @@ end
 
 
 
+   def qtrname(q)
+     if q == 1
+       s='1st'
+     elsif q == 4
+       s='2nd'
+     elsif q == 7
+       s='3rd'
+     elsif q == 10
+       s='4th'
+     else
+       s='n/a'
+     end
+     return s
+   end
+
+
+   helper_method :qtrname
 
 
 

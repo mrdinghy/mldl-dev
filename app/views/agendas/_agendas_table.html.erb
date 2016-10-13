@@ -1,0 +1,69 @@
+
+
+
+
+    <table id="agendastable" class="table table-striped table-hover">
+
+
+        <thead>
+        <tr>
+          <%if params[:controller] == 'issues' %>
+              <th>Meeting</th>
+              <th>Date</th>
+          <% end %>
+
+          <%if params[:controller] == 'meetings' %>
+
+              <th>Issue</th>
+          <% end %>
+          <th>Result</th>
+          <th>Agenda note</th>
+          <th></th  >
+        </tr>
+        </thead>
+
+        <tbody>
+        <% @myagendas.each do |agenda| %>
+            <tr>
+              <%if params[:controller] == 'issues' %>
+                  <td><%= link_to agenda.meeting.meetingid, agenda.meeting %></td>
+                  <td><%= agenda.meeting.meeting_on %></td>
+
+              <% end %>
+
+              <%if params[:controller] == 'meetings' %>
+
+            <td><%= agenda.issue.issuecode %></td>
+              <% end %>
+
+              <td><%= agenda.result_humanize %></td>
+              <td><%= agenda.agenda_note %></td>
+              <td><%= link_to 'Show', agenda %></td>
+
+
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+
+
+
+<script>
+    $('#agendastable').dataTable({
+        'paging':   true,  // Table pagination
+        'ordering': true,  // Column ordering
+        'info':     true,  // Bottom left status text
+// Text translation options
+// Note the required keywords between underscores (e.g _MENU_)
+        oLanguage: {
+            sSearch:      'Search all columns:',
+            sLengthMenu:  '_MENU_ records per page',
+            info:         'Showing page _PAGE_ of _PAGES_',
+            zeroRecords:  'Nothing found - sorry',
+            infoEmpty:    'No records available',
+            infoFiltered: '(filtered from _MAX_ total records)'
+        }
+    });
+</script>
+
+

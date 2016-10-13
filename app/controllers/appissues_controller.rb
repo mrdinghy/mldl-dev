@@ -4,169 +4,221 @@ class AppissuesController < ApplicationController
   # GET /appissues
   # GET /appissues.json
   def index
-      Appissue.where('issue_id in (?)', [501,363,176,177]).destroy_all
-      @uniquemeetings = Appissue.select(:meetingname, :structure, :structurecounty, :structuredistrict, :meetingcode, :originalmeetingdate).order(:meetingcode).uniq
+
+
+      Appissue.where('issueid in (?)', [501,363,176,177]).destroy_all
+      @cleanissues2 = Appissue.order('id').where('id < 700')
+
+      @uniquemeetings = Appissue.select(:meetingcode, :originalmeetingdate, :structurecounty, :structuredistrict, :structure).order(:meetingcode).uniq
 
       @uniquemeetings.each do |meet|
 
-       if !meet.originalmeetingdate.blank? and !meet.structurecounty.blank? and !meet.structuredistrict.blank? and !meet.structure.blank? and !meet.meetingcode.blank?
+
           s = self.newstructureid(meet.structurecounty, meet.structuredistrict, meet.structure)
           if s == 0 or s.nil?
             s = 1
           end
-          m=Meeting.create(name: meet.meetingname, real_start: meet.originalmeetingdate, old_id: meet.meetingcode, structure_id: s)
-        end
-
+          m=Meeting.create(meeting_on: meet.originalmeetingdate, old_id: meet.meetingcode, structure_id: s)
       end
 
-       newissues = Appissue.order(:id)
-       #yourname column would be users in CSV so Ill leave that alone fon now
-       newissues.each do |issue|
-         s = self.newstructureid(issue.structurecounty, issue.structuredistrict, issue.structure)
-         cat = self.retcategory(issue.category)
-         d = self.retdist(issue.issuedistrict)
-         scpe = self.retscope(issue.status)
-         if !issue.resolutiontype.blank?
-         rt = self.retrestype(issue.resolutiontype)
-         else
-           rt = 0
-         end
-         if s == 0 or s.nil? or s.blank?
-           thisstructureid = 1
-         else
-           thisstructureid = s
+      #yourname column would be users in CSV so Ill leave that alone fon now
+      @cleanissues2.each do |issue|
 
 
-         end
-
-         if issue.report_ongoing == 'Resolved' or issue.status == 'Resolved' or issue.mediationoutcome == 'Resolved' or issue.updatetype == 'Resolution'
-           if issue.resolutiondate.nil?
-             rd= issue.originalmeetingdate
-           else
-             rd = issue.resolutiondate
-           end
-           vstatus = 3   #status is resolved
-         else
-           vstatus = 2   #status is ongoing
-
-         end
-
-         if cat == 0
-           cat = nil
-         end
+          s = self.newstructureid(issue.structurecounty, issue.structuredistrict, issue.structure)
+          cat = self.retcategory(issue.category)
+          vuser = self.finduser(issue.yourname)
+          d = self.retdist(issue.issuedistrict)
+          scpe = self.retscope(issue.status)
+          if !issue.resolutiontype.blank?
+          rt = self.retrestype(issue.resolutiontype)
+          else
+          rt = 0
+          end
+          if s == 0 or s.nil? or s.blank?
+          thisstructureid = 1
+          else
+          thisstructureid = s
 
 
-         mldlissue = Issue.create(
-             old_id: issue.issueid,
-             structure_id: thisstructureid,
-             scope_id: scpe,
-             district_id: d,
-             community: issue.community,
-             category_id: cat,
-             description: issue.issuedescription,
-             name: issue.issuename,
-             originaltimestamp:issue.originaltimestamp,
-             originaluser: issue.yourname,
-             uuid: issue.uuid,
-             actioncommittee: issue.actionplancommittee,
-             actionplan: issue.actionplandescription,
-             resolutiontype_id: rt,
-             status: vstatus,
+          end
+          if issue.issuename.blank?
+          vname = 'No Issue Name Provided'
+          else
+          vname = issue.issuename
+          end
 
+          if issue.community.blank?
+          vcommunity = 'No Community identified'
+          else
+          vcommunity = issue.community
+          end
+          if issue.report_ongoing.include? 'Resolve'
+            if issue.resolutiondate.nil?
+              rd= issue.originalmeetingdate
+            else
+              rd = issue.resolutiondate
+            end
+            vstatus = Status::RESOLVED
+            vresult = Result::RESOLVED
+          else
+          vstatus = Status::ONGOING
+          vstatus = Result::ONGOING
+          end
+
+          if cat == 0
+          cat = nil
+          end
+
+
+
+          mldlissue = Issue.create(
+              old_id: issue.id,
+              structure_id: thisstructureid,
+              scope_id: scpe,
+              district_id: d,
+              community: vcommunity,
+              category_id: cat,
+              description: issue.issuedescription,
+              name: vname,
+              originaltimestamp:issue.originaltimestamp,
+              originaluser: issue.yourname,
+              uuid: issue.uuid,
+              actioncommittee: issue.actionplancommittee,
+              actionplan: issue.actionplandescription,
+              resolutiontype_id: rt,
+              status: vstatus,
              resolution_date: rd)
 
 
+             mldlissue.update_attributes(created_at:  issue.originalmeetingdate)
 
 
-         thismeeting = Meeting.where('old_id = ?', issue.meetingcode).first
+          thismeeting = Meeting.where('old_id = ?', issue.meetingcode).first
 
-         # creates an Agenda action for each issues link to a meeting
-         if thismeeting.nil?
-           meetid=0
-         else
-           meetid=thismeeting.id
-         end
-         if !issue.originalmeetingdate.nil?
-           agenda = Issueaction.create(issue_id: mldlissue.id, actiontype: 2, user_id: 1, meeting_id: meetid)
-           agenda.created_at = issue.originalmeetingdate
-           agenda.save
-         end
+          # creates an Agenda action for each issues link to a meeting
+          if thismeeting.nil?
+            meetid=0
+          else
+            meetid=thismeeting.id
+          end
 
 
-
-         if !issue.mediationdate.nil?
-           addmed = Mediation.create(issue_id: mldlissue.id, mediation_start: issue.mediationdate)
-           medaction=Issueaction.create(issue_id: mldlissue.id, actiontype: 7, user_id: 1, mediation_id: addmed.id)
-
-           medaction.created_at = issue.mediationdate
-
-           medaction.save
-         end
-
-         if !issue.statusnotes.blank?
-           statusnote = Issueaction.create(issue_id: mldlissue.id,actiontype: 3, actionbody: issue.statusnotes, user_id: 1)
-
-           if !issue.originalmeetingdate.nil?
-             statusnote.created_at = issue.originalmeetingdate
-           else
-             statusnote.created_at = issue.originaltimestamp
-           end
-
-           #statusnote.save
-         end
-
-         if !issue.actionplannotes.blank?
-           actplan = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.actionplannotes, user_id: 1)
-           if !issue.originalmeetingdate.nil?
-             actplan.created_at = issue.originalmeetingdate
-           else
-             actplan.created_at = issue.originaltimestamp
-           end
-
-           #actplan.save
-         end
+          # all issues get an agenda and Resolved or Ongoing
+          action = Issueaction.create(issue_id: mldlissue.id, actiontype: 2, user_id: vuser, meeting_id: meetid)
+          if vresult == 5
+            agenda = Agenda.create(issue_id: mldlissue.id, meeting_id: meetid, :addressed => true, result: Result::RESOLVED)
+          else
+            agenda = Agenda.create(issue_id: mldlissue.id, meeting_id: meetid, :addressed => true,  result: Result::ONGOING)
+          end
+          agenda.update_attributes!(created_at: issue.originalmeetingdate)
 
 
+          if !issue.mediationdate.nil?
+            if vresult == 5
+              addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate,  result: Result::RESOLVED)
+
+            else
+              addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate, result: Result::ONGOING)
+            end
+
+            medaction=Issueaction.create(issue_id: mldlissue.id, actiontype: 7, user_id: vuser, mediation_id: addmed.id, actionbody: issue.mediationoutcome)
+            medaction.update_attributes(created_at: issue.mediationdate)
 
 
-         if !issue.updatedescription.blank? and !issue.updatetype.nil?
+            medaction.save!
+          end
+          if !issue.statusnotes.blank?
+            statusnote = Issueaction.create(issue_id: mldlissue.id,actiontype: 3, actionbody: issue.statusnotes, user_id: vuser)
 
-           if issue.updatetype.include? 'Resolution'
-             acttype=5
-           elsif issue.updatetype.include? 'Referred'
-             acttype=6
+            if !issue.originalmeetingdate.nil?
+              statusnote.update_attributes(created_at: issue.originalmeetingdate)
+            else
 
-           elsif issue.updatetype.include? 'Mediation'
-             acttype=7
-           else
-             acttype=3
-           end
-
-           updater = Issueaction.create(issue_id: mldlissue.id, actiontype: acttype, actionbody: issue.updatedescription, user_id: 1)
-           if !issue.updatedate.nil?
-             updater.created_at = issue.updatedate
-           else
-             updater.created_at = issue.originaltimestamp
-           end
-           #updater.save
-         end
+              statusnote.update_attributes(created_at:  issue.originaltimestamp)
+            end
 
 
+          end
+
+          if !issue.actionplannotes.blank?
+            actplan = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.actionplannotes, user_id: vuser)
+            if !issue.originalmeetingdate.nil?
+              actplan.update_attributes!(created_at: issue.originalmeetingdate)
+
+            else
+
+              actplan.update_attributes!(created_at:  issue.originaltimestamp)
+            end
+
+            #actplan.save!
+          end
+
+          if !issue.updatedescription.blank? and !issue.updatetype.nil?
+
+            if issue.updatetype.include? 'Resolution'
+              acttype=5
+            elsif issue.updatetype.include? 'Referred'
+              acttype=6
+
+            elsif issue.updatetype.include? 'Mediation'
+              acttype=7
+            else
+              acttype=3
+            end
+
+            updater = Issueaction.create(issue_id: mldlissue.id, actiontype: acttype, actionbody: issue.updatedescription, user_id: vuser)
+            if !issue.updatedate.nil?
+              updater.update_attributes(created_at: issue.originalmeetingdate)
+
+            else
+              updater.update_attributes(created_at:  issue.originaltimestamp)
+
+            end
+            #updater.save!
+          end
 
 
 
-
-
-
-
-
-
-       end
+      end
 
 
 
 
   end
+
+
+
+
+  def finduser(yname)
+    if !yname.nil?
+      if yname.include? 'Robert'
+        thisuser = 14
+        elsif yname.include? 'Suah'
+          thisuser = 16
+      elsif yname.include? 'suah'
+        thisuser = 16
+      elsif yname.include? 'Thomas'
+        thisuser = 16
+      elsif yname.include? 'Sopp'
+        thisuser = 17
+      elsif yname.include? 'Boim'
+        thisuser = 19
+      elsif yname.include? 'Kann'
+        thisuser = 12
+      elsif yname.include? 'Mulbah'
+        thisuser = 13
+      elsif yname.include? 'Koll'
+        thisuser = 20
+      else
+        thisuser = 1
+      end
+
+    end
+    return thisuser
+  end
+
+
 
 
 
@@ -303,19 +355,19 @@ class AppissuesController < ApplicationController
               if structure == 'DSC'
               s=28
               else
-              s=27
+              s=29
               end
             elsif district.include? 'Gbao'
               if structure == 'DSC'
-              s=28
+              s=30
               else
-              s=27
+              s=31
               end
             elsif district.include? 'Kono'
               if structure == 'DSC'
-              s=28
+              s=32
               else
-              s=27
+              s=33
               end
             end
           else
@@ -475,15 +527,6 @@ end
 
 
   end
-
-  def makemeetings
-    @meetings = Appissue.select(:originalmeet, :meetingname, :structurecode, :county, :district).order(:meetingname).uniq
-    @countydist = Appissue.select(:county, :district).order(:county, :district).uniq
-
-  end
-
-
-
 
 
   # GET /appissues/1

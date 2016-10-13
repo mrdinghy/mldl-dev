@@ -13,7 +13,7 @@
 
 </style>
 
-<p id="notice"><%= notice %></p>
+
 
 
 <div class="container">
@@ -25,7 +25,7 @@
     <div class="col-sm-12">
 
 
-      <%= link_to 'Back to Mediations', mediations_path %><br>
+      <%= link_to 'Back to Issue', @mediation.issue %><br>
       <h1>
         <span style="color: #999">Mediation: </span> <%= @mediation.mediationcode %>
         <div class="pull-right">
@@ -66,12 +66,12 @@
           </p>
           <p>
             <strong>Mediation start:</strong>
-            <%= @mediation.mediation_start.strftime("%m/  %d/%Y") if @mediation.mediation_start %>
+            <%= @mediation.mediate_start.strftime("%m/  %d/%Y") if @mediation.mediate_start %>
           </p>
 
           <p>
             <strong>Mediation end:</strong>
-            <%= @mediation.mediation_end.strftime("%m/  %d/%Y") if @mediation.mediation_end  %>
+            <%= @mediation.mediate_end.strftime("%m/  %d/%Y") if @mediation.mediate_end  %>
           </p>
 
           <p>

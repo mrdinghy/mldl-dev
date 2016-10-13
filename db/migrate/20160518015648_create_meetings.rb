@@ -2,10 +2,7 @@ class CreateMeetings < ActiveRecord::Migration
   def change
     create_table :meetings do |t|
       t.date :meeting_on
-      t.time :meeting_start
-      t.time :meeting_end
-      t.datetime :real_start
-      t.datetime :real_end
+      t.time :starts_at
       t.string :name
       t.string :location
       t.integer :structure_id

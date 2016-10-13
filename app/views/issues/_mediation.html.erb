@@ -7,24 +7,19 @@
 
 
 
+
     <div class="form-group">
-      <label class="string optional col-sm-2 control-label" for="mediation_Mediation Start">Med start</label>
-      <div class='col-sm-1 input-group date' id='mediationstart'>
-        <div class="input datetime_picker optional mediation_mediation_start">
-          <div class="input-group date datetimepicker">
-            <input class="string datetime_picker optional  " type="text" data-date-options="{&quot;locale&quot;:&quot;en&quot;,&quot;format&quot;:&quot;DD/MM/YYYY HH:mm&quot;,&quot;dayViewHeaderFormat&quot;:&quot;MMMM YYYY&quot;}" name="mediation[mediation_start]" id="mediation_mediation_start" />
-            <span class="input-group-btn"><button class="btn btn-default" type="button"><span class="glyphicon glyphicon-calendar"></span></button></span></div></div>
+      <%= f.label 'Mediation Start' %>
+      <div class="col-sm-3" id="sandbox-container">
+        <div class="input-group date">
+          <!---<input  name="mediation_start" type="text" class="form-control" width="80">--->
+          <% @the_date = Time.now.to_date %>
+          <%= date_select("mediate_start", "mediate_start", :default => @the_date) %>
+
+          <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+        </div>
 
       </div>
-    </div>
-
-    <script type="text/javascript">
-        $(function () {
-            $('#mediationstart').datetimepicker();
-        });
-    </script>
-
-
 
 
 <%# Added Bootstrap classes, and help-block container for error messages %>
@@ -37,3 +32,10 @@
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
     </div>
 <% end %>
+
+<script>
+    $('#sandbox-container input').datepicker({
+    });
+
+
+</script>

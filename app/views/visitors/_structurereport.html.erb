@@ -1,0 +1,84 @@
+
+
+
+
+
+<div class="col-md-12">
+  <div class="panel panel-default">
+
+    <div class="panel-heading">Status by Structure Organization</div>
+
+    <div class="panel-body">
+      <table class="table">
+        <thead><tr>
+
+          <th rowspan="2">Structure</th>
+
+          <th colspan="5" style="background-color: #b3d271; color: #fff; text-align: center; border: 2px solid #fff;">Current Month</th>
+          <th colspan="6" style="background-color: #ccc; color: #fff; text-align: center; center; border: 2px solid #fff;"">Total</th>
+        </tr>
+
+
+
+        <tr>
+          <th>Meetings Held</th>
+          <th>Total Issues</th>
+          <th>Open</th>
+          <th>Resolved</th>
+          <th>Cancelled</th>
+
+          <th>All Issues</th>
+          <th>New</th>
+          <th>Ongoing</th>
+          <th>Open Issues</th>
+          <th>Resolved</th>
+          <th>Cancelled</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <% @structures.each do |s| %>
+
+
+
+
+            <tr>
+              <td>
+                <% if s.structuretype == Structuretype::NSC %>
+                    <strong><%= link_to s.name, s  %></strong>
+                <% elsif s.structuretype ==  Structuretype::CSC %>
+                    <strong><%= link_to s.name, s  %></strong>
+                <% elsif s.structuretype ==  Structuretype::DSC  %>
+
+                    &nbsp;&nbsp;<%= link_to s.name, s  %>
+                <% elsif s.structuretype ==  Structuretype::CF  %>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<em><%= link_to s.name, s  %></em>
+                <% end %>
+
+              </td>
+              <td><%= s.qmeetings(0,0,s.id,0).count %></td>
+              <td><%= s.qissues(0,0,s.id,0).count %></td>
+              <td><%= s.openissues(0,0,s.id,0).count %></td>
+              <td><%= s.resolvedissues(0,0,s.id,0).count %></td>
+              <td><%= s.cancelledissues(0,0,s.id,0).count %></td>
+
+
+              <td><%= s.ourissues.count %></td>
+              <td><%= s.ournewissues.count %></td>
+              <td><%= s.ourongoingissues.count %></td>
+              <td><%= s.ouropenissues.count %></td>
+              <td><%= s.ourresolvedissues.count %></td>
+              <td><%= s.ourcancelledissues.count %></td>
+
+
+
+            </tr>
+
+
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

@@ -5,7 +5,8 @@
 <% remote = modal ? true : false %>
 
 
-<% thisissue = Issue.find(issue_id) %>
+<% thisagenda = Agenda.find(agenda_id) %>
+<% thisissue = Issue.find(thisagenda.issue_id) %>
 
 
 <%= form_for(@issueaction) do |f| %>
@@ -23,45 +24,45 @@
       <% end %>
       <h3><%= thisissue.name %></h3>
       <%= hidden_field(:issueaction, :meeting_id, :value => @meeting.id) %>
-      <%= hidden_field(:issueaction, :issue_id, :value => thisissue.id) %>
+
+      <%= hidden_field(:issueaction, :issue_id, :value => thisagenda.issue_id) %>
       <%= hidden_field_tag(:parent_id, thisissue.structure.parent_id) %>
 
       <%= hidden_field(:issueaction, :structure_id, :value => @meeting.structure_id) %>
-      <%= hidden_field_tag(:frommeeting, 1) %>
+      <%= hidden_field_tag(:agenda_id, agenda_id) %>
 
-  <div class="row">
-    <div class="col-sm-9">
-        Report Notes from Meeting for this Issue:<br>
+      <div class="row">
+        <div class="col-sm-9">
+          Report Notes from Meeting for this Issue:<br>
 
-      <%= f.text_area :actionbody, cols: "100", rows: "12" %>
+          <%= f.text_area :actionbody, cols: "100", rows: "12" %>
 
 
-      </div>
+        </div>
 
         <div class="col-sm-3">
-<div style="font-size: 16px">
+          <div style="font-size: 16px">
 
-<h3>Meeting Result</h3>
-
-
-
-  <%= radio_button :issueaction, 'actiontype', Actiontype::MEETING_RESULT_RESOLVED %> Resolved<br>
-  <%= radio_button(:issueaction,  'actiontype', Actiontype::MEETING_RESULT_ONGOING) %> Ongoing<br>
-  <%= radio_button(:issueaction, 'actiontype', Actiontype::MEETING_RESULT_MEDIATION) %> Send to Mediation<br>
-  <%= radio_button(:issueaction,  'actiontype', Actiontype::MEETING_RESULT_ESCALATED) %> Escalate Issue<br>
-  <%= radio_button(:issueaction,  'actiontype', Actiontype::MEETING_RESULT_CANCELLED) %> Cancel Issue<br>
+            <h3>Meeting Result</h3>
 
 
 
-</div>
-</div>
-    </div>
+            <%= radio_button(:issueaction, 'actiontype', Actiontype::RESOLVED) %> Resolved<br>
+            <%= radio_button(:issueaction,  'actiontype', Actiontype::ONGOING) %> Ongoing<br>
+            <%= radio_button(:issueaction, 'actiontype', Actiontype::MEDIATION) %> Send to Mediation<br>
+            <%= radio_button(:issueaction,  'actiontype', Actiontype::ESCALATED) %> Escalate Issue<br>
+            <%= radio_button(:issueaction,  'actiontype', Actiontype::CANCELLED) %> Cancel Issue<br>
+
+
+
+          </div>
+        </div>
+      </div>
 
 
 
 
-          <div class="pull-right"><%= f.submit :class => "btn btn-primary" %></div>
-<br><br>
+      <div class="pull-right"><%= f.submit 'Record Meeting Result', :class => "btn btn-primary" %></div>
+      <br><br>
     </div>
 <% end %>
-

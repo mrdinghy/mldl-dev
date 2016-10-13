@@ -1,36 +1,12 @@
-<% modal ||= false %>
-<% remote = modal ? true : false %>
-<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'new_note_form'}) do |f| %>
-    <% if @issue.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@location.errors.count, "error") %> prohibited this location from being saved:</h2>
 
-          <ul>
-            <% @issue.errors.full_messages.each do |message| %>
-                <li><%= message %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
+<%= form_for(@issueaction, multipart: true, remote: false) do |f| %>
     <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
-
-    <%= hidden_field_tag(:fromissue, true) %>
     <%= hidden_field(:issueaction, :actiontype, :value => Actiontype::AGENDA) %>
-<% xmeetings = Meeting.where('structure_id = ?', @issue.id) %>
-    <div class="form-group">
-      <%= f.label 'Select A Meeting', :class => "col-sm-2" %>
-      <div class="col-sm-10">
-        <%#= f.select :meeting_id, options_for_select(@mymeetings.map{ |c| [c.name, c.real_start.to_s]}),  :include_blank => true %>
-        <%#= f.collection_select(:meeting_id, @mymeetings, :id, :real_start.to_s , include_blank: true, :class => "form-control") %>
+
+      Add To Meeting Agenda
         <%= f.select :meeting_id, options_for_select(@mymeetings.collect{|m| [m.meetingid, m.id]}), {:include_blank => true,:class=>'user-id-widget', size: 5} %>
 
       </div>
-      <br><BR>
-<%# Added Bootstrap classes, and help-block container for error messages %>
-    <div class="field">
-      <%= f.label 'Notes (optional):' %>
-      <%= f.text_area :actionbody,  cols: "120", rows: "12" %>
-    </div>
 
     <div class="actions">
       <%= f.submit 'Submit', :class => "btn btn-small btn-primary" %>

@@ -46,6 +46,11 @@ class District < ActiveRecord::Base
   end
 
 
+  def allissuesdistricts(district_id)
+    qq=Issue.where(:district_id => district_id)
+    return qq
+  end
+
 
 
 

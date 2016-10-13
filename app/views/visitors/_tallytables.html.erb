@@ -1,0 +1,76 @@
+
+<div class="row">
+  <div class="col-sm-2">
+    <div class="panel panel-default">
+      <h4>by Status</h4>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <span class="badge"><%= @allissues.count %></span>
+            Total Issues
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%= @allnewissues.count %></span>
+            New
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%= @allongoingissues.count %></span>
+            Ongoing
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%= @allmediationissues.count %></span>
+            In Mediation
+          </li>
+          <li class="list-group-item">
+            <span class="badge"><%= @allresolvedissues.count %></span>
+            Resolved
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="panel panel-default">
+      <h4>by Category</h4>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% @allcats.each do |c| %>
+              <li class="list-group-item">
+                <span class="badge"><%= c.allissuescategories(c.id).count %></span>
+                <%= c.name %>
+              </li>
+
+          <% end %>
+
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-sm-3">
+    <div class="panel panel-default">
+      <h4>by District </h4>
+      <div class="panel-body">
+        <ul class="list-group">
+          <% @alldistricts.each do |d| %>
+
+                  <li class="list-group-item">
+                    <span class="badge"><%= d.allissuesdistricts(d.id).count %></span>
+                    <%= d.name %>
+                  </li>
+
+          <% end %>
+
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+</div>

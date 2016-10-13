@@ -13,7 +13,7 @@
         $('#new_report_model').modal('hide');
     })
 
-    <% @meetingactions.each do |agenda| %>
+    <% @myagendas.each do |agenda| %>
     <% modalid = '#meetingreport-' + agenda.id.to_s %>
     $('<%= modalid %>').on('submit', function() {
         $('#new_report_model').modal('hide');
@@ -82,7 +82,7 @@
                       <p>
                       <strong>Meeting Start:</strong>
                       <%#=  @meeting.real_start.strftime("%m/%d/%y") %>
-                      <%=  @meeting.real_start %>
+                      <%=  @meeting.meeting_on %>   at   <%=  @meeting.starts_at %>
                       </p>
 
 
@@ -102,171 +102,191 @@
 
                   <p>
                   <strong>Structure:</strong>
-                  <%= link_to @meeting.structure do %><%= @meeting.structure.name %><% end %>
+                  <%= link_to @meeting.structure.name, @meeting.structure %>
                   <%= @meeting.structure.structuretype_humanize %>
 
                   </p>
+                <p>
+                  <strong>Parent Structure:</strong>
+                  <%= link_to @myparent.name, @myparent %>
+
+
+                </p>
                 </div>
 
 
+              <% if @canedit %>
+                  <div>
 
-
-
-            </div>
-          </div>
-
-
-            </div>
-
-
-      <div class="col-sm-10">
-
-
-
-
-
-        <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#viewissues">Agenda</a></li>
-          <li><a data-toggle="tab" href="#viewparticipants">Participants</a></li>
-          <li><a data-toggle="tab" href="#viewdocuments">Documents</a></li>
-
-        </ul>
-
-        <div class="tab-content">
-          <div id="viewissues" class="tab-pane fade in active">
-            <h3>Meeting Agenda</h3>
-            <div class="panel panel-default">
-              <div class="panel-heading">Agenda Issues</div>
-              <div class="panel-body">
-
-                <table id="agendatable"  class="table table-striped hover">
-                  <thead>
-                  <tr>
-
-                    <th>Issue</th>
-                    <th>Disputant</th>
-                    <th>Meeting Results</th>
-                    <th>District</th>
-                    <th>Report</th>
-
-                  </tr>
-                  </thead>
-
-                  <tbody>
-                  <% @meetingactions.each do |agenda| %>
-                      <% issue = Issue.find(agenda.issue.id) %>
-                      <% results = Issueaction.where('issue_id =? and meeting_id = ? and actiontype <> 2', agenda.issue_id, @meeting.id ) %>
-
-                      <% modalid = '#meetingreport-' + agenda.issue.id.to_s %>
-                      <tr>
-
-                        <td><%= link_to issue.issuecode, issue %></td>
-                        <td><%= issue.disputant %></td>
-                        <td><small>
-                          <% results.each do |r| %>
-                             <%= r.actiontype_humanize %> : <%= r.created_at.strftime("%m/  %d/%Y") %><br>
-                          <% end %>
-
-                          </small>
-                        </td>
-                        <td><%= issue.district.name if issue.district_id %></td>
-                        <td>
-                          <% if results.count != 0 %>
-                              <%= link_to 'Revise',  modalid, 'data-toggle' => 'modal', :class => "btn btn-success" %>
-                          <% else %>
-                              <%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %>
-                          <% end %>
-
-                        </td>
-
-
-                      </tr>
-                  <% end %>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
-          <div id="viewparticipants" class="tab-pane fade">
-            <h3>Meeting Participants</h3>
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Participants</h3>
-                <% if @canedit %>
-                    <%= link_to 'Add Participant', '#new_participant_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
-                <% end %>
-                </div>
-              <div class="panel-body">
-
-                <table class="table">
-                  <thead>
-                  <th>Name</th>
-                  <th>Title</th>
-                  <th>Organization</th>
-
-                  </thead>
-                  <tbody>
-                  <% @participants.each do |p| %>
-                      <tr>
-                        <td>  <%= link_to p.person.fullname, p.person %> </td>
-                        <td><%= p.person.title %></td>
-                        <td><%= p.person.email %></td>
-                        <td><%= p.person.phone %></td>
-                      </tr>
-                  <% end %>
-                  </tbody>
-                </table>
-                <% if @canedit %>
-                     <small>Add Participant to Meeting</small><br>
-                     <%= render 'addparticipant' %>
-                 <% end %>
-
-
-
-
-
-
-              </div>
-
-            </div>
-
-
-
-
-
-          </div>
-          <div id="viewdocuments" class="tab-pane fade">
-            <h3>Documents</h3>
-
-
-
-            <table class="table">
-
-              <% @meetingdocs.each do |doc| %>
-                  <tr>
-
-                    <td>
-                      <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
-                    </td>
-                    <td>
-                      <%= doc.document_updated_at %><br>
-                    </td>
-                  </tr>
-
+                    <%= link_to 'Delete', @meeting, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+                  </div>
               <% end %>
-            </table>
-            <% if @canedit %>
-                <%= simple_form_for @new_site_document do |form| %>
-                    <%= form.hidden_field :documentable_id, :value => @meeting.id %>
-                    <%= form.hidden_field :documentable_type, :value => 'meeting' %>
-                    <%= form.input :document, as: :file, :label => false %>
-                    <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+
+
+            </div>
+          </div>
+
+
+
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#viewissues">Agenda</a></li>
+            <li><a data-toggle="tab" href="#viewparticipants">Participants</a></li>
+            <li><a data-toggle="tab" href="#viewdocuments">Documents</a></li>
+
+          </ul>
+
+          <div class="tab-content">
+            <div id="viewissues" class="tab-pane fade in active">
+              <h3>Meeting Agenda</h3>
+              <div class="panel panel-default">
+                <div class="panel-heading">Agenda Issues</div>
+                <div class="panel-body">
+
+
+
+                  <table id="meetingagenda"  class="table table-striped hover">
+                    <thead>
+                    <tr>
+
+                      <th>ID</th>
+                      <th>Issue</th>
+
+                      <th>Meeting Results</th>
+                      <th>District</th>
+                      <th>Report</th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+
+
+
+
+                    <% @myagendas.each do |agenda| %>
+                        <% issue = Issue.find(agenda.issue_id) %>
+                        <%# results = Issueaction.where('issue_id =? and meeting_id = ? and actiontype <> 2', agenda.issue_id, @meeting.id ) %>
+
+                        <% modalid = '#meetingreport-' + agenda.id.to_s %>
+                        <tr>
+
+                          <td><%= link_to issue.issuecode, issue %></td>
+                          <td><%= issue.name %></td>
+                          <td>
+                            <% if agenda.addressed == true %>
+
+                                <%= agenda.result_humanize %><br>
+                            <% else %>
+                                not addressed
+                            <% end %>
+
+
+                          </td>
+                          <td><%#= agenda.issue.district.name if agenda.issue.district_id %></td>
+                          <td>
+                            <% if agenda.result.nil? %>
+                                <%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %>
+                            <% else %>
+                                <%= link_to 'Revise',  modalid, 'data-toggle' => 'modal', :class => "btn btn-success" %>
+                            <% end %>
+
+                          </td>
+
+
+                        </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+            <div id="viewparticipants" class="tab-pane fade">
+              <h3>Meeting Participants</h3>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Participants</h3>
+                  <% if @canedit %>
+                      <%= link_to 'Add Participant', '#new_participant_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
+                  <% end %>
+                </div>
+                <div class="panel-body">
+
+                  <table class="table">
+                    <thead>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Organization</th>
+
+                    </thead>
+                    <tbody>
+                    <% @participants.each do |p| %>
+                        <tr>
+                          <td>  <%= link_to p.person.fullname, p.person %> </td>
+                          <td><%= p.person.title %></td>
+                          <td><%= p.person.email %></td>
+                          <td><%= p.person.phone %></td>
+                        </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                  <% if @canedit %>
+                      <small>Add Participant to Meeting</small><br>
+                      <%= render 'addparticipant' %>
+                  <% end %>
+
+
+
+
+
+
+                </div>
+
+              </div>
+
+
+
+
+
+            </div>
+            <div id="viewdocuments" class="tab-pane fade">
+              <h3>Documents</h3>
+
+
+
+              <table class="table">
+
+                <% @meetingdocs.each do |doc| %>
+                    <tr>
+
+                      <td>
+                        <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
+                      </td>
+                      <td>
+                        <%= doc.document_updated_at %><br>
+                      </td>
+                    </tr>
+
                 <% end %>
-            <% end %>
+              </table>
+              <% if @canedit %>
+                  <%= simple_form_for @new_site_document do |form| %>
+                      <%= form.hidden_field :documentable_id, :value => @meeting.id %>
+                      <%= form.hidden_field :documentable_type, :value => 'meeting' %>
+                      <%= form.input :document, as: :file, :label => false %>
+                      <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+                  <% end %>
+              <% end %>
 
 
 
+
+
+
+
+
+            </div>
 
 
 
@@ -278,13 +298,11 @@
 
 
 
-              </div>
 
 
 
+        </div>
 
-
-      </div>
 
 
 
@@ -294,10 +312,17 @@
 
 
 
-
-
         <% if @canedit %>
             <%= link_to 'New Issue', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+
+            <% if @unheardagendas == 0 %>
+
+                <%= link_to 'Close Meeting', '#close_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+            <% else %>
+                <button class="btn btn-default">Close Meeting</button><br><br>
+                Respond to all AGenda items prior to closing
+            <% end %>
+
         <% end %>
         <button class="btn btn-default">Print Attendance Sheet</button><br>
         <button class="btn btn-default">Print Meeting Form</button><br>
@@ -309,25 +334,30 @@
     </div>
 
 
-
-
-
-  </div>
-  <% if @canedit %>
-  <div>
-
-    <%= link_to 'Delete', @meeting, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
-  </div>
-    <% end %>
 </div>
+  </div>
 
 
 
 <script>
-    $(document).ready(function() {
-        $('#agenda').DataTable();
-    } );
+    $('#meetingagenda').dataTable({
+        'paging':   true,  // Table pagination
+        'ordering': true,  // Column ordering
+        'info':     true,  // Bottom left status text
+// Text translation options
+// Note the required keywords between underscores (e.g _MENU_)
+        oLanguage: {
+            sSearch:      'Search all columns:',
+            sLengthMenu:  '_MENU_ records per page',
+            info:         'Showing page _PAGE_ of _PAGES_',
+            zeroRecords:  'Nothing found - sorry',
+            infoEmpty:    'No records available',
+            infoFiltered: '(filtered from _MAX_ total records)'
+        }
+    });
 </script>
+
+
 
 
 
@@ -338,7 +368,7 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <small>Add New Issue to Meeting Agenda</small><br>
-          <h4 class="modal-title" id="myModalLabel"><%= @meeting.id %></h4>
+          <h4 class="modal-title" id="myModalLabel"><%= @meeting.meetingid %></h4>
         </div>
         <div class="modal-body">
           <%= render 'addmeetingissues', modal: true %>
@@ -377,18 +407,60 @@
 
 
 
-  <% @meetingactions.each do |agenda| %>
-      <% modalid = 'meetingreport-' + agenda.issue.id.to_s %>
+
+
+<div class="modal fade" id="new_participant_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-addissue">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Add New Attendee to Meeting Agenda</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @meeting.id %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'addparticipant', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <% @myagendas.each do |agenda| %>
+      <% modalid = 'meetingreport-' + agenda.id.to_s %>
       <div class="modal fade" id="<%= modalid %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-addissue">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <small>Report out from meeting</small><br>
+              <small>
+                <% if agenda.result.nil? %>
+                    Revise
+                    <% else %>
+                    Record
+                    <% end %>
+                Meeting Result</small><br>
               <h4 class="modal-title" id="myModalLabel"><%= agenda.id %></h4>
             </div>
             <div class="modal-body">
-              <%= render partial: "meetingreportout", locals: {issue_id: agenda.issue.id} %>
+              <%= render partial: "meetingreportout", locals: {agenda_id: agenda.id} %>
 
             </div>
 

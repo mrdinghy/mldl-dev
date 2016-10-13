@@ -28,6 +28,14 @@
         </div>
       </div>
 
+  <div class="form-group">
+    <%= f.label 'Short Code', :class => "col-sm-2" %>
+    <div class="col-sm-10">
+      <div style="width: 350px">
+        <%= f.input :short, :class => "form-control", :width => '30', :label => false  %>
+      </div>
+    </div>
+  </div>
 
       <div class="form-group">
         <%= f.label 'Structure Type', :class => "col-sm-2" %>
@@ -57,7 +65,7 @@
         <%= f.label 'Default Meeting Location', :class => "col-sm-2" %>
         <div class="col-sm-10">
           <div style="width: 350px">
-          <%= f.input :default_location, :class => "form-control" %>
+          <%= f.input :default_location, :class => "form-control", :label => false %>
             </div>
         </div>
       </div>
