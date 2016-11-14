@@ -18,7 +18,7 @@ class AppissuesController < ApplicationController
           if s == 0 or s.nil?
             s = 1
           end
-          m=Meeting.create(meeting_on: meet.originalmeetingdate, old_id: meet.meetingcode, structure_id: s)
+          m=Meeting.create(meeting_on: meet.originalmeetingdate, old_id: meet.meetingcode, structure_id: s, meeting_held: true)
       end
 
       #yourname column would be users in CSV so Ill leave that alone fon now
@@ -26,14 +26,50 @@ class AppissuesController < ApplicationController
 
 
           s = self.newstructureid(issue.structurecounty, issue.structuredistrict, issue.structure)
-          cat = self.retcategory(issue.category)
+
+
+
+          cat = issue.category   
+          catother = nil
+          c = nil
+          if !cat.nil?
+          if cat.include? 'Land'
+                c = 1
+              elsif cat.include? 'International'
+                c= 2
+              elsif cat.include? 'Internal'
+                c= 3
+              elsif cat.include? 'Violence'
+                c= 4
+              elsif cat.include? 'Corruption'
+                c= 5
+              elsif cat.include? 'Infrastructure'
+                c= 6
+              elsif cat.include? 'Security'
+                c= 7
+              elsif cat.include? 'Public Health'
+                c= 8
+              elsif cat.include? 'Tradition'
+                c= 9
+              elsif cat.include? 'Other'
+                c= 10
+              else
+                c = nil
+                catother = issue.category
+              end
+          end
+
+   
+
+
+
           vuser = self.finduser(issue.yourname)
           d = self.retdist(issue.issuedistrict)
           scpe = self.retscope(issue.status)
           if !issue.resolutiontype.blank?
           rt = self.retrestype(issue.resolutiontype)
           else
-          rt = 0
+          rt = nil
           end
           if s == 0 or s.nil? or s.blank?
           thisstructureid = 1
@@ -53,23 +89,14 @@ class AppissuesController < ApplicationController
           else
           vcommunity = issue.community
           end
-          if issue.report_ongoing.include? 'Resolve'
-            if issue.resolutiondate.nil?
-              rd= issue.originalmeetingdate
-            else
+          if !issue.resolutiondate.nil?
               rd = issue.resolutiondate
-            end
-            vstatus = Status::RESOLVED
-            vresult = Result::RESOLVED
+              vstatus = Status::RESOLVED
+              vresult = Result::RESOLVED
           else
-          vstatus = Status::ONGOING
-          vstatus = Result::ONGOING
+              vstatus = Status::ONGOING
+              vresult = Result::ONGOING
           end
-
-          if cat == 0
-          cat = nil
-          end
-
 
 
           mldlissue = Issue.create(
@@ -78,12 +105,15 @@ class AppissuesController < ApplicationController
               scope_id: scpe,
               district_id: d,
               community: vcommunity,
-              category_id: cat,
+              category_id: c,
+              other_category: catother,
               description: issue.issuedescription,
               name: vname,
               originaltimestamp:issue.originaltimestamp,
               originaluser: issue.yourname,
               uuid: issue.uuid,
+              originnote: issue.statusnotes,
+              raisedby_structure: issue.raisedby,
               actioncommittee: issue.actionplancommittee,
               actionplan: issue.actionplandescription,
               resolutiontype_id: rt,
@@ -105,44 +135,55 @@ class AppissuesController < ApplicationController
 
 
           # all issues get an agenda and Resolved or Ongoing
-          action = Issueaction.create(issue_id: mldlissue.id, actiontype: 2, user_id: vuser, meeting_id: meetid)
-          if vresult == 5
-            agenda = Agenda.create(issue_id: mldlissue.id, meeting_id: meetid, :addressed => true, result: Result::RESOLVED)
-          else
-            agenda = Agenda.create(issue_id: mldlissue.id, meeting_id: meetid, :addressed => true,  result: Result::ONGOING)
-          end
+          action = Issueaction.create(issue_id: mldlissue.id, actiontype: 2, user_id: vuser, meeting_id: meetid, structure_id: mldlissue.structure_id)
+          action.update_attributes!(created_at: issue.originalmeetingdate)
+          agenda = Agenda.create(issue_id: mldlissue.id, meeting_id: meetid, :addressed => true, result: vresult)
           agenda.update_attributes!(created_at: issue.originalmeetingdate)
 
 
           if !issue.mediationdate.nil?
             if vresult == 5
-              addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate,  result: Result::RESOLVED)
+              addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate,  mediate_end: mldlissue.resolution_date, result: Result::RESOLVED)
 
             else
               addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate, result: Result::ONGOING)
             end
 
-            medaction=Issueaction.create(issue_id: mldlissue.id, actiontype: 7, user_id: vuser, mediation_id: addmed.id, actionbody: issue.mediationoutcome)
+            medaction=Issueaction.create(issue_id: mldlissue.id, actiontype: 7, user_id: vuser, mediation_id: addmed.id, actionbody: issue.mediationoutcome, structure_id: mldlissue.structure_id)
             medaction.update_attributes(created_at: issue.mediationdate)
 
 
             medaction.save!
           end
-          if !issue.statusnotes.blank?
-            statusnote = Issueaction.create(issue_id: mldlissue.id,actiontype: 3, actionbody: issue.statusnotes, user_id: vuser)
+         # if !issue.statusnotes.blank?
+           # statusnote = Issueaction.create(issue_id: mldlissue.id,actiontype: 3, actionbody: issue.statusnotes, user_id: vuser, structure_id: mldlissue.structure_id)
 
+            #if !issue.originalmeetingdate.nil?
+             # statusnote.update_attributes(created_at: issue.originalmeetingdate)
+            #else
+
+             # statusnote.update_attributes(created_at:  issue.originaltimestamp)
+            #end
+
+
+          #end
+
+
+          if !issue.issuenotes.blank?
+            issuenote = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.issuenotes, user_id: vuser, structure_id: mldlissue.structure_id)
             if !issue.originalmeetingdate.nil?
-              statusnote.update_attributes(created_at: issue.originalmeetingdate)
+              issuenote.update_attributes!(created_at: issue.originalmeetingdate)
+
             else
 
-              statusnote.update_attributes(created_at:  issue.originaltimestamp)
+              issuenote.update_attributes!(created_at:  issue.originaltimestamp)
             end
 
-
+            #actplan.save!
           end
 
           if !issue.actionplannotes.blank?
-            actplan = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.actionplannotes, user_id: vuser)
+            actplan = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.actionplannotes, user_id: vuser, structure_id: mldlissue.structure_id)
             if !issue.originalmeetingdate.nil?
               actplan.update_attributes!(created_at: issue.originalmeetingdate)
 
@@ -167,7 +208,7 @@ class AppissuesController < ApplicationController
               acttype=3
             end
 
-            updater = Issueaction.create(issue_id: mldlissue.id, actiontype: acttype, actionbody: issue.updatedescription, user_id: vuser)
+            updater = Issueaction.create(issue_id: mldlissue.id, actiontype: acttype, actionbody: issue.updatedescription, user_id: vuser, structure_id: mldlissue.structure_id)
             if !issue.updatedate.nil?
               updater.update_attributes(created_at: issue.originalmeetingdate)
 
@@ -179,10 +220,7 @@ class AppissuesController < ApplicationController
           end
 
 
-
       end
-
-
 
 
   end
@@ -384,35 +422,7 @@ end
 
 
 
-  def retcategory(category)
-    if !category.nil?
-      if category.include? 'Land'
-        c = 1
-      elsif category.include? 'International'
-        c= 2
-      elsif category.include? 'Internal'
-        c= 3
-      elsif category.include? 'Violence'
-        c= 4
-      elsif category.include? 'Corruption'
-        c= 5
-      elsif category.include? 'Infrastructure'
-        c= 6
-      elsif category.include? 'Security'
-        c= 7
-      elsif category.include? 'Health'
-        c= 8
-      elsif category.include? 'Tradition'
-        c= 9
-      elsif category.include? 'Other'
-        c= 10
-      end
-    else
-      c=0
-    end
-
-    return c
-  end
+ 
 
 
 
@@ -485,10 +495,10 @@ end
         elsif status.include? 'Security'
           sc= 5
         else
-         sc= 0
+         sc= nil
         end
       else
-        sc=0
+        sc=nil
       end
 
     return c

@@ -1,0 +1,154 @@
+<br>
+
+<section>
+  <!-- Page content-->
+  <div class="content-wrapper">
+    <div class="content-heading">
+      Project Dashboard
+      <small data-localize="dashboard.WELCOME"></small>
+    </div>
+
+
+
+
+
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#viewissues">Summary</a></li>
+
+        <li><a data-toggle="tab" href="#viewstructures">Structure Report</a></li>
+        <li><a data-toggle="tab" href="#viewqrreport">by Quarter</a></li>
+
+        <li><a data-toggle="tab" href="#viewmeetings">Lofa</a></li>
+        <li><a data-toggle="tab" href="#viewmediations">D3 Dash</a></li>
+        <li><a data-toggle="tab" href="#viewchartjs">Chartjs</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div id="viewissues" class="tab-pane fade in active">
+          <h3>Summary</h3>
+          <%= render partial: 'overview_dashboard' %>
+        </div>
+        <div id="viewstructures" class="tab-pane fade">
+          <h3>Structure Report</h3>
+          <%= render partial: 'overview_structures' %>
+        </div>
+         <div id="viewqrreport" class="tab-pane fade">
+          <h3>Quarterly Activity</h3>
+          <%= render partial: 'overview_quarterly' %>
+        </div>
+        <div id="viewqrreport" class="tab-pane fade">
+          <h3>Lofa County</h3>
+          <%= render partial: 'overview_lofa' %>
+        </div>
+          <h3>RiskshawJS Bars</h3>
+          <%#= render partial: 'riskshawbars' %>
+        </div>
+        <div id="viewmediations" class="tab-pane fade">
+          <h3> D3 Dashboard</h3>
+          <%#= render partial: 'd3dashboard' %>
+        </div>
+        <div id="viewchartjs" class="tab-pane fade">
+          <h3> ChartJS</h3>
+          <%#= render partial: 'chartjs' %>
+        </div>
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <%= link_to 'Back to Meetings', meetings_path %><br>
+  <h3><span style="color: #999">Summary By Quarters</h3>
+
+
+
+
+
+  <%= form_tag qtrreport_path, :method => :get do %>
+
+          <div class="field">
+          <h4>Select Quarter</h4>
+          <%=  select_tag "year", options_for_select((2013..2017).step(1)) %>
+            <%=  select_tag "qtr", '<option value="1"">1st Qtr</option><option value="4">2nd Qtr</option><option value="7">3rd Qtr</option><option value="10">4th Qtr</option>'.html_safe %>
+
+        </div>
+
+
+        <div class="actions">
+          <%= submit_tag 'Submit', :class => "btn btn-primary" %>
+        </div>
+
+      </div>
+  <% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+
+        <div class="panel-body">
+
+            <%#= render :partial => 'quarterlyreport' %>
+        </div>
+         </div
+          </div>
+      </div>
+
+</div>

@@ -29,7 +29,7 @@
 <style>
 
 
-  .modal-addissue {
+  .modal-addissue, .modal-closemeeting, .modal-reopenmeeting {
     width: 1200px;
   }
 </style>
@@ -57,23 +57,42 @@
 
 <div class="content-wrapper widerbox">
 
+<div class="row">
 
-<%= link_to 'Back to Meetings', meetings_path %><br>
-<h3><span style="color: #999">Meeting: </span><%= @meeting.meetingid %></h3>
-        <div class="pull-right">
-       </div>
+  <div class="col-md-12">
+
+    <%= link_to 'Return to Meetings', meetings_path %><br>
+
+    <span class="pageheader"><span style="color: #999">Meeting: </span><%= @meeting.meetingid %></span>
+
+
+    <!-- START row-->
+
+
+
+  </div>
 
 
 
 
-  <div class="row">
+
+
+
+
+
 
 
         <div class="col-sm-10">
-          <div class="panel panel-default">
+          <div class="panel panel-info">
             <% if @canedit %>
                 <div class="panel-heading">
+                  <% if @meeting.meeting_held == true %>
+                      <button class="btn btn-default">Meeting Closed</button><br>
+                  <% else %>
+
+
                   <%= link_to 'Edit/Set Agenda', edit_meeting_path(@meeting), :class => "btn btn-primary pull-right" %>
+                      <% end %>
                 </div>
             <% end %>
             <div class="panel-body">
@@ -82,7 +101,7 @@
                       <p>
                       <strong>Meeting Start:</strong>
                       <%#=  @meeting.real_start.strftime("%m/%d/%y") %>
-                      <%=  @meeting.meeting_on %>   at   <%=  @meeting.starts_at %>
+                      <%=  @meeting.meeting_on %>   at   <%=  @meeting.starts_at.strftime("%H:%M") if @meeting.starts_at %>
                       </p>
 
 
@@ -112,15 +131,26 @@
 
 
                 </p>
+
+                <% if !@meeting.closenote.blank? %>
+                <p>
+                  <strong>Closeout Note:</strong>
+                 <%= @meeting.closenote %>
+                   </p>
+                    <% end %>
+
+                <% if !@meeting.reopennote.blank? %>
+                <p>
+                  <strong>Reopen Note:</strong>
+                  <%= @meeting.reopennote %>
+                </p>
+                <% end %>
+
+
+
                 </div>
 
 
-              <% if @canedit %>
-                  <div>
-
-                    <%= link_to 'Delete', @meeting, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
-                  </div>
-              <% end %>
 
 
             </div>
@@ -137,9 +167,11 @@
 
           <div class="tab-content">
             <div id="viewissues" class="tab-pane fade in active">
-              <h3>Meeting Agenda</h3>
-              <div class="panel panel-default">
-                <div class="panel-heading">Agenda Issues</div>
+
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Meeting Agenda Issues</h3>
+                </div>
                 <div class="panel-body">
 
 
@@ -185,12 +217,16 @@
                           </td>
                           <td><%#= agenda.issue.district.name if agenda.issue.district_id %></td>
                           <td>
+                            <% if @meeting.meeting_held == true %>
+
+                                <button class="btn btn-default">Closed</button><br>
+                           <% else %>
                             <% if agenda.result.nil? %>
                                 <%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %>
                             <% else %>
                                 <%= link_to 'Revise',  modalid, 'data-toggle' => 'modal', :class => "btn btn-success" %>
                             <% end %>
-
+                          <% end %>
                           </td>
 
 
@@ -203,8 +239,8 @@
 
             </div>
             <div id="viewparticipants" class="tab-pane fade">
-              <h3>Meeting Participants</h3>
-              <div class="panel panel-default">
+
+              <div class="panel panel-info">
                 <div class="panel-heading">
                   <h3 class="panel-title">Participants</h3>
                   <% if @canedit %>
@@ -251,7 +287,13 @@
 
             </div>
             <div id="viewdocuments" class="tab-pane fade">
-              <h3>Documents</h3>
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Meeting Documents</h3>
+
+                </div>
+                <div class="panel-body">
+
 
 
 
@@ -288,22 +330,10 @@
 
             </div>
 
-
-
-
-
-          </div>
-
-
-
-
-
-
-
-
+         </div>
         </div>
-
-
+            </div>
+</div>
 
 
     <div class="col-sm-2">
@@ -313,15 +343,21 @@
 
 
         <% if @canedit %>
-            <%= link_to 'New Issue', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
 
-            <% if @unheardagendas == 0 %>
 
-                <%= link_to 'Close Meeting', '#close_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-            <% else %>
-                <button class="btn btn-default">Close Meeting</button><br><br>
-                Respond to all AGenda items prior to closing
-            <% end %>
+
+            <% if @meeting.meeting_held != true %>
+                <%= link_to 'New Issue', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                <% if @unheardagendas == 0 %>
+
+                    <%= link_to 'Close Meeting', '#close_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                <% else %>
+                    <button class="btn btn-default">Close Meeting</button><br>
+                    Respond to all Agenda items prior to closing
+                <% end %>
+             <% else %>
+                <%= link_to 'Reopen Meeting', '#reopen_meeting_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+                <% end %>
 
         <% end %>
         <button class="btn btn-default">Print Attendance Sheet</button><br>
@@ -329,8 +365,14 @@
         <button class="btn btn-default">Print Issue Forms</button><br>
 
 
+        <% if @canedit %>
+            <div>
 
-      </div>j
+              <%= link_to 'Delete Meeting', @meeting, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+            </div>
+        <% end %>
+
+      </div>
     </div>
 
 
@@ -391,7 +433,7 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <small>Add New Attendee to Meeting Agenda</small><br>
-          <h4 class="modal-title" id="myModalLabel"><%= @meeting.id %></h4>
+          <h4 class="modal-title" id="myModalLabel"><%= @meeting.meetingid %></h4>
         </div>
         <div class="modal-body">
           <%= render 'addparticipant', modal: true %>
@@ -415,10 +457,58 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <small>Add New Attendee to Meeting Agenda</small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @meeting.id %></h4>
+        <h4 class="modal-title" id="myModalLabel"><%= @meeting.meetingid %></h4>
       </div>
       <div class="modal-body">
         <%= render 'addparticipant', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="close_meeting_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-closemeeting">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Close out MLDL Meeting</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @meeting.meetingid %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'closemeeting', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="reopen_meeting_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-reopenmeeting">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Reopen MLDL Meeting</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @meeting.meetingid %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'reopenmeeting', modal: true %>
       </div>
 
       <div class="modal-footer">
@@ -443,7 +533,10 @@
 
 
 
-  <% @myagendas.each do |agenda| %>
+
+
+
+<% @myagendas.each do |agenda| %>
       <% modalid = 'meetingreport-' + agenda.id.to_s %>
       <div class="modal fade" id="<%= modalid %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-addissue">
@@ -457,7 +550,8 @@
                     Record
                     <% end %>
                 Meeting Result</small><br>
-              <h4 class="modal-title" id="myModalLabel"><%= agenda.id %></h4>
+              <h4 class="modal-title" id="myModalLabel"><%= agenda.issue.issuecode %></h4>
+              <h3><%= agenda.issue.name %></h3>
             </div>
             <div class="modal-body">
               <%= render partial: "meetingreportout", locals: {agenda_id: agenda.id} %>

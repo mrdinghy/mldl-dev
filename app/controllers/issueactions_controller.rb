@@ -41,8 +41,13 @@ class IssueactionsController < ApplicationController
 
     elsif params[:issueaction][:mediation_id].present?
 
+      @issueaction.update_attributes!(:mediation_id => params[:issueaction][:mediation_id])
+
        @mediation = Mediation.find(params[:issueaction][:mediation_id])
        goto = @mediation
+
+
+
     else
        goto = @issue
     end
@@ -83,7 +88,8 @@ class IssueactionsController < ApplicationController
         if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
           @agenda.update_attributes!(:result => Result::ONGOING, :addressed => true)
         elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
-          @mediation.update_attributes!(:result => Result::ONGOING, :mediate_end => Date.today)
+          d2 = Date.parse(params[:mediate_end])
+          @mediation.update_attributes!(:result => Result::ONGOING, :mediate_end => d2)
         end
         sendnotice = 'Issue Remains Open'
 
@@ -101,7 +107,8 @@ class IssueactionsController < ApplicationController
         if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
           @agenda.update_attributes!(:result => Result::CANCELLED, :addressed => true)
         elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
-          @mediation.update_attributes!(:result => Result::CANCELLED, :mediate_end => Date.today)
+          d2 = Date.parse(params[:mediate_end])
+          @mediation.update_attributes!(:result => Result::CANCELLED, :mediate_end => d2)
         end
         sendnotice = 'Issue Cancelled Successfully.'
 
@@ -120,7 +127,8 @@ class IssueactionsController < ApplicationController
         if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
           @agenda.update_attributes!(:result => Result::ESCALATED, :addressed => true)
         elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
-          @mediation.update_attributes!(:result => Result::ESCALATED, :mediate_end => Date.today)
+          d2 = Date.parse(params[:mediate_end])
+          @mediation.update_attributes!(:result => Result::ESCALATED, :mediate_end => d2)
         end
         sendnotice = 'Issue Referred Up Successfully.'
       end
@@ -128,10 +136,15 @@ class IssueactionsController < ApplicationController
 
       #create Mediation-------------------------------------------------------
 
-    elsif @issueaction.mediation?
+   elsif @issueaction.mediation?
+     d2 = Date.parse(params[:mediate_start])
+     puts 'dateparse--------------------------------'
+     puts d2
+
+
       @issue.update_attributes!(:status => Status::MEDIATION)
       @mediation = Mediation.new
-      @mediation.update_attributes!(:mediate_start => Date.today, :issue_id => params[:issueaction][:issue_id])
+      @mediation.update_attributes!(:mediate_start => d2, :issue_id => params[:issueaction][:issue_id])
       @mediation.save!
 
       if @issueaction.save
@@ -149,17 +162,23 @@ class IssueactionsController < ApplicationController
    elsif @issueaction.resolved?
 
 
-      @issue.update_attributes!(:status => Status::RESOLVED, resolution_date: params[:issueaction][:resolution_date], resolutiontype_id: params[:issueaction][:resolution_date], resolution: params[:issueaction][:resolution])
+    @issue.update_attributes!(:status => Status::RESOLVED, resolution_date: params[:resolution_date], resolutiontype_id: params[:issueaction][:resolutiontype_id],
+                              resolution_date: params[:resolution_date], resolution: params[:issueaction][:resolution])
+
+
     if @issueaction.save
         if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
           @agenda.update_attributes!(:result => Result::RESOLVED, :addressed => true)
           @agenda.save!
+
+
         elsif params[:issueaction][:mediation_id].present?
 
+          d2 = Date.parse(params[:mediate_end])
 
-          @mediation.update_attributes!(:result => Result::RESOLVED, :mediate_end => Date.today)
-          #puts params[:mediation_end]
-          puts '[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[['
+
+          @mediation.update_attributes!(:result => Result::RESOLVED, :mediate_end => d2, :mediation_held => true)
+          @issue.update_attributes(:resolution => params[:issueresolved])
           @mediation.save!
 
 
@@ -172,9 +191,28 @@ class IssueactionsController < ApplicationController
 
       #create REOPEN--------------------------------------------------------
       # need to save comment with Old resoltion statement and clear out current
-        elsif @issueaction.reopened?
+   elsif @issueaction.reopened?
+
+
+
           @issueaction.update_attributes!(old_resolution_date: @issue.resolution_date)
+
+
+
+
+
+
           if @issueaction.save
+
+
+            if  params[:issueaction][:mediation_id].present?
+
+
+              @mediation.update_attributes(:result => Result::ONGOING, :mediate_end => nil, :mediation_held => false)
+              @mediation.save!
+            end
+
+
             @issue.update_attributes!(resolution_date: nil)
             @issue.update_attributes!(cancelled_at: nil)
             @issue.update_attributes!(status: Status::ONGOING)
@@ -250,6 +288,6 @@ class IssueactionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def issueaction_params
-      params.require(:issueaction).permit(:actiontype, :meetingresult, :mediationresult, :meeting_id, :organization_id, :issue_id, :actionbody, :structure_id, :user_id, :laststructure_id)
+      params.require(:issueaction).permit(:actiontype, :meetingresult, :mediationresult, :meeting_id, :organization_id, :issue_id, :actionbody, :structure_id, :user_id, :laststructure_id, :issue_resolution, :mediate_end)
     end
 end

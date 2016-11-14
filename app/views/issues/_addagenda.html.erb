@@ -1,6 +1,8 @@
 
 <%= form_for(@issueaction, multipart: true, remote: false) do |f| %>
     <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
+    <%= hidden_field(:issueaction, :structure_id, :value => @issue.structure_id) %>
+
     <%= hidden_field(:issueaction, :actiontype, :value => Actiontype::AGENDA) %>
 
       Add To Meeting Agenda

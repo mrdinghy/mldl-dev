@@ -1,9 +1,9 @@
 class Issue < ActiveRecord::Base
 
-  validates :name, presence: true
-  validates :structure_id, presence: true
-  validates :district_id, presence: true
-  validates :community, presence: true
+  #validates :name, presence: true
+  #validates :structure_id, presence: true
+  #validates :district_id, presence: true
+  #validates :community, presence: true
 
 
   belongs_to :structure
@@ -23,7 +23,7 @@ class Issue < ActiveRecord::Base
   has_many :agendas, :dependent => :destroy
   has_many :meetings, :through => :agendas
 
-
+  has_many :actionstructures
 
   has_many :issueactions, :dependent => :destroy
   has_many :users, :through => :issueactions
@@ -78,7 +78,7 @@ class Issue < ActiveRecord::Base
   end
 
   def openmediation
-    mediationchk = Mediation.where('issue_id =? and mediation_end is not NULL', self.id).count
+    mediationchk = Mediation.where('issue_id =? and mediate_end is not NULL', self.id).count
 
       return mediationchk
 

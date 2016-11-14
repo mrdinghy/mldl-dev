@@ -1,0 +1,77 @@
+<div class="content-wrapper">
+
+
+
+
+  <h4 class="page-header">MLDL Structures</h4>
+  <!-- START row-->
+
+
+<table class="table">
+
+
+
+
+  <div class="row">
+
+    <% @csc_structures.each do |csc| %>
+
+        <%# csc.getdistricts(csc.county_id) %>
+
+        <tr><td><strong><%= link_to csc.name, csc %></strong></td><td>
+           <small>
+              <% cscmanagers = csc.listmanagers(csc.id) %>
+              <% cscmanagers.each do |m| %>
+                  <%= m.user.name %><br>
+              <% end %>
+            </small>
+        </td></tr>
+
+
+          <% csc.getdistricts(csc.county_id).each do |dsc| %>
+
+            <tr><td><strong><%= link_to dsc.name, dsc %></strong></td><td>
+              <small>
+                <% dscmanagers = dsc.listmanagers(dsc.id) %>
+                <% dscmanagers.each do |m| %>
+                    <%= m.user.name %><br>
+                <% end %>
+              </small>
+            </td></tr>
+
+
+
+              <% csc.getcfs(dsc.district_id).each do |cf| %>
+
+
+                    <tr><td><strong><%= link_to cf.name, cf %></strong></td><td>
+                      <small>
+                        <% cfmanagers = cf.listmanagers(cf.id) %>
+                        <% cfmanagers.each do |m| %>
+                            <%= m.user.name %><br>
+                        <% end %>
+                      </small>
+                    </td></tr>
+
+                <% end %>
+
+
+
+          <% end %>
+
+    <% end %>
+</div>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+  <!-- END row-->

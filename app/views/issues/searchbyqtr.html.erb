@@ -1,0 +1,82 @@
+<style>
+    .chkpanel {
+        font-size: 14px;
+        font-weight: normal;
+
+
+    }
+
+
+
+</style>
+<script>
+    $(document).ready(function() { $("#issuedisputants").select2(); });
+</script>
+
+
+
+
+
+
+<div class="container">
+  <div class="col-sm-4">
+
+  <h2>Search Issues</h2>
+  <div class="row">
+    <%= form_tag searchbyqtrresults_path, :method => :get do %>
+
+
+
+
+
+        <h4>Select Quarter</h4><br>
+        <select name="quarter_id" class="input-md form-control">
+          <option value = "">Select -></option>
+          <% Quarter.all.each do |q| %>
+              <option value="<%= q.id %>"><%= q.q1234(q.qtrmonth,q.qtryear) %></option>
+          <% end %>
+        </select>
+
+
+
+
+
+        <%#= select_tag(:category_ids, Category.all, :id, :name) {:include_blank => "Select"}, { :multiple => true })%><br><br>
+        <div class="field">
+          <h4>Filter Issues</h4>
+          <%= select_tag "code", options_from_collection_for_select(Metric.all, "code", "name"), :include_blank => "Select", :multiple => false  %>
+        </div>
+
+
+
+        <%#= select_tag(:category_ids, Category.all, :id, :name) {:include_blank => "Select"}, { :multiple => true })%><br><br>
+        <div class="field">
+          <h4>Select Structure</h4>
+          <%= select_tag "structure_ids", options_from_collection_for_select(Structure.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
+        </div>
+
+
+
+        <hr>
+          <div class="actions">
+            <%= submit_tag 'Search', :class => "btn btn-primary" %>
+          </div>
+          <br><BR>    <div class="actions">
+          <%= button_tag "Reset", type: :reset, :class => 'btn btn-default' %>
+        </div>
+        </div>
+    <% end %>
+
+  </div>
+
+
+
+
+
+
+
+
+
+</div>
+
+

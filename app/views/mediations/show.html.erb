@@ -7,7 +7,7 @@
   .modal-mediationreport {
     width: 800px;
   }
-  .modal-addissue {
+  .modal-reopenmediation {
     width: 800px;
   }
 
@@ -22,26 +22,25 @@
 
 
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-12">
 
-
+      <%= link_to 'Return to Mediations', mediations_path %><br>
       <%= link_to 'Back to Issue', @mediation.issue %><br>
-      <h1>
-        <span style="color: #999">Mediation: </span> <%= @mediation.mediationcode %>
-        <div class="pull-right">
-        </div>
+      <span class="pageheader"><span style="color: #999">Mediation: </span><%= @mediation.mediationcode %></span>
+      <!-- START row-->
 
 
-      </h1>
 
     </div>
-  </div>
 
-  <div class="row">
+
+
+
+
 
 
     <div class="col-sm-4">
-      <div class="panel panel-default">
+      <div class="panel panel-info">
         <div class="panel-heading">
           <h3 class="panel-title">General</h3>
           <% if @canedit %>
@@ -122,7 +121,7 @@
       </div>
       <div class="col-sm-4">
 
-      <div class="panel panel-default">
+      <div class="panel panel-info">
         <div class="panel-heading">
           <h3 class="panel-title">Mediators</h3>
 
@@ -181,7 +180,30 @@
 
 
       <% if @canedit %>
-        <%= link_to 'Mediation Result', '#mediation_result_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+
+
+          <% if @mediation.mediation_held != true %>
+              <%= link_to 'Mediation Result', '#mediation_result_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+            
+             
+          <% else %>
+              <%= link_to 'Reopen medation', '#reopen_mediation_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+          <% end %>
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+       
       <% end %>
       <button class="btn btn-default">Print Mediation Report</button><br>
 
@@ -203,7 +225,7 @@
 
   </div>
 
-</div>
+
 
 
 <div class="modal fade" id="mediation_result_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -226,3 +248,28 @@
     </div>
   </div>
 </div>
+
+
+
+<div class="modal fade" id="reopen_mediation_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-reopenmediation">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Reopen MLDL Medation</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @mediation.mediationcode %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'reopenmediation', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,32 @@
+
+
+
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'reopenmediation_form'}) do |f| %>
+
+    <%= hidden_field(:issueaction, :issue_id, :value => @mediation.issue_id) %>
+    <%= hidden_field(:issueaction, :structure_id, :value => @mediation.issue.structure_id) %>
+    <%= hidden_field_tag(:frommediation, true) %>
+    <%= hidden_field(:issueaction, :mediation_id, :value => @mediation.id) %>
+    <%= hidden_field(:issueaction, :actiontype, :value => Actiontype::REOPENED) %>
+
+<%# Added Bootstrap classes, and help-block container for error messages %>
+    <div class="field">
+      <%= f.label 'Note:' %><br>
+      Reopen Mediation
+      The End date will removed.
+      This Note will be saved in the Issue history table.
+      <%= f.text_area :actionbody,  cols: "120", rows: "4" %>
+    </div>
+
+
+
+
+
+    <div class="actions">
+      <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
+    </div>
+<% end %>
+
+

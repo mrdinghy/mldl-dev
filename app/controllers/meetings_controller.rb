@@ -100,16 +100,17 @@ class MeetingsController < ApplicationController
  puts params[:meeting][:issue_ids]
 
 
- issuesadded =params[:meeting][:issue_ids].reject { |e| e.to_s.empty? }
- Issueaction.where('actiontype = ? and meeting_id = ? and issue_id in (?)', Actiontype::AGENDA, params[:id], issuesadded).destroy_all
-
-
  if params[:meeting][:issue_ids]
-        issuesadded.each do |i|
 
-        Issueaction.create(meeting_id: @meeting.id, structure_id: @meeting.structure_id, issue_id: i, actiontype: Actiontype::AGENDA)
-      end
+   issuesadded =params[:meeting][:issue_ids].reject { |e| e.to_s.empty? }
+   Issueaction.where('actiontype = ? and meeting_id = ? and issue_id in (?)', Actiontype::AGENDA, params[:id], issuesadded).destroy_all
+
+
+   issuesadded.each do |i|
+
+      Issueaction.create(meeting_id: @meeting.id, structure_id: @meeting.structure_id, issue_id: i, actiontype: Actiontype::AGENDA)
     end
+  end
 
     respond_to do |format|
       if @meeting.update(meeting_params)
@@ -176,6 +177,6 @@ class MeetingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def meeting_params
-      params.require(:meeting).permit(:meeting_on, :structure_id, :location, :duration, :starts_at, :meeting_held, issue_ids: [])
+      params.require(:meeting).permit(:meeting_on, :structure_id, :location, :duration, :starts_at, :meeting_held, :closenote, :reopennote, issue_ids: [])
     end
 end

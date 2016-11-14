@@ -3,8 +3,9 @@
 
 
 
-    <div class="panel panel-default">
+    <div class="panel panel-info">
       <div class="panel-heading">
+        <h3 class="panel-title">General Information</h3>
         <% if @canedit %>
         <%= link_to 'Edit', edit_structure_path(@structure), :class => "btn btn-small btn-primary pull-right"   %>
         <% end %>
@@ -51,8 +52,9 @@
         </div>
       </div>
     </div>
-
-    <div class="panel panel-default">
+</div>
+  <div class="col-sm-5">
+    <div class="panel panel-info">
       <div class="panel-heading">
         <h3 class="panel-title">Management (Users)</h3>
         <%#= link_to 'Add Manager', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
@@ -98,97 +100,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </div>
-
-
-
-
-
-
-
-  <div class="col-sm-7">
-    <%= @structure.name %> Summary
-    <table id="datatables1"  class="table table-striped hover">
-
-        <thead>
-        <tr>
-          <th>Status</th>
-          <th>Number</th>
-
-        </tr>
-        </thead>
-      <tbody>
-      <tr><td><span class="btn-new">New Issues*</span></td><td><%= @newissues %></td></tr>
-      <tr><td><button class="btn btn-ongoing">Ongoing</button></td> <td><%=  @ongoingissues %></td></tr>
-      <tr><td><button class="btn btn-mediation">In Mediation</button></td> <td><%=  @mediationissues %></td></tr>
-      <tr><td><button class="btn btn-resolved">Resolved</button></td> <td><%=  @resolvedissues %></td></tr>
-      <tr><td><button class="btn btn-cancelled">Cancelled</button></td>  <td><%=   @cancelledissues %></td></tr>
-      </tbody>
-    </table>
-
-
-
-      <%= @structure.name %> Issues by Category
-      <table id="datatables1"  class="table table-striped hover" width=""100%">
-
-        <thead>
-        <tr>
-          <th>Status</th>
-          <th>New Issues*</th>
-          <th>Ongoing</th>
-          <th>Mediation</th>
-          <th>Resolved</th>
-          <th>Cancelled</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% @allcats.each do |c| %>
-
-            <% catissues = Issue.where('category_id = ?', c.id ) %>
-
-            <% newissues=catissues.where(:status => Status::NEW).count %>
-            <% ongoingissues=catissues.where(:status => Status::ONGOING).count %>
-            <% mediationissues=catissues.where(:status => Status::MEDIATION).count %>
-            <% resolvedissues=catissues.where(:status => Status::RESOLVED).count %>
-            <% cancelledissues=catissues.where(:status => Status::CANCELLED).count %>
-            <tr><td><%= c.name %></td>
-              <td><%= newissues %></td>
-               <td><%=  ongoingissues %></td>
-               <td><%=  mediationissues %></td>
-               <td><%=  resolvedissues %></td>
-               <td><%=  cancelledissues %></td>
-            </tr>
-         <% end %>
-        </tbody>
-      </table>
-
-      * Issues not yet addressed in Meeting or Mediation
-
-
-
-
-
-  </div>
-
-
 
 
 

@@ -2,6 +2,7 @@
 
    def index
     @latestissues = Issue.limit(12)
+    @latestactivity = Issueaction.order('created_at DESC' ).limit(30)
     @upcoming = Meeting.limit(6)
     @countystructures = Structure.where('structuretype in (?)', [:nsc,:csc] ).order( 'structuretype_id DESC')
     @structures = Structure.all
@@ -64,14 +65,14 @@
     @resolved = resolved
 
 
-    @allissues= Issue.all
-    @allnewissues = @allissues.where(:status => Status::NEW)
-    @allongoingissues = @allissues.where(:status => Status::ONGOING)
-    openids = [Status::ONGOING, Status::NEW, Status::MEDIATION]
-    @allopenissues = @allissues.where(status: openids)
+  #  @allissues= Issue.all
+  #  @allnewissues = @allissues.where(:status => Status::NEW)
+  #  @allongoingissues = @allissues.where(:status => Status::ONGOING)
+  #  openids = [Status::ONGOING, Status::NEW, Status::MEDIATION]
+  #  @allopenissues = @allissues.where(status: openids)
 
-    @allmediationissues = @allissues.where(:status => Status::MEDIATION)
-    @allresolvedissues = @allissues.where(:status => Status::RESOLVED)
+  #  @allmediationissues = @allissues.where(:status => Status::MEDIATION)
+  #  @allresolvedissues = @allissues.where(:status => Status::RESOLVED)
 
 
 

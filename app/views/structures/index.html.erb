@@ -61,7 +61,7 @@
           <div class="col-sm-3">
             <div class="col-sm-12 cscbox">
 
-              <span class="short"><%= csc.short %></span> <strong><%= link_to csc.name, csc %></strong>
+              <span class="short"><%= csc.short %></span> <strong><%= link_to csc.name, csc %></strong><br>
 
 
               <div class="pull-right">
@@ -70,7 +70,12 @@
                 <%= fa_icon "wrench", :style => "color: blue" %>
                 <%= csc.openissues(0,0,csc.id,0).count %>
               </div>
-
+              <small>
+              <% cscmanagers = csc.listmanagers(csc.id) %>
+              <% cscmanagers.each do |m| %>
+                <%= m.user.name %><br>
+              <% end %>
+              </small>
             </div>
             <% csc.getdistricts(csc.county_id).each do |dsc| %>
 
@@ -78,7 +83,7 @@
                 <div class="col-sm-2">&nbsp;</div>
                 <div class="col-sm-10 dscbox">
 
-                  <span class="short"><%= dsc.short %></span>      <strong><%= link_to dsc.name, dsc %></strong>
+                  <span class="short"><%= dsc.short %></span>      <strong><%= link_to dsc.name, dsc %></strong><br>
 
                   <div class="pull-right">
 
@@ -88,13 +93,22 @@
                     <%= fa_icon "wrench", :style => "color: blue" %>
                     <%= dsc.openissues(0,0,dsc.id,0).count %>
                   </div>
+                  <small>
+                  <% dscmanagers = csc.listmanagers(csc.id) %>
+                  <% dscmanagers.each do |m| %>
+                      <%= m.user.name %><br>
+                  <% end %>
+                  </small>
+
+
+
                 </div>
 
                 <% csc.getcfs(dsc.district_id).each do |cf| %>
 
                     <div class="col-sm-4">&nbsp;</div>
                     <div class="col-sm-8 cfbox">
-                      <span class="short"><%= cf.short %></span><strong><%= link_to cf.name, cf %></strong>
+                      <span class="short"><%= cf.short %></span><strong><%= link_to cf.name, cf %></strong><br>
 
                       <div class="pull-right">
                         <%= fa_icon "users", :style => "color: green" %>
@@ -103,6 +117,13 @@
                         <%= fa_icon "wrench", :style => "color: blue" %>
                         <%= cf.openissues(0,0,cf.id,0).count %>
                       </div>
+                      <small>
+                      <% cfmanagers = csc.listmanagers(cf.id) %>
+                      <% cfmanagers.each do |m| %>
+                          <%= m.user.name %><br>
+                      <% end %>
+                      </small>
+
                     </div>
                 <% end %>
 

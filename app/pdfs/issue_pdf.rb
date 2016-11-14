@@ -15,12 +15,6 @@ class IssuePdf < Prawn::Document
 
 
 
-    table([ ["short", "short", "loooooooooooooooooooong"],
-            ["short", "loooooooooooooooooooong", "short"],
-            ["loooooooooooooooooooong", "short", "short"] ])
-
-
-
     float do
 
       bounding_box([0, cursor], :width => 550) do

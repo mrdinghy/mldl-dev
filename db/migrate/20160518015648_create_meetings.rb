@@ -11,6 +11,8 @@ class CreateMeetings < ActiveRecord::Migration
       t.boolean :meeting_held
       t.string :old_id
       t.integer :duration
+      t.text :closenote
+      t.text :reopennote
 
       t.timestamps null: false
     end

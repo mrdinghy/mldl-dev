@@ -1,0 +1,16 @@
+
+
+<% modal ||= false %>
+<% remote = modal ? true : false %>
+<%= form_for(@meeting, multipart: true, remote: false, html: {role: :form, 'data-model' => 'meeting', id: 'close_meeting_form'}) do |f| %>
+
+    <%= hidden_field(:meeting, :meeting_held, :value => true) %>
+    <div class="field">
+      <%= f.label 'Close Out Note:' %><br>
+      This Note will be saved to the Meeting record.<br>
+      <%= f.text_area :closenote,  cols: "120", rows: "12" %>
+    </div>
+    <div class="actions">
+      <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
+    </div>
+<% end %>

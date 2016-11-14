@@ -1,31 +1,27 @@
 <% modal ||= false %>
 <% remote = modal ? true : false %>
-<%= form_for(@issueaction) do |f| %>
+<%= simple_form_for(@issueaction) do |f| %>
     <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
     <%= hidden_field(:issueaction, :actiontype,  :value => Actiontype::MEDIATION) %>
 
 
-
-
-    <div class="form-group">
-      <%= f.label 'Mediation Start' %>
-      <div class="col-sm-3" id="sandbox-container">
-        <div class="input-group date">
-          <!---<input  name="mediation_start" type="text" class="form-control" width="80">--->
-          <% @the_date = Time.now.to_date %>
-          <%= date_select("mediate_start", "mediate_start", :default => @the_date) %>
-
-          <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
-        </div>
-
-      </div>
-
-
-<%# Added Bootstrap classes, and help-block container for error messages %>
     <div class="field">
-      <%= f.label 'Note:' %><br>
-      <%= f.text_area :actionbody, cols: "120", rows: "12" %>
+
+    <%= f.label 'Note:' %><br>
+    <%= f.input :actionbody, cols: "120", rows: "12" %>
+    </div>
+
+
+
+    <div class="field">
+      <%= f.label 'Mediation Start' %><br>
+
+
+          <%= date_field_tag 'mediate_start', @date, id: "date", class: "date" %>
+
+</div>
+
 
     </div>
     <div class="actions">
@@ -33,9 +29,11 @@
     </div>
 <% end %>
 
-<script>
-    $('#sandbox-container input').datepicker({
-    });
+<script type="text/javascript">
 
+
+    $(".date").pickadate({
+        format: 'yyyy-mm-d',
+    })
 
 </script>

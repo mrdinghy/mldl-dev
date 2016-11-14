@@ -1,9 +1,14 @@
 
 
-<div class="panel panel-default">
+<div class="panel panel-info">
 
   <div class="panel-heading">
-    <h3 class="panel-title">Issues</h3>
+    <% if !@metric.nil? %>
+        <h3 class="panel-title"><%= @metric.name %> - <%= @d2.year %> <%= @quarter.qtrname(@d2.month) %></h3>
+        <%= @resultcount %> Issues
+        <% else %>
+        <%= @tabhead if @tabhead %>
+     <% end %>
   </div>
 
 
@@ -38,7 +43,7 @@
         <td><button class="tabstatusbox <%= statusbox1 %>"><%= issue.status_humanize %></button></td>
         <td><%= issue.name %></td>
 
-        <td><%= issue.category.name if issue.category_id %></td>
+        <td><%= issue.category.name if !issue.category_id.nil? %></td>
         <td><%#= issue.district.name if issue.district_id.blank %></td>
         <td><%= issue.disputant %><br>
 

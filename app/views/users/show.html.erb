@@ -5,38 +5,50 @@
   <div class="row">
 
 
-    <div class="col-sm-10">
-      <div class="panel panel-default">
+    <div class="col-sm-12">
+      <div class="panel panel-info">
         <div class="panel-heading">
 
 
         </div>
         <div class="panel-body">
+
+          <div class="col-sm-6">
+
+
           <h3>User</h3>
             <p>Name: <%= @user.name if @user.name %></p>
             <p>Email: <%= @user.email if @user.email %></p>
-
-            <strong>User Roles</strong><BR>
-          <% userroles = Userrole.where(user_id: @user.id) %>
-
-            <% userroles.each do |ur| %>
-              <% mystructures = Manager.where('user_id = ?', ur.id) %>
-
-
-              <%= ur.role.name %><br>
-              <ul>
-              <% mystructures.each do |mgmt| %>
-                 <li><%= link_to mgmt.structure.name, mgmt.structure %></li>
-              <% end %>
-              </ul>
+          <p>Role: <%= @user.mldlrole_humanize %></p>
 
 
 
-            <% end %>
 
 
          </div>
-          </div>
-        </div>
+
+
+    <div class="col-sm-6">
+
+          <h4>Assigned to Structures</h4>
+
+          <% mystructures = Manager.where('user_id = ?', @user.id) %>
+
+
+
+          <ul>
+            <% mystructures.each do |mgmt| %>
+                <li><%= link_to mgmt.structure.name, mgmt.structure %></li>
+            <% end %>
+          </ul>
+
+
+
+
+
+
+    </div>
+
+
 </div>
     </div>

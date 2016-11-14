@@ -1,66 +1,53 @@
-<div class="container">
-  <div class="col-sm-9">
+<div class="row">
+
+
+
+  <div class="row">
+
+
+
     <p id="notice"><%= notice %></p>
 
-    <h1>
 
-      Person: <%= @person.fullname %></h1>
+<div class="col-sm-9">
+
+
+
+  <div class="col-md-12">
+
+    <%= link_to 'Return to People', people_path %><br>
+    <span class="pageheader"><span style="color: #999">Person: </span><%= @person.fullname %></span>
+    <!-- START row-->
+
+    <p>
+      <strong>Gender:</strong>
+      <%= @person.gender_humanize %>
+    </p>
+
+
+
+
     <p>
       <strong>Title:</strong>
       <%= @person.title %>
     </p>
 
 
-<p>
-  <strong>Organization:</strong>
-  <%= @person.organization.name if @person.organization_id %>
-</p>
+    <p>
+      <strong>Organization:</strong>
+      <%= @person.organization.name if @person.organization_id %>
+    </p>
 
-<p>
-  <strong>Email:</strong>
-  <%= @person.email %>
-</p>
-
-
-    <h3>DAtabase activity</h3>
-
-</div>
-
-
-
-
-
-
-  <div class="col-sm-3">
-
-    <div class="btn-group-vertical" role="group" aria-label="...">
-
-      <%= link_to 'Back', people_path %><br><br>
-      <%= link_to 'Edit', edit_person_path(@person), :class => "btn btn-primary" %><br><br>
-
-
-      <%#= link_to 'New Issue (M)', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-
-      <%#= link_to 'New Issue (M)', '#new_meetingissue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-
-
-
-
-      <%= link_to 'Delete', @person, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
-
-    </div>
-
-
-
-
-
-
+    <p>
+      <strong>Email:</strong>
+      <%= @person.email %>
+    </p>
 
 
   </div>
 
-<div class="col-sm-4">
-  <div class="panel panel-default">
+<div class="col-sm-6">
+  <div class="panel panel-info">
     <div class="panel-heading">
       <h3 class="panel-title">Member of Structures</h3>
     </div>
@@ -88,8 +75,8 @@
 </div>
 
 
-  <div class="col-sm-4">
-    <div class="panel panel-default">
+  <div class="col-sm-6">
+    <div class="panel panel-info">
       <div class="panel-heading">
         <h3 class="panel-title">Meeting Participation</h3>
       </div>
@@ -119,8 +106,8 @@
   </div>
 
 
-  <div class="col-sm-8">
-    <div class="panel panel-default">
+  <div class="col-sm-12">
+    <div class="panel panel-info">
       <div class="panel-heading">
         <h3 class="panel-title">Issue Disputant</h3>
       </div>
@@ -151,8 +138,8 @@
 
 
 
-  <div class="col-sm-8">
-    <div class="panel panel-default">
+  <div class="col-sm-12">
+    <div class="panel panel-info">
       <div class="panel-heading">
         <h3 class="panel-title">As Mediator</h3>
       </div>
@@ -179,3 +166,20 @@
 
     </div>
   </div>
+
+
+
+
+</div>
+<div class="col-sm-3">
+
+  <div class="btn-group-vertical" role="group" aria-label="...">
+
+    <%= link_to 'Edit', edit_person_path(@person), :class => "btn btn-primary" %><br><br>
+
+
+
+    <%= link_to 'Delete', @person, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+
+  </div>
+</div>

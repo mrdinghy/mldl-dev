@@ -1,0 +1,29 @@
+<tr>
+  <td>
+    <% if s.structuretype == Structuretype::NSC %>
+        <strong><%= link_to s.name, s  %></strong>
+    <% elsif s.structuretype ==  Structuretype::CSC %>
+        <strong><%= link_to s.name, s  %></strong>
+    <% elsif s.structuretype ==  Structuretype::DSC  %>
+
+        &nbsp;&nbsp;<%= link_to s.name, s  %>
+    <% elsif s.structuretype ==  Structuretype::CF  %>
+        &nbsp;&nbsp;&nbsp;&nbsp;<em><%= link_to s.name, s  %></em>
+    <% end %>
+
+  </td>
+  <td><%= s.project.beginissues(@d2,s,0,0).count %></td>
+  <td><%= s.project.quarter_issues(@d2,s,0,0).count %></td>
+  <td><%= s.project.totalopen(@d2,s,0,0).count %></td>
+  <td><%= s.project.quarter_resolved(@d2,s,0,0).count %></td>
+
+  <td><%= s.project.allbystatus(0,s,0,0).count %></td>
+  <td><%= s.project.allbystatus(Status::NEW,s,0,0).count %></td>
+  <td><%= s.project.allbystatus(Status::ONGOING,s,0,0).count %></td>
+  <td><%= s.project.allbystatus(Status::MEDIATION,s,0,0).count %></td>
+  <td><%= s.project.allbystatus(Status::CANCELLED,s,0,0).count %></td>
+  <td><%= s.project.allbystatus(Status::RESOLVED,s,0,0).count %></td>
+  <td><%= s.project.percentresolved(s.project.allbystatus(0,s,0,0).count,s.project.allbystatus(Status::RESOLVED,s,0,0).count).round(2) %>%</td>
+
+
+</tr>

@@ -503,3 +503,10 @@ peeps = Person.create([
 {name_first: 'Zayzay', name_last: 'Kpakolo',   gender: 1, structure_id: 11, community: 'Kolliemai'}
 
                           ])
+
+
+
+peeps = Person.all
+peeps.each do |p|
+  Membership.create(structure_id: p.structure_id, person_id: p.id)
+end

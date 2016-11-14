@@ -41,4 +41,6 @@ module RailsDevise
 end
 Rails.application.configure do
   config.i18n.available_locales = [:en, :ar, :fr]
+  config.autoload_paths << Rails.root.join('lib')
 end
+

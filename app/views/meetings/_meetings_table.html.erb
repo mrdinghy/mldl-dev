@@ -1,7 +1,7 @@
 
 
 
-  <div class="panel panel-default">
+  <div class="panel panel-info">
     <div class="panel-heading">
       <h3 class="panel-title"><%= @tabhead %></h3>
     </div>
@@ -17,7 +17,7 @@
           <th>Status</th>
           <th>Meeting Date</th>
           <th>Time Start</th>
-          <th>Name</th>
+
          <th>Structure</th>
           <th>Agenda Issues</th>
 
@@ -34,9 +34,9 @@
               <td><%= link_to meeting.meetingid, meeting %></td>
               <td><%= meeting.status %></td>
               <td><%=  meeting.meeting_on.strftime("%m/  %d/%Y") if meeting.meeting_on %></td>
-              <td><%=  meeting.starts_at.strftime("%R") if meeting.starts_at %></td>
+              <td><%=  meeting.starts_at.strftime("%H:%M") if meeting.starts_at %></td>
 
-              <td><%= meeting.name %></td>
+
                          <td>
                            <% if meeting.structure_id.present? && meeting.structure_id.to_i > 0 %>
                              <%= link_to meeting.structure.name, meeting.structure if meeting.structure_id %>

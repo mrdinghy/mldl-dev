@@ -1,76 +1,114 @@
 <div class="container">
 
-  <div class="panel panel-default">
+  <div class="panel panel-info">
 
     <div class="panel-heading"><h2><%= @panelheader %></h2>
       <%if params[:action] == "edit" %><h2><strong><%= @issue.name %></strong></h2><% end %></div>
 
     <div class="panel-body">
 
+      <%= simple_form_for (@issue), :data => {:parsley_validate => "", :novalidate => ""}  do |f| %>
 
-
-      <%= form_for(@issue) do |f| %>
 <div class="form-horizontal">
-  <% if @issue.errors.any? %>
+
+
+ <!--- <% if @issue.errors.any? %>
 
 
 
 
     <div id="error_explanation" role="alert" class="alert alert-danger">
-      <strong><%= pluralize(@issue.errors.count, "error") %> prohibited this issue from being saved:</strong><br>
+      <strong><%#= pluralize(@issue.errors.count, "error") %> prohibited this issue from being saved:</strong><br>
 
       <ul>
-      <% @issue.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+      <%# @issue.errors.full_messages.each do |message| %>
+        <li><%#= message %></li>
+      <%# end %>
       </ul>
     </div>
-  <% end %>
-
+  <% end %>--->
 
 
 
   <div class="form-group">
     <%= f.label :name, :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.text_field :name, :size => 100, :class => "form-control" %>
+      <%= f.input :name, label: false, :class => "form-control", :required => 'required', input_html: {:style => 'width: 75%'} %>
 
     </div>
   </div>
+
+
+  <div class="form-group">
+    <%= f.label :structure_id, :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%#= f.select :category_id, Category.all, {}, {class: 'form-control', required: true } %>
+      <%= f.association :structure, include_blank: true, label: false, :class => "form-control", input_html: {:style => 'width: 40%'} %>
+      <%#= f.collection_select(:category_id, Category.all, :id, :name, {}, {required: true, include_blank: true } ) %>
+
+    </div>
+  </div>
+
+
+
 
   <div class="form-group">
     <%= f.label 'Community of Origin', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.text_field :community, :size => 100, :class => "form-control" %>
+      <%= f.input :community, label: false, :class => "form-control", :required => 'required', input_html: {:style => 'width: 40%'}  %>
 
     </div>
   </div>
-
 
 
   <div class="form-group">
     <%= f.label 'District', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.grouped_collection_select :district_id, County.order(:name), :districts, :name, :id, :name, include_blank: true, :class => "form-control" %>
+      <%= f.association :district,  label: false, :class => "form-control", required: true, input_html: {:style => 'width: 40%'}%>
     </div>
   </div>
+
+
 
 
 
   <div class="form-group">
     <%= f.label 'Disputants', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.text_field :disputant, :size => 100, :class => "form-control" %>
+      <%= f.input :disputant, label: false, :size => 100, :class => "form-control", input_html: {:style => 'width: 80%'} %>
 
     </div>
   </div>
 
 
+
+
   <div class="form-group">
+    <%= f.label 'Structure Raised', :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.input :raisedby_structure, label: false, :size => 50, :class => "form-control", input_html: {:style => 'width: 25%'} %>
+
+    </div>
+  </div>
+
+
+
+
+  <div class="form-group">
+
+
+
     <%= f.label 'Raised by', :class => "col-sm-2 control-label" %>
     <div class="col-sm-4">
-      <%= f.collection_select(:raised_by, Person.all, :id, :fullname, include_blank: true, :class => "form-control") %>
+      <%#= f.collection_select(:raised_by, Person.all, :id, :fullname, include_blank: true, :class => "form-control") %>
+      <%#= f.association :person, label_method: :fullname, value_method: :id, include_blank: true, label: false, :class => "form-control" %>
+      <select name="issue[raised_by]" class="chosen-select">
+        <option value = "">Select -></option>
+        <% Person.all.each do |p| %>
 
+            <option value="<%= p.id %>"><%= p.fullname %></option>
+        <% end %>
+      </select>
     </div>
     <div class="col-sm-6">
       <label><input type="checkbox" name="addraiser" id="addraiser" value="1"> Click to add new person to system</label><br>
@@ -103,19 +141,22 @@
 
 
 
+  <div class="form-group">
+    <%= f.label 'Issue Origin', :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%#= f.select :category_id, Category.all, {}, {class: 'form-control', required: true } %>
+      <%#= f.collection_select(:scope_id, Scope.all, :id, :name, {}, {required: true, include_blank: true } ) %>
+      <%= f.association :scope, include_blank: true, label: false, :class => "form-control", input_html: {:style => 'width: 40%'} %>
+    </div>
+  </div>
 
+  <div class="form-group">
+    <%= f.label 'Origin Note', :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.input :originnote, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 3 } %>
 
-
-
-
-
-
-
-
-
-
-
-
+    </div>
+  </div>
 
 
 
@@ -123,7 +164,9 @@
   <div class="form-group">
     <%= f.label :category_id, :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.collection_select(:category_id, Category.all, :id, :name, include_blank: true, :class => "form-control") %>
+      <%#= f.select :category_id, Category.all, {}, {class: 'form-control', required: true } %>
+      <%= f.association :category, include_blank: true, label: false, :class => "form-control", input_html: {:style => 'width: 40%'} %>
+      <%#= f.collection_select(:category_id, Category.all, :id, :name, {}, {required: true, include_blank: true } ) %>
 
     </div>
   </div>
@@ -133,24 +176,10 @@
   <div class="form-group">
     <%= f.label :description, :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.text_area :description, :id => "descedit", :cols => "100", :rows => "8" %>
+      <%= f.input :description, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 8 } %>
 
     </div>
   </div>
-
-
-
-
-  <div class="form-group">
-    <%= f.label :structure_id, :class => "col-sm-2 control-label" %>
-    <div class="col-sm-10">
-
-          <%= f.collection_select(:structure_id, Structure.all, :id, :name, include_blank: true, :class => "form-control") %>
-
-     </div>
-  </div>
-
-
 
 
 
@@ -158,7 +187,7 @@
     <div class="form-group">
       <%= f.label :status_note, :class => "col-sm-2 control-label" %>
       <div class="col-sm-10">
-        <%= f.text_area :status_note, :id => "descedit", :cols => "100", :rows => "5" %>
+        <%= f.input :status_note, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 8 } %>
 
       </div>
     </div>
@@ -166,7 +195,7 @@
     <div class="form-group">
       <%= f.label :actionplan, :class => "col-sm-2 control-label" %>
       <div class="col-sm-10">
-        <%= f.text_area :actionplan, :id => "descedit", :cols => "100", :rows => "5" %>
+        <%= f.input :actionplan, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 8 } %>
 
       </div>
     </div>
@@ -174,16 +203,10 @@
   <div class="form-group">
     <%= f.label 'Action Plan Committee', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
-      <%= f.text_area :actioncommittee, :id => "descedit", :cols => "100", :rows => "5" %>
+      <%= f.input :actioncommittee, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 8 } %>
 
     </div>
   </div>
-
-
-
-
-
-
 
 
 
@@ -203,17 +226,31 @@
 </div>
 
 
-
 <script type="text/javascript">
-  var checkbox = document.getElementById('addraiser');
-  var details_div = document.getElementById('person_details');
-  checkbox.onchange = function() {
-    if(this.checked) {
-      details_div.style['display'] = 'block';
-    } else {
-      details_div.style['display'] = 'none';
+    var config = {
+        '.chosen-select'           : {},
+        '.chosen-select-deselect'  : {allow_single_deselect:true},
+        '.chosen-select-no-single' : {disable_search_threshold:10},
+        '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+        '.chosen-select-width'     : {width:"95%"}
     }
-  };
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+</script>
+<script type="text/javascript">
+
+
+
+    var checkbox = document.getElementById('addraiser');
+    var details_div = document.getElementById('person_details');
+    checkbox.onchange = function() {
+        if(this.checked) {
+            details_div.style['display'] = 'block';
+        } else {
+            details_div.style['display'] = 'none';
+        }
+    };
 </script>
 
 

@@ -1,0 +1,28 @@
+
+
+<div class="container">
+<br>
+
+<div class="col-md-12">
+  <div class="panel panel-info">
+
+    <div class="panel-heading">Status by Structure Organization - Through <%= Date.today %></div>
+
+    <div class="panel-body">
+      <table class="table">
+        <%= render 'structuretablehead' %>
+
+        <tbody>
+        <% @structures.each do |s| %>
+            <%= render partial: 'structuretablerow', :locals => { :s => s } %>
+
+
+
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>

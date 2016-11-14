@@ -7,6 +7,7 @@ class CreateStructures < ActiveRecord::Migration
       t.integer :district_id
       t.integer :county_id
       t.integer :parent_id
+      t.integer :project_id
       t.string :default_location
       t.timestamps null: false
     end

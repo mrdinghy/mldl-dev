@@ -42,7 +42,11 @@ class MediationsController < ApplicationController
   def create
 
     @mediation = Mediation.new(mediation_params)
-    @mediation.update_attributes!(:mediation_start => params[:mediation_start])
+
+    d1 = Date.parse(params[:mediate_start])
+
+
+    @mediation.update_attributes!(:mediation_start => d1)
 
    @mediation.save!
 
@@ -64,9 +68,17 @@ class MediationsController < ApplicationController
   # PATCH/PUT /mediations/1
   # PATCH/PUT /mediations/1.json
   def update
+   # if !params[:mediate_start].blank?
+      #d1 = Date.parse(params[:mediate_start])
+      #@mediation.update_attributes!(:mediation_start => d1)
+    #end
+    #if !params[:mediate_end].blank?
+    #  d2 = Date.parse(params[:mediate_end])
+    #  @mediation.update_attributes!(:mediation_end => d2)
+    #end
     #Issueaction.create(mediation_id: @mediation.id, issue_id: params[[:issue_id], user_id: current_user.id, actiontype: params[:actiontype], structure_id: issue.structure_id)
-    @mediation.update_attributes!(:mediation_start => params[:mediation_start])
-    @mediation.update_attributes!(:mediation_end => params[:mediation_end])
+
+    #@mediation.update_attributes!(:mediation_end => d2)
     respond_to do |format|
       if @mediation.update(mediation_params)
         format.html { redirect_to @mediation, notice: 'Mediation was successfully updated.' }
@@ -140,6 +152,6 @@ class MediationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def mediation_params
-      params.require(:mediation).permit(:name, :issue_id, :mediate_start, :mediate_end, :mediation_notes)
+      params.require(:mediation).permit(:name, :issue_id, :mediate_start, :mediate_end, :mediation_held, :mediation_notes)
     end
 end

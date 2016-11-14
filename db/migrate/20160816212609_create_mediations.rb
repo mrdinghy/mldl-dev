@@ -3,10 +3,11 @@ class CreateMediations < ActiveRecord::Migration
     create_table :mediations do |t|
       t.string :name
       t.integer :issue_id
-      t.datetime :mediation_start
-      t.datetime :mediation_end
+      t.date :mediate_start
+      t.date :mediate_end
       t.text :mediation_notes
       t.integer :result
+      t.boolean :mediation_held
 
       t.timestamps null: false
     end

@@ -1,0 +1,73 @@
+
+
+<table class="table">
+
+  <thead>
+  <tr>
+    <th rowspan = "2">Issue Category</th>
+    <th colspan = "3">CSC</th>
+    <th colspan = "3" style = "border-left: #000 solid 1px">DSC and CF</th>
+    <th colspan = "3" style = "border-left: #000 solid 1px">All Structures</th>
+    <th rowspan = "3" style = "border-left: #000 solid 1px">Resolved YTD</th>
+  </tr>
+  <tr>
+    <th>New</th>
+    <th>Ongoing</th>
+    <th>Resolved</th>
+    <th style = "border-left: #000 solid 1px">New</th>
+    <th>Ongoing</th>
+    <th>Resolved</th>
+    <th style = "border-left: #000 solid 1px">New</th>
+    <th>Ongoing</th>
+    <th>Resolved</th>
+
+  </tr>
+
+  </thead>
+  <tbody>
+
+  <% @categories.each do |c| %>
+      <tr>
+        <td><%= c.name %></td>
+        <td><%= @project.quarter_issues(@d2,@structureid,c.id,0).count %></td>
+        <td><%= @project.beginissues(@d2,@structureid,c.id,0).count %></td>
+        <td><%= @project.quarter_resolved(@d2,@structureid,c.id,0).count %></td>
+
+        <td style = "border-left: #000 solid 1px"><%= @project.quarter_issues(@d2,@lofadsccf,c.id,0).count %></td>
+        <td><%= @project.beginissues(@d2,@lofadsccf,c.id,0).count %></td>
+        <td><%= @project.quarter_resolved(@d2,@lofadsccf,c.id,0).count %></td>
+
+        <td style = "border-left: #000 solid 1px"><%= @project.quarter_issues(@d2,@lofaall,c.id,0).count %></td>
+        <td><%= @project.beginissues(@d2,@lofaall,c.id,0).count %></td>
+        <td><%= @project.quarter_resolved(@d2,@lofaall,c.id,0).count %></td>
+        <td style = "border-left: #000 solid 1px"><%= @project.cumulative_resolved(@d2,@lofaall,c.id,0).count %></td>
+
+      </tr>
+
+
+
+  <% end %>
+
+  <tr style = "font-weight: bold;">
+    <td>Total</td>
+    <td><%= @project.quarter_issues(@d2,@structureid,0,0).count %></td>
+    <td><%= @project.beginissues(@d2,@structureid,0,0).count %></td>
+    <td><%= @project.quarter_resolved(@d2,@structureid,0,0).count %></td>
+
+    <td style = "border-left: #000 solid 1px"><%= @project.quarter_issues(@d2,@lofadsccf,0,0).count %></td>
+    <td><%= @project.beginissues(@d2,@lofadsccf,0,0).count %></td>
+    <td><%= @project.quarter_resolved(@d2,@lofadsccf,0,0).count %></td>
+
+    <td style = "border-left: #000 solid 1px"><%= @project.quarter_issues(@d2,@lofaall,0,0).count %></td>
+    <td><%= @project.beginissues(@d2,@lofaall,0,0).count %></td>
+    <td><%= @project.quarter_resolved(@d2,@lofaall,0,0).count %></td>
+    <td style = "border-left: #000 solid 1px"><%= @project.cumulative_resolved(@d2,@lofaall,0,0).count %></td>
+
+  </tr>
+
+
+  </tbody>
+
+
+
+</table>

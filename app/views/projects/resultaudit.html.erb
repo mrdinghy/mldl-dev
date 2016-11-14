@@ -1,0 +1,109 @@
+
+
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+    <h3 class="panel-title">Issues</h3>
+  </div>
+
+
+
+  <div class="panel-body">
+
+
+
+    <table id="audittable"  class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th width="60px">ID</th>
+
+        <th>Status</th>
+
+
+        <th>Created</th>
+        <th>Res Date</th>
+        <th>Agendas</th>
+        <th>Mediations</th>
+
+
+      </tr>
+      </thead>
+      <tbody>
+      <% @allissues.each do |issue| %>
+      <% agendas = Agenda.where(issue_id: issue.id) %>
+      <% mediations = Mediation.where(issue_id: issue.id) %>
+
+          <% statusbox1 = 'btn btn-'+issue.issuestatus(issue.status) %>
+          <% mydisputants = Disputant.where(:issue_id => issue.id) %>
+          <tr>
+            <td><%= link_to issue.issuecode, issue %></td>
+
+            <td><button class="tabstatusbox <%= statusbox1 %>"><%= issue.status_humanize %></button></td>
+
+
+
+            <td><%= issue.created_at.strftime("%m/  %d/%Y") %></td>
+            <td>
+              <% if !issue.resolution_date.nil? %>
+              <%= issue.resolution_date.strftime("%m/  %d/%Y") %>
+            <% if issue.resolution_date < issue.created_at %>
+                  ERROR!
+                      <% end %>
+                  <% end %>
+            </td>
+
+            <td>
+                <table class="table">
+                <% agendas.each do |a| %>
+                    <tr>
+                    <td><%= a.created_at.strftime("%m/  %d/%Y") %></td>
+                    <td><%= a.result_humanize %></td>
+                    </tr>
+                <% end %>
+                </table>
+
+            </td>
+            <td>
+              <table class="table">
+                <% mediations.each do |m| %>
+                    <tr>
+                      <td><%= m.mediate_start.strftime("%m/  %d/%Y") %></td>
+                      <td><%= m.mediate_end.strftime("%m/  %d/%Y") if !m.mediate_end.nil? %></td>
+                      <td><%= m.result_humanize %></td>
+                    </tr>
+                <% end %>
+              </table>
+
+            </td>
+
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+<script>
+    $('#audittable').dataTable({
+        'paging':   true,  // Table pagination
+        'ordering': true,  // Column ordering
+        'info':     true,  // Bottom left status text
+// Text translation options
+// Note the required keywords between underscores (e.g _MENU_)
+        oLanguage: {
+            sSearch:      'Search all columns:',
+            sLengthMenu:  '_MENU_ records per page',
+            info:         'Showing page _PAGE_ of _PAGES_',
+            zeroRecords:  'Nothing found - sorry',
+            infoEmpty:    'No records available',
+            infoFiltered: '(filtered from _MAX_ total records)'
+        }
+    });
+</script>

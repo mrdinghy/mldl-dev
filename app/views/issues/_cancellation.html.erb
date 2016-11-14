@@ -3,6 +3,7 @@
 <%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'new_note_form'}) do |f| %>
 
     <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
+    <%= hidden_field(:issueaction, :structure_id, :value => @issue.structure_id) %>
     <%= hidden_field_tag(:fromissue, true) %>
     <%= hidden_field(:issueaction, :actiontype, :value => Actiontype::CANCELLED) %>
 

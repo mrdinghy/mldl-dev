@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161010194416) do
+ActiveRecord::Schema.define(version: 20161114202808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,12 @@ ActiveRecord::Schema.define(version: 20161010194416) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "category_colors", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "comments", force: :cascade do |t|
     t.integer  "commentable_id"
     t.string   "commentable_type"
@@ -107,6 +113,12 @@ ActiveRecord::Schema.define(version: 20161010194416) do
   end
 
   create_table "counties", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "countries", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -166,8 +178,11 @@ ActiveRecord::Schema.define(version: 20161010194416) do
     t.string   "uuid"
     t.integer  "resolutiontype_id"
     t.integer  "status"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "other_category"
+    t.text     "originnote"
+    t.string   "raisedby_structure"
   end
 
   create_table "managers", force: :cascade do |t|
@@ -180,14 +195,13 @@ ActiveRecord::Schema.define(version: 20161010194416) do
   create_table "mediations", force: :cascade do |t|
     t.string   "name"
     t.integer  "issue_id"
-    t.datetime "mediation_start"
-    t.datetime "mediation_end"
+    t.date     "mediate_start"
+    t.date     "mediate_end"
     t.text     "mediation_notes"
     t.integer  "result"
+    t.boolean  "mediation_held"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.date     "mediate_end"
-    t.date     "mediate_start"
   end
 
   create_table "mediators", force: :cascade do |t|
@@ -208,6 +222,8 @@ ActiveRecord::Schema.define(version: 20161010194416) do
     t.boolean  "meeting_held"
     t.string   "old_id"
     t.integer  "duration"
+    t.text     "closenote"
+    t.text     "reopennote"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
   end
@@ -217,6 +233,14 @@ ActiveRecord::Schema.define(version: 20161010194416) do
     t.integer  "structure_id"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "metrics", force: :cascade do |t|
+    t.string   "name"
+    t.string   "code"
+    t.integer  "objectmodel"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -278,6 +302,20 @@ ActiveRecord::Schema.define(version: 20161010194416) do
     t.boolean  "is_featured"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "quarters", force: :cascade do |t|
+    t.integer  "qtryear"
+    t.integer  "qtrqtr"
+    t.integer  "qtrmonth"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "resolutiontypes", force: :cascade do |t|
@@ -346,6 +384,7 @@ ActiveRecord::Schema.define(version: 20161010194416) do
     t.integer  "district_id"
     t.integer  "county_id"
     t.integer  "parent_id"
+    t.integer  "project_id"
     t.string   "default_location"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
@@ -383,5 +422,73 @@ ActiveRecord::Schema.define(version: 20161010194416) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+
+  create_view :agenda_meetings,  sql_definition: <<-SQL
+      SELECT a.id,
+      a.meeting_id,
+      a.issue_id,
+      a.agenda_note,
+      a.result,
+      a.addressed,
+      a.created_at,
+      a.updated_at,
+      m.structure_id
+     FROM agendas a,
+      meetings m
+    WHERE (a.meeting_id = m.id);
+  SQL
+
+  create_view :mediation_issues,  sql_definition: <<-SQL
+      SELECT m.id,
+      m.issue_id,
+      m.mediate_start,
+      m.mediate_end,
+      m.result,
+      m.mediation_notes,
+      m.created_at,
+      m.updated_at,
+      i.structure_id
+     FROM mediations m,
+      issues i
+    WHERE (m.issue_id = i.id);
+  SQL
+
+  create_view :pie_categories,  sql_definition: <<-SQL
+      SELECT count(issues.id) AS vcount,
+      issues.category_id
+     FROM issues
+    GROUP BY issues.category_id;
+  SQL
+
+  create_view :pie_districts,  sql_definition: <<-SQL
+      SELECT count(issues.id) AS vcount,
+      issues.district_id
+     FROM issues
+    GROUP BY issues.district_id;
+  SQL
+
+  create_view :categories_structures,  sql_definition: <<-SQL
+      SELECT count(issues.id) AS vcount,
+      issues.category_id,
+      issues.structure_id
+     FROM issues
+    GROUP BY issues.category_id, issues.structure_id;
+  SQL
+
+  create_view :districts_structures,  sql_definition: <<-SQL
+      SELECT count(issues.id) AS vcount,
+      issues.district_id,
+      issues.structure_id
+     FROM issues
+    GROUP BY issues.district_id, issues.structure_id;
+  SQL
+
+  create_view :project_structures,  sql_definition: <<-SQL
+      SELECT count(issues.id) AS vcount,
+      issues.structure_id
+     FROM issues
+    GROUP BY issues.structure_id;
+  SQL
 
 end

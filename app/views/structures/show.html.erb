@@ -29,14 +29,32 @@ width: 800px;
 </script>
 
 
+<div class="row">
+  <div class="col-md-6">
+
+    <%= link_to 'Return to Structures', structures_path %><br>
+    <span class="pageheader"><span style="color: #999">Structure: </span><%= @structure.name %></span>
+    <!-- START row-->
+
+  </div>
+  <div class="col-md-6">
+
+    <div class="pull-right">
+      <% if @canedit %>
+          <div class="pull-right"><br>
+            <%= link_to 'New Issue', new_issue_path(:structure_id => @structure.id), :class => "btn btn-success"  %>
+            <%#= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
+            <%= link_to "New Meeting", new_meeting_path(:structure_id => @structure.id), :class => "btn btn-success" %>
+          </div>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>
 
 
 <!-- Page content-->
-<div class="container">
-
-    <%= link_to 'Return to Structures', structures_path %>
-    <h4 class="page-header"><span style="color: #999">Structure: </span><%= @structure.name %></h4>
-    <!-- START row-->
 
 
 
@@ -44,16 +62,20 @@ width: 800px;
 
 
 
-      <div class="pull-right">
-        <% if @canedit %>
-            <div class="pull-right">
-              <%= link_to 'New Issue', new_issue_path(:structure_id => @structure.id), :class => "btn btn-success"  %>
-              <%#= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
-              <%= link_to "New Meeting", new_meeting_path(:structure_id => @structure.id), :class => "btn btn-success" %>
-            </div>
-        <% end %>
 
-      </div>
+
+
+
+
+
+
+  <%#= render 'dashboard_structure' %>
+
+
+
+
+
+
 
 
 
@@ -76,30 +98,30 @@ width: 800px;
 
           <div class="tab-content">
             <div id="viewdash" class="tab-pane fade in active">
-              <h3><%= @structure.name %> - Dashboard</h3>
-              <%= render partial: 'structures/dashboard' %>
+
+              <%= render partial: 'structure_dashboard' %>
             </div>
 
             <div id="viewgeneral" class="tab-pane fade">
-              <h3><%= @structure.name %> - General</h3>
+
               <%= render partial: 'structures/general' %>
             </div>
 
             <div id="viewissues" class="tab-pane">
-              <h3><%= @structure.name %> Issues</h3>
+              <% @tabhead = @structure.name + ' Issues' %>
               <%= render partial: 'issues/issues_table' %>
             </div>
             <div id="viewmeetings" class="tab-pane fade">
-              <h3><%= @structure.name %> Meetings</h3>
+              <% @tabhead = @structure.name + ' Meetings' %>
               <%= render partial: 'meetings/meetings_table' %>
             </div>
             <div id="viewmediations" class="tab-pane fade">
-              <h3><%= @structure.name %> Mediations</h3>
+              <% @tabhead = @structure.name + ' Mediations' %>
               <%= render partial: 'mediations/mediations_table' %>
             </div>
             <div id="viewmembers" class="tab-pane fade">
-              <h3><%= @structure.name %> Members</h3>
-              <div class="panel panel-default">
+
+              <div class="panel panel-info">
                 <div class="panel-heading">
                   <h3 class="panel-title">People (non Users linked to Structure)</h3>
                   <%#= link_to 'Add Person', '#new_person_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>

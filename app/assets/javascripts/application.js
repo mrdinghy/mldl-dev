@@ -12,18 +12,21 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap-sprockets
 //= require turbolinks
+//= require bootstrap-sprockets
+//= require bootstrap-datepicker
+//= require zebra_datepicker
 //= require modernizr.custom
 //= require jquery.storageapi
 //= require jquery.easing
 //= require animo
 //= require moment
-//= require bootstrap-datepicker.min
-//= require jquery.timepicker
-// require bootstrap-datetimepicker
-//= require pickers
+// require picker
+// require picker.date
+// require pickers
 //= require chosen.jquery
+// require rails.validations
+//= require parsley
 //= require issues
 //= require jquery.dataTables.min
 //= require dataTables.bootstrap
@@ -43,6 +46,7 @@
 // require froala_editor.min
 // require lists.min
 //= require d3.v3
+//= require d3pie
 //= require rickshaw.min
 //= require Chart
 //= require Chart.bundle

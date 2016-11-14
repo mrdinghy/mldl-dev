@@ -6,13 +6,13 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
+gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-datepicker-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'simple_form'
-gem 'momentjs-rails', '~> 2.9'
-gem 'simple-form-datepicker'
-#gem 'bootstrap-datepicker-rails'
-#gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+gem 'devise'
+gem 'momentjs-rails', '>= 2.9.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem "paperclip", "3.5.4"
 gem "enumerate_it"
@@ -23,7 +23,12 @@ gem 'chosen-rails'
 gem 'seed_dump'
 gem 'therubyracer'
 gem 'cancancan', '~> 1.10'
-gem 'prawn'
+#gem 'prawn'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+gem 'scenic'
+gem 'parsley-rails'
+#gem 'client_side_validations'
 gem 'time_splitter'
 gem 'date_time_attribute'
 gem 'roo', '~> 2.4.0'
@@ -33,10 +38,6 @@ end
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'spring'
-end
-gem 'bootstrap-sass'
-gem 'devise'
-group :development do
   gem 'better_errors'
   gem 'quiet_assets'
   gem 'rails_layout'

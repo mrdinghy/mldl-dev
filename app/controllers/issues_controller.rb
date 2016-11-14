@@ -45,15 +45,16 @@ class IssuesController < ApplicationController
     @parent = Structure.find(parent_id) if parent_id
     @gapps = Appissue.where('issueid = ?', @issue.old_id)
 
-
+   @pdfname = 'mldl_issue_' + @issue.id.to_s
 
     respond_to do |format|
       format.html
       format.pdf do
-        pdf = IssuePdf.new(@issue)
-        send_data pdf.render, filename: "order_#{@issue.issuecode}.pdf",
-                  type: "application/pdf",
-                  disposition: "inline"
+        render pdf: @pdfname
+       # pdf = IssuePdf.new(@issue)
+        #send_data pdf.render, filename: "order_#{@issue.issuecode}.pdf",
+         #         type: "application/pdf",
+          #        disposition: "inline"
       end
     end
 
@@ -67,10 +68,104 @@ class IssuesController < ApplicationController
 
 
 
+  def searchbyqtr
+    @yloop = [2013,2014,2015,2016,2017]
+    @qloop = [1,4,7,10]
+    @issuemetrics = Metric.where(objectmodel: 1)
+    @agendametrics = Metric.where(objectmodel: 3)
+    @mediationmetrics = Metric.where(objectmodel: 4)
+
+
+
+  end
+
+  def calcdate(y,q)
+    d0= y.to_s + '-' + q.to_s + '-1'
+    d2= Date.parse(d0)
+    return d2
+  end
+
+  def searchbyqtrresults
+    @quarter = Quarter.find(params[:quarter_id])
+
+
+    d2 = self.calcdate(@quarter.qtryear, @quarter.qtrmonth)
+
+    puts 'd2*****************************************************************'
+    puts d2
+
+
+    @d2 = d2
+    @project = Project.find(1)
+
+
+    @metric = Metric.find_by_code(params[:code])
+
+
+
+    if params[:code] ==   "qissues"
+      searchresults=@project.cumulative_issues(d2,0,0,0)
+    elsif params[:code] == "qissues_new"
+      searchresults = @project.quarter_issues(d2,0,0,0)
+      puts searchresults
+      puts 'searchresultshhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh'
+    elsif params[:code] == "qissues_begin"
+      searchresults=@project.beginissues(d2,0,0,0)
+
+    elsif params[:code] ==     "qissues_resolved"
+      searchresults=@project.quarter_resolved(d2,0,0,0)
+    elsif params[:code] ==    "qmeetings"
+      searchresults=@project.get_agendas(d2,0,0,0)
+    elsif params[:code] ==  "qagendas"
+      searchresults=@project.get_agendas(d2,0,0,0)
+    elsif params[:code] ==   "aresult_resolved"
+      searchresults=@project.agenda_results(d2,0,Result::RESOLVED,0,0)
+    elsif params[:code] ==   "aresult_mediation"
+      searchresults=@project.agenda_results(d2,0,Result::MEDIATION,0,0)
+    elsif params[:code] ==   "aresult_referred"
+      searchresults=@project.agenda_results(d2,0,Result::REFERRED,0,0)
+    elsif params[:code] ==   "aresult_cancelled"
+      searchresults=@project.agenda_results(d2,0,Result::CANCELLED,0,0)
+    elsif params[:code] ==     "aresult_ongoing"
+      searchresults=@project.agenda_results(d2,0,Result::ONGOING,0,0)
+    elsif params[:code] ==   "qmediationstarted"
+      searchresults=@project.mediation_starts(d2,0,0,0)
+    elsif params[:code] == "qmediationended"
+      searchresults=@project.mediation_ends(d2,0,0,0)
+    elsif params[:code] ==    "mresult_resolved"
+      searchresults=@project.mediation_results(d2,0,Result::RESOLVED,0,0)
+    elsif params[:code] ==  "mresult_referred"
+      searchresults=@project.mediation_results(d2,0,Result::REFERRED,0,0)
+    elsif params[:code] ==  "mresult_cancelled"
+      searchresults=@project.mediation_results(d2,0,Result::CANCELLED,0,0)
+    elsif params[:code] ==   "mresult_ongoing"
+      searchresults=@project.mediation_results(d2,0,Result::ONGOING,0,0)
+    end
+
+
+    @resultcount=searchresults.count
+
+    if @metric.objectmodel == 1
+      @issues=searchresults
+      render 'issues/index'
+    elsif @metric.objectmodel == 2
+      @meetings = searchresults
+      render 'meetings/index'
+    elsif @metric.objectmodel == 3
+      @myagendas = searchresults
+      render 'agendas/index'
+    elsif @metric.objectmodel == 4
+      @mediations = searchresults
+      render 'mediations/index'
+    end
+
+  end
+
 
 
   def searchissues
-
+    @yloop = [2013,2014,2015,2016,2017]
+    @qloop = [1,4,7,10]
     @allcategories = Category.all
     @allscopes= Scope.all
     @allstructures = Structure.order(:id)
@@ -87,17 +182,18 @@ class IssuesController < ApplicationController
 
     searchterm = params[:search_term]
     searchresults = Issue.all
-    searchresults = Issue.where('category_id in (?)', params[:category_ids]) if !params[:category_ids].blank?
-    searchresults = Issue.where('structure_id in (?)', params[:structure_ids]) if !params[:structure_ids].blank?
-    searchresults = Issue.where('district_id in (?)', params[:district_ids]) if !params[:district_ids].blank?
-    searchresults = Issue.where('organization_id in (?)', params[:organization_ids]) if !params[:organization_ids].blank?
-    searchresults = Issue.where('name like ? or description like ? or community like  ? ', "%#{searchterm}%", "%#{searchterm}%", "%#{searchterm}%") if !params[:search_term].blank?
-    searchresults = Issue.where('id =?', params[:new_id]) if !params[:new_id].blank?
-    searchresults = Issue.where('id in (?)', params[:old_id]) if !params[:old_id].blank?
+    searchresults = searchresults.where(category_id: params[:category_ids]) if params[:category_ids].present?
+    searchresults = searchresults.where(structure_id: params[:structure_ids]) if params[:structure_ids].present?
+    searchresults = searchresults.where('district_id in (?)', params[:district_ids]) if params[:district_ids].present?
+    searchresults = searchresults.where('organization_id in (?)', params[:organization_ids]) if params[:organization_ids].present?
+    searchresults = searchresults.where('name like ? or description like ? or community like  ? ', "%#{searchterm}%", "%#{searchterm}%", "%#{searchterm}%") if !params[:search_term].blank?
+    searchresults = searchresults.where('id = ?', params[:new_id]) if params[:new_id].present?
+    searchresults = searchresults.where('old_id = ?', params[:old_id]) if params[:old_id].present?
 
-
-    disputants = Disputant.select(:issue_id).where('person_id = ?', params[:person_id]) if !params[:person_id].blank?
-    searchresults = Issue.where('id in (?)', disputants) if !params[:person_id].blank?
+    if !params[:person_id].blank? or !params[:person_id].nil?
+   # disputants = Disputant.select(:issue_id).where('person_id = ?', params[:person_id])
+    #searchresults = searchresults.where('id in (?)', disputants)
+    end
 
     @issues = searchresults
     render 'index'
@@ -136,7 +232,7 @@ class IssuesController < ApplicationController
   # POST /issues
   # POST /issues.json
   def create
-    #@issue = Issue.new(issue_params)
+    @issue = Issue.new(issue_params)
     #@issue.update_attributes(status:Status::NEW)
     #if params[:issue][:structure_id].present?
       #@issue.update_attributes(:structure_id => params[:issue][:structure_id])
@@ -185,10 +281,33 @@ class IssuesController < ApplicationController
   # PATCH/PUT /issues/1.json
   def update
 
+
+
+
     puts '=================dfasfdfsdfsd====================adfasddsff================='
 
     respond_to do |format|
       if @issue.update(issue_params)
+
+
+        if params[:addraiser] == '1'
+
+          if !params[:lname].blank? and !params[:fname].blank?
+
+            addraiser = Person.create(name_last: params[:lname], name_first: params[:fname], email: params[:email], title: params[:title])
+
+            @issue.update_attributes(raised_by: addraiser.id)
+
+
+
+          end
+        end
+
+
+
+
+
+
         format.html { redirect_to @issue, notice: 'Issue was successfully updated.' }
         format.json { render :show, status: :ok, location: @issue }
       else
@@ -422,7 +541,7 @@ end
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
       params.require(:issue).permit(:name, :description, :structure_id, :community, :yourname, :district_id, :location, :status, :status_note, :resolution, :resolutiontype_id,
-                                    :actionplan, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, person_ids: [], meeting_ids: [] )
+                                    :actionplan, :other_category, :originnote, :raisedby_structure, :category_id, :resolution_date, :raised_by, :disputant, :scope_id, :actioncommittee, :cancelled_at, person_ids: [], meeting_ids: [] )
     end
 end
 

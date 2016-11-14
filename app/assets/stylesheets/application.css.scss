@@ -12,19 +12,23 @@
  */
  @import "bootstrap-sprockets";
  @import "bootstrap";
- @import "bootstrap-datepicker3.min";
- @import "jquery.timepicker";
+ @import "bootstrap-datepicker3";
+ @import "zbootstrap";
  @import "chosen";
  @import "font-awesome";
  @import "simple-line-icons";
  @import "animate.min";
  @import "dataTables.bootstrap";
+ @import "parsley";
  @import "index";
  @import "app";
 /*
+@import "classic";
+ @import "classic.date";
 
 @import "bootstrap-datetimepicker.min";
-
+ @import "jquery.ui.datepicker";
+ @import "bootstrap-datetimepicker.min";
  @import "jquery.dataTables";
  @import "dataTables.jqueryui";
  @import "froala_editor.min";
@@ -100,4 +104,45 @@
   color: #154360;
 
 
+ }
+
+ .container {
+
+   background-color: #fffffff;
+
+
+ }
+
+ span.pageheader {
+   font-size: large;
+   font-weight: bold;
+   color: darkgreen;
+
+ }
+ panel-heading {
+   padding: 10px 15px;
+   border-bottom: 1px solid transparent;
+   border-top-right-radius: 3px;
+   border-top-left-radius: 3px;
+ }
+
+
+ :hov
+
+
+ .cls
+
+ element.style {
+ }
+ .panel .panel-heading {
+   border-bottom: 0;
+   font-size: 14px;
+ }
+ .panel-info > .panel-heading {
+   color: #fafafa;
+   background-color: #9eadb5;
+   border-color: #bce8f1;
+ }
+ td.rt {
+   text-align:right;
  }

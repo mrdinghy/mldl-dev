@@ -6,7 +6,72 @@ class StructuresController < ApplicationController
 
   # GET /structures
   # GET /structures.json
+
+
+def settime
+  @project = Project.find(1)
+
+  @yloop = [2013,2014,2015,2016,2017]
+  @qloop = [1,4,7,10]
+
+  @currentyear = Date.today.year
+  @currentqtr = Date.today.beginning_of_quarter.month
+  @currentbegin = Date.today.beginning_of_quarter
+  @currentend = Date.today.end_of_quarter
+
+  if params[:qtr].nil?
+    @thisyear = @currentyear
+    @thisqtr = @currentqtr
+
+
+    #@thisyear = 2015
+    #@thisqtr = 10
+  else
+    @thisyear = params[:year]
+    @thisqtr = params[:qtr]
+  end
+
+  d0= @thisyear.to_s + '-' + @thisqtr.to_s + '-01 '
+  @d2 = Time.parse(d0)
+
+
+  if @thisqtr == 1
+    @qtrname = @thisyear.to_s + '1st Qtr'
+  elsif @thisqtr == 4
+    @qtrname = @thisyear.to_s + '2nd Qtr'
+  elsif @thisqtr == 7
+    @qtrname =@thisyear.to_s + '3rd Qtr'
+  elsif @thisqtr == 10
+    @qtrname = @thisyear.to_s + '4th Qtr'
+  else
+    @qtrname = 'n/a'
+  end
+
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   def index
+    self.settime
     @nsc = Structure.where('structuretype_id =?', 4)
     @csc_structures = Structure.where('structuretype =?', Structuretype::CSC)
   end
@@ -14,35 +79,21 @@ class StructuresController < ApplicationController
   # GET /structures/1
   # GET /structures/1.json
   def show
-    @yloop = [2013,2014,2015,2016]
-    @qloop = [1,4,7,10]
+    self.settime
+
+
 
     if @structure.ismanager(current_user.id) or current_user.mldlrole == 1
          @canedit = true
     end
     @issues= Issue.where('structure_id = ?', @structure.id).order('created_at DESC')
 
-    cats= Category.all
-    flotter = '['
-    cats.each do |c|
 
-       slice1 = '{ "label": "' + c.name + '", "color": "#4acab4","data": 30}'
-
-        if c == Category.last
-          slice2 = slice1
-        else
-          slice2 = slice1 + ','
-        end
-      flotter = flotter + slice2
-
-    end
-
-@piefinal = flotter + ']'
 
 
     @allcats = Category.all
     @alldistricts = District.all
-
+    @myactions = Issueaction.where(structure_id: @structure.id).order('created_at DESC').limit(20)
     @mediations = Mediation.all
     @mypeople= Membership.where('structure_id = ?', @structure.id)
     @mymanagers = Manager.where('structure_id = ?', @structure.id)
@@ -64,6 +115,65 @@ class StructuresController < ApplicationController
     @person = Person.new
     @membership = Membership.new
     @manager = Manager.new
+
+
+
+
+
+
+    catsids = CategoriesStructure.where('category_id > 0 and structure_id = ?', @structure.id).order('vcount desc')
+    catcolor = 1
+    cattotals = ''
+    catsids.each do |c|
+
+      slice = CategoryColor.find(catcolor)
+      c1 = '{ "label": "' + c.category.name + '", "value": ' + c.vcount.to_s + ', "color": "' + slice.name  + '"}'
+      if c != catsids.last
+        c1 = c1 + ','
+      end
+
+      catcolor = catcolor + 1
+
+
+      cattotals = cattotals + c1
+
+    end
+    @catdata =   cattotals
+
+
+
+    distids = DistrictsStructure.where('district_id > 0 and structure_id = ?', @structure.id).order('vcount desc')
+    distcolor = 1
+    disttotals = ''
+    distids.each do |d|
+      slice = CategoryColor.find(distcolor)
+      d1 = '{ "label": "' + d.district.name + '", "value": ' + d.vcount.to_s + ', "color": "' + slice.name  + '"}'
+      if d != distids.last
+        d1 = d1 + ','
+      end
+      if distcolor == 10
+        distcolor = 2
+      else
+        distcolor = distcolor + 1
+      end
+
+
+
+
+      disttotals = disttotals + d1
+
+    end
+    @distdata =   disttotals
+
+
+
+
+
+
+
+
+
+
 
   end
 
@@ -169,6 +279,13 @@ class StructuresController < ApplicationController
 
   end
 
+
+
+  def managersmap
+@csc_structures = Structure.where(structuretype: 3)
+render 'managersmap'
+
+  end
 
 
 

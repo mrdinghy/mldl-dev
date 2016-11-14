@@ -22,8 +22,9 @@
             </ul>
           </div>
       <% end %>
-      <h3><%= thisissue.name %></h3>
+
       <%= hidden_field(:issueaction, :meeting_id, :value => @meeting.id) %>
+      <%= hidden_field(:issueaction, :structure_id, :value => @meeting.structure_id) %>
 
       <%= hidden_field(:issueaction, :issue_id, :value => thisagenda.issue_id) %>
       <%= hidden_field_tag(:parent_id, thisissue.structure.parent_id) %>
@@ -32,15 +33,13 @@
       <%= hidden_field_tag(:agenda_id, agenda_id) %>
 
       <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-12">
           Report Notes from Meeting for this Issue:<br>
 
-          <%= f.text_area :actionbody, cols: "100", rows: "12" %>
+          <%= f.text_area :actionbody, cols: "100", rows: "4" %>
 
 
-        </div>
 
-        <div class="col-sm-3">
           <div style="font-size: 16px">
 
             <h3>Meeting Result</h3>
@@ -48,7 +47,36 @@
 
 
             <%= radio_button(:issueaction, 'actiontype', Actiontype::RESOLVED) %> Resolved<br>
-            <%= radio_button(:issueaction,  'actiontype', Actiontype::ONGOING) %> Ongoing<br>
+
+            <div>
+
+              Enter Resolution Description if Resolved. Will save to Issue record<br>
+              <%= text_area 'issueresolved', cols: "100", rows: "4"  %>
+
+
+            </div>
+            <div class="form-group">
+              <%= f.label :resolutiontype, :class => "col-sm-2 control-label" %>
+              <div class="col-sm-10">
+
+                <%= f.collection_select(:resolutiontype_id, Resolutiontype.all, :id, :name, include_blank: true, :class => "form-control") %>
+
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <%= radio_button(:issueaction,  'actiontype', Actiontype::ONGOING, checked: true) %> Ongoing<br>
             <%= radio_button(:issueaction, 'actiontype', Actiontype::MEDIATION) %> Send to Mediation<br>
             <%= radio_button(:issueaction,  'actiontype', Actiontype::ESCALATED) %> Escalate Issue<br>
             <%= radio_button(:issueaction,  'actiontype', Actiontype::CANCELLED) %> Cancel Issue<br>

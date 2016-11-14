@@ -1,191 +1,97 @@
 <div class="container">
-  <h2>Dashboard Options</h2>
 
 
 
+<br>
 
 
 <div class="row">
 
   <div class="col-sm-12">
 
+<div class="col-md-6">
 
-
-
-    <ul class="nav nav-tabs">
-      <li class="active"><a data-toggle="tab" href="#viewissues">Map</a></li>
-      <li><a data-toggle="tab" href="#viewsummarytables">Summary Tables</a></li>
-      <li><a data-toggle="tab" href="#viewstructures">Structure Report</a></li>
-      <!---   <li><a data-toggle="tab" href="#viewqrreport">by Quarter</a></li>
-
-       <li><a data-toggle="tab" href="#viewmeetings">Bar charts</a></li>
-        <li><a data-toggle="tab" href="#viewmediations">D3 Dash</a></li>
-        <li><a data-toggle="tab" href="#viewchartjs">Chartjs</a></li>--->
-    </ul>
-
-    <div class="tab-content">
-      <div id="viewissues" class="tab-pane fade in active">
-        <h3>CartoDB Map</h3>
-        <%= render partial: 'cartodbimbed' %>
-      </div>
-      <div id="viewsummarytables" class="tab-pane fade">
-        <h3>MLDL Summary Tables</h3>
-        <%= render partial: 'tallytables' %>
-      </div>
-      <div id="viewstructures" class="tab-pane fade">
-        <h3>Structure Report</h3>
-        <%= render partial: 'structurereport' %>
-      </div>
-      <!---  <div id="viewmeetings" class="tab-pane fade">
-        <      <div id="viewqrreport" class="tab-pane fade">
-        <h3>Quarterly Activity</h3>
-        <%#= render partial: 'quarterlytable' %>
-      </div>
-   h3>RiskshawJS Bars</h3>
-        <%#= render partial: 'riskshawbars' %>
-      </div>
-      <div id="viewmediations" class="tab-pane fade">
-        <h3> D3 Dashboard</h3>
-        <%#= render partial: 'd3dashboard' %>
-      </div>
-      <div id="viewchartjs" class="tab-pane fade">
-        <h3> ChartJS</h3>
-        <%#= render partial: 'chartjs' %>
-      </div>
-      --->
-    </div>
-
-
-
-
-
-
-
-
-
-
-  </div>
-
-
-  <div class="col-sm-3">
-<h3>Monthly Activity Report</h3>
-
-
-  <%= form_tag actionreport_path, :method => :get do %>
-      <%= select_tag(:reportmonth, options_for_select(Month.to_a), :include_blank => 'Select Month >') %><br><br>
-
-      <%= select_tag(:reportyear, options_for_select(['2014','2015', '2016']), :include_blank => 'Select Year')  %><br><br>
-      <div class="actions">
-        <%= submit_tag 'Generate', :class => 'btn btn-primary'%>
-      </div>
-  <% end %>
-
-
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <div class="col-md-6">
   <div class="panel panel-default">
 
-    <div class="panel-heading">Latest Issues</div>
+    <div class="panel-heading">Distirbution of Issues</div>
 
     <div class="panel-body">
 
 
+  <%= render partial: 'cartodbimbed' %>
 
-  <table class="table">
-    <% @latestissues.each do |i| %>
+
+
+</div>
+    </div>
+
+
+
+</div>
+
+    <div class="col-md-6">
+      <div class="panel panel-default">
+
+        <div class="panel-heading">Latest Issue Activity</div>
+
+        <div class="panel-body">
+
+
+<table class="table">
+            <% @latestactivity.each do |act| %>
         <tr>
-          <td><%= i.created_at.strftime("%F") %></td>
-          <td width="50%"><%= link_to i.name, i %></td>
-          <td><%= i.structure.name  if i.structure_id %></td>
+              <td><%= act.created_at.strftime("%F") %></td>
+
+          <td>
+            <%if act.comment? %>
+                <%= link_to act.issue.issuecode, act.issue  %> Comment<br>
+                <em><%= act.actionbody %></em>
+            <% else %>
+                <%= link_to act.issue.issuecode, act.issue  %>
+            <%= act.actiondesc(act.actiontype) %><br>
+                <% if !act.meeting_id.nil? %>
+                    Meeting: <%= link_to act.meeting.meetingid, act.meeting %>
+                <% end %>
+                <% if !act.mediation_id.nil? %>
+                    Mediation: <%= link_to act.mediation.mediationcode, act.mediation %>
+                <% end %>
+            <% end %>
+
+          </td>
+
+          <td>  <%= act.user.name if act.user_id %></td>
+
+
+
+
         </tr>
-    <% end %>
-  </table>
+            <% end %>
+          </table>
 
 
 
 
-    </div></div>
+        </div>
+    </div>
+
+
 </div>
 
- <div class="col-md-6">
-    <div class="panel panel-default">
-
-      <div class="panel-heading">Upcoming Meetings</div>
-
-      <div class="panel-body">
 
 
 
 
 
+</div>
 
-</div></div>
- </div>
-
-
-  <div class="col-md-6">
-    <div class="panel panel-default">
-
-      <div class="panel-heading">County Status (based on location of Issue)</div>
-
-      <div class="panel-body">
-        <table class="table">
-          <thead>
-            <th>County</th>
-            <th>District</th>
-            <th>Issues</th>
-            <th>Open</th>
-            <th>Resolved</th>
-            <th>Percent Resolved</th>
-          </thead>
-
-
-        </table>
-      </div>
-    </div>
-  </div>
+</div>
 
 
 
 
 
-
-  <div class="col-md-6">
-  <div class="panel panel-default">
-
-    <div class="panel-heading">Import Issues from Google</div>
-
-    <div class="panel-body">
 
   <%= form_tag uploadcsv_appissues_path, multipart: true do %>
       <%= file_field_tag :file %>
       <%= submit_tag "Import" %>
   <% end %>
-</div>
-
-
-
-</div>
-
-
-</div>
-
-</div>

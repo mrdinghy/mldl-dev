@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  resources :dataentries
+  resources :metrics
+  resources :quarters
+  resources :projects
   resources :agendas
   resources :userroles
   resources :actiontypes
@@ -42,6 +46,15 @@ Rails.application.routes.draw do
   resources  :people_structures
   resources :comments, :path_prefix => '/:commentable_type/:commentable_id'
 
+  get 'projectdashboard', :to => 'projects#dashboard', as: 'projectdashboard'
+  get 'quarterlyreport', :to => 'projects#quarterlyreport', as: 'quarterlyreport'
+  get 'structurereport', :to => 'projects#structurereport', as: 'structurereport'
+  get 'projectlofa', :to => 'projects#lofa', as: 'projectlofa'
+  get 'projectgrandgedeh', :to => 'projects#grandgedeh', as: 'projectgrandgedeh'
+  get 'projectbong', :to => 'projects#bong', as: 'projectbong'
+  get 'projectnimba', :to => 'projects#nimba', as: 'projectnimba'
+  get 'managersmap', :to => 'structures#managersmap', as: 'managersmap'
+
 
   post 'addtoagenda', to: 'issuesactions#create_meetingagenda', as: 'addtoagenda'
 
@@ -57,14 +70,21 @@ Rails.application.routes.draw do
   post 'addperson', to: 'structures#addperson', as: 'addperson'
   get 'adjustroles', to: 'users#adjustroles', as: 'adjustroles'
   get 'actionreport', to: 'visitors#actionreport', as: 'actionreport'
-
+  get 'qtrreport', to: 'projects#qtrreport', as: 'qtrreport'
   get 'searchissues', to: 'issues#searchissues', as: 'searchissues'
   get 'issueresults', to: 'issues#searchresults', as: 'issueresults'
 
+  get 'searchbyqtr', to: 'issues#searchbyqtr', as: 'searchbyqtr'
+  get 'searchbyqtrresults', to: 'issues#searchbyqtrresults', as: 'searchbyqtrresults'
   get 'searchmeetings', to: 'meetings#searchmeetings', as: 'searchmeetings'
   get 'meetingresults', to: 'meetings#meetingresults', as: 'meetingresults'
 
 
+
+
+
+
+  get 'resultaudit', to: 'projects#resultaudit', as: 'resultaudit'
   post 'adddisputant', to: 'issues#adddisputant', as: 'adddisputant'
   post 'addparticipant', to: 'meetings#addparticipant', as: 'addparticipant'
   post 'addmediator', to: 'mediations#addmediator', as: 'addmediator'

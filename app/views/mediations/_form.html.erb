@@ -1,84 +1,67 @@
-<div class="container">
 
-  <div class="panel panel-default">
+
+<div class="panel panel-default">
 
     <div class="panel-heading">
-      <%if params[:action] == "edit" %><h3><strong><%= @mediation.mediationcode %></strong></h3><% end %></div>
+        <%if params[:action] == "edit" %><h3><strong><%= @mediation.mediationcode %></strong></h3><% end %>
+    </div>
 
     <div class="panel-body">
+          <%= form_for @mediation do |f| %>
 
 
-
-      <%= simple_form_for @mediation do |f| %>
-
-
-          <% if params[:issue_id] %>
-               <%= hidden_field(:mediation, :issue_id, :value => params[:issue_id]) %>
-          <% else %>
-              <%= hidden_field(:mediation, :issue_id, :value => @mediation.issue_id) %>
+            <% if params[:issue_id] %>
+                <%= hidden_field(:mediation, :issue_id, :value => params[:issue_id]) %>
+            <% else %>
+                <%= hidden_field(:mediation, :issue_id, :value => @mediation.issue_id) %>
 
             <% end %>
-          <div class="form-horizontal">
+
             <% if @mediation.errors.any? %>
                 <div id="error_explanation">
-                  <h2><%= pluralize(@mediation.errors.count, "error") %> prohibited this mediation from being saved:</h2>
+                    <h2><%= pluralize(@mediation.errors.count, "error") %> prohibited this mediation from being saved:</h2>
 
-                  <ul>
+                    <ul>
                     <% @mediation.errors.full_messages.each do |message| %>
-                        <li><%= message %></li>
+                    <li><%= message %></li>
                     <% end %>
-                  </ul>
+                    </ul>
                 </div>
             <% end %>
 
 
+            <div class="field">
+                <%= f.label :mediate_start %><br>
+              <%= f.text_field :mediate_start, :id => "datepicker-example1" %>
 
-            <div class="form-group">
-              <%= f.label 'Mediation Start', :class => "col-sm-3 control-label" %>
-              <div class="col-sm-3" id="sandbox-container">
-                <div class="input-group date">
-                  <!---<input  name="mediate_start" type="text" class="form-control" width="80">--->
-                  <%= f.date_select :mediate_start, :default => Date.today %>
-
-                  <%# f.input :mediate_start, :class => "form-control", :width => "80"%>
-                </div>
-
-              </div>
 
             </div>
-            <div class="form-group">
-              <%= f.label 'Mediation End', :class => "col-sm-3 control-label" %>
-              <div class="col-sm-3" id="sandbox2-container">
-                <div class="input-group date">
-                  <%#= f.input :mediate_end, :class => "form-control", :width => "80" %>
-                  <%= f.date_select :mediate_end, :default => Date.today %>
-                  <!--- <input  name="mediate_end" type="text" class="form-control" width="80">--->
-                </div>
+          <div class="field">
+            <%= f.label :mediate_end %><br>
+            <%= f.text_field :mediate_end, :id => "datepicker-example2" %>
 
-              </div>
 
-            </div>
+          </div>
 
 
 
             <div class="field">
-    <%= f.label :mediation_notes %><br>
+                <%= f.label :mediation_notes %><br>
 
-    <%= f.text_area :mediation_notes, cols: "120", rows: "12" %>
-  </div>
-  <div class="actions">
-    <%= f.submit :class => 'btn btn-primary' %>
-  </div>
-<% end %>
+                <%= f.text_area :mediation_notes, cols: "120", rows: "12" %>
+             </div>
+            <div class="actions">
+                <%= f.submit :class => 'btn btn-primary' %>
+            </div>
+        <% end %>
+    </div>
+
 </div>
 
-        </div>
-      </div>
+<script type="text/javascript">
+    $('#datepicker-example1').Zebra_DatePicker();
+</script>
 
-  <script>
-    $('#sandbox-container input').datepicker({
-    });
-    $('#sandbox2-container input').datepicker({
-    });
-
+  <script type="text/javascript">
+      $('#datepicker-example2').Zebra_DatePicker();
   </script>

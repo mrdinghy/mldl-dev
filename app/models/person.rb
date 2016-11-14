@@ -17,7 +17,7 @@ class Person < ActiveRecord::Base
   has_many :issues, :foreign_key => :raised_by
 
   extend EnumerateIt
-  has_enumeration_for :gender, required: true, with: Gender
+  has_enumeration_for :gender
 
 
   #has_one :user

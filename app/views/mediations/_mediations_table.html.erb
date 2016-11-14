@@ -1,5 +1,5 @@
 
-<div class="panel panel-default">
+<div class="panel panel-info">
   <div class="panel-heading">
     <h3 class="panel-title"><%= @tabhead %></h3>
   </div>
@@ -18,8 +18,11 @@
     <th>Mediation start</th>
     <th>Mediation end</th>
     <th>Mediators</th>
+
+    <th>Result</th>
+    <th>Issue Resolution</th>
     <th>Mediation notes</th>
-    <th colspan="3"></th>
+
   </tr>
   </thead>
 
@@ -38,7 +41,8 @@
         <% end %>
         </td>
 
-
+        <td><%= mediation.result_humanize %></td>
+        <td><%= mediation.issue.resolution_date if mediation.issue.resolution_date %></td>
         <td><%= mediation.mediation_notes %></td>
 
       </tr>

@@ -7,16 +7,14 @@
 
         <thead>
         <tr>
-          <%if params[:controller] == 'issues' %>
-              <th>Meeting</th>
-              <th>Date</th>
-          <% end %>
 
-          <%if params[:controller] == 'meetings' %>
-
-              <th>Issue</th>
+          <th>Meeting</th>
+          <th>Date</th>
+          <% if @issue.nil? %>
+             <th>Issue</th>
           <% end %>
-          <th>Result</th>
+              <th>Result</th>
+          <th>Resolution Date</th>
           <th>Agenda note</th>
           <th></th  >
         </tr>
@@ -25,20 +23,16 @@
         <tbody>
         <% @myagendas.each do |agenda| %>
             <tr>
-              <%if params[:controller] == 'issues' %>
-                  <td><%= link_to agenda.meeting.meetingid, agenda.meeting %></td>
-                  <td><%= agenda.meeting.meeting_on %></td>
 
-              <% end %>
-
-              <%if params[:controller] == 'meetings' %>
-
-            <td><%= agenda.issue.issuecode %></td>
-              <% end %>
-
-              <td><%= agenda.result_humanize %></td>
-              <td><%= agenda.agenda_note %></td>
-              <td><%= link_to 'Show', agenda %></td>
+            <td><%= link_to agenda.meeting.meetingid, agenda.meeting %></td>
+            <td><%= agenda.meeting.meeting_on %></td>
+              <% if @issue.nil? %>
+            <td><%= link_to agenda.issue.issuecode, agenda.issue %></td>
+                  <% end %>
+            <td><%= agenda.result_humanize %></td>
+            <td><%= agenda.issue.resolution_date if agenda.issue.resolution_date %></td>
+            <td><%= agenda.agenda_note %></td>
+            <td><%= link_to 'Show', agenda %></td>
 
 
             </tr>

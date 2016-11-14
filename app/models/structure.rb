@@ -2,7 +2,7 @@ class Structure < ActiveRecord::Base
   has_many :meetings
   belongs_to :county
   belongs_to :district
-
+  belongs_to :project
 
 
   #enum structuretype: [ :cf, :dsc, :csc, :nsc ]
@@ -154,93 +154,6 @@ end
 
 
 
-  def qtrname(q)
-    if q == 1
-      s='1st'
-    elsif q == 4
-      s='2nd'
-    elsif q == 7
-      s='3rd'
-    elsif q == 10
-      s='4th'
-    else
-      s='n/a'
-    end
-    return s
-  end
-
-
-  def quarter_resolved(d2,s1)
-    qstart= d2.beginning_of_quarter
-    qlast= d2.end_of_quarter
-    qmonth1 = qstart.month
-    qmonth2 = qmonth1 + 1
-    qmonth3 = qmonth1 + 2
-    all = Issue.where('resolution_date >= ? and resolution_date <= ?', qstart, qlast)
-    if s1 != 0
-      all = all.where(structure_id: s1)
-    end
-
-    return all
-  end
-
-
-def quarter_issues(d2,s1)
-  qstart= d2.beginning_of_quarter
-  qlast= d2.end_of_quarter
-  qmonth1 = qstart.month
-  qmonth2 = qmonth1 + 1
-  qmonth3 = qmonth1 + 2
-  all = Issue.where('extract(year from created_at) = ?', qstart.year)
-  number = all.where('extract(month from created_at) in (?)', [qmonth1,qmonth2,qmonth3])
-  if s1 != 0
-    number = number.where(structure_id: s1)
-  end
-
-  return number
-end
-
-  def quarter_agendas(d2,s1)
-    qstart= d2.beginning_of_quarter
-    qlast= d2.end_of_quarter
-    qmonth1 = qstart.month
-    qmonth2 = qmonth1 + 1
-    qmonth3 = qmonth1 + 2
-    all = Agenda.where('extract(year from created_at) = ?', qstart.year)
-    number = all.where('extract(month from created_at) in (?)', [qmonth1,qmonth2,qmonth3])
-    #number =  Issue.where(created_at: @qstart..@qend).count
-    if s1 != 0
-      number = number.where(structure_id: s1)
-    end
-    return number
-  end
-
-
-
-  def quarter_issue_total(d2,s1)
-    number = self.quarter_issues(d2,s1).count
-    return number
-
-  end
-
-
-
-
-  def quarter_agenda_total(d2,s1)
-    number = self.quarter_agendas(d2,s1).count
-    return number
-    return all
-  end
-
-
-
-def quarter_issue_resolved(d2,s1)
-  all = self.quarter_resolved(d2,s1).count
-
-  return all
-
-end
-
 
 
   def quarter_agenda_resolved(d2,s1)
@@ -316,12 +229,6 @@ end
 
 
 
-
-
-
-
-
-
   def maindata(thisyear, thismonth,structure, district, action, result, mediate)
     alldata = Issueaction.all
     alldata = alldata.where('extract(year from created_at) = ? and extract(month from created_at) = ?', thisyear, thismonth)  if thisyear !=0
@@ -330,50 +237,15 @@ end
     alldata = alldata.where('actiontype =?', action)   if action  != 0
 
 
-
-
     return alldata
   end
 
 
 
-
-  def issues_agenda(thisyear,thismonth,structure_id)
-    db_count = Issueaction.where('extract(year from created_at) = ? and extract(month from created_at) =? and actiontype_id = 2 and structure_id = ?', thisyear, thismonth,structure_id).count
-    return db_count
-  end
-
-
-  def issues_escalated(thisyear,thismonth,structure_id)
-    db_count = Issueaction.where('extract(year from created_at) = ? and extract(month from created_at) =? and actiontype_id in (5,12) and structure_id = ?', thisyear, thismonth,structure_id).count
-    return db_count
-  end
-
-  def issues_mediated(thisyear,thismonth,structure_id)
-    db_count = Issueaction.where('extract(year from created_at) = ? and extract(month from created_at) =? and actiontype_id in (11,16) and structure_id = ?', thisyear, thismonth,structure_id).count
-    return db_count
-  end
-
-
-  def issues_mediation_success(thisyear,thismonth,structure_id)
-    db_count = Issueaction.where('extract(year from created_at) = ? and extract(month from created_at) =? and actiontype_id in (6) and structure_id = ?', thisyear, thismonth,structure_id).count
-    return db_count
-  end
-
-
-  def issues_cancelled(thisyear,thismonth,structure_id)
-    db_count = Issueaction.where('extract(year from created_at) = ? and extract(month from created_at) =? and actiontype_id in (15,9) and structure_id = ?', thisyear, thismonth,structure_id).count
-    return db_count
-  end
-
-
-  def issues_reopened(thisyear,thismonth,structure_id)
-    db_count = Issueaction.where('extract(year from created_at) = ? and extract(month from created_at) =2 and actiontype_id in (10) and structure_id = ?', thisyear, thismonth,structure_id).count
-    return db_count
-  end
-
-
-
+def listmanagers(structure_id)
+  q = Manager.where(structure_id: structure_id)
+  return q
+end
 
 
 

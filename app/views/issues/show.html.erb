@@ -7,7 +7,9 @@
 
 
 </style>
+
 <% statusbox1 = 'btn btn-'+@issue.issuestatus(@issue.status) %>
+
 <% parentstructure = Structure.find(@issue.structure.parent_id) %>
 <% parentlink = 'Refer Issue to ' + parentstructure.name %>
 
@@ -37,125 +39,26 @@
 
   <div class="row">
 
+    <div class="col-sm-12">
 
-
-    <div class="col-sm-3">
-
-      <div class="panel panel-default">
+      <div class="panel panel-info">
         <div class="panel-heading">
 
-          <% if @canedit %>
-          <%= link_to 'Edit', edit_issue_path(@issue), :class => "btn btn-primary pull-right" %>
-              <% end %>
+
         </div>
         <div class="panel-body">
-        <div class="form-horizontal">
-
-
-
-
-            <div class="form-group">
-              <label class="col-sm-4">Disputants</label>
-              <div class="col-sm-8">
-                <%= @issue.disputant %>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-4">Raised by (Person)</label>
-              <div class="col-sm-8">
-                <%= link_to @issue.person.fullname, @raised_by if @issue.raised_by %>
-              </div>
-            </div>
-
-
-            <div class="form-group">
-              <label class="col-sm-4">Category</label>
-              <div class="col-sm-8">
-                <%= @issue.category.name if @issue.category_id %>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-4">Description</label>
-              <div class="col-sm-8">
-                <%= @issue.description %>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-4">Managing Council</label>
-              <div class="col-sm-8">
-                <%= link_to @issue.structure.name, @issue.structure %>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-4">District Location of Issue:</label>
-              <div class="col-sm-8">
-                <%= @issue.district.name if @issue.district_id %>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-4">Community Origin</label>
-              <div class="col-sm-8">
-                <strong><%= @issue.community %></strong>
-              </div>
-            </div>
-
-
-
-
-
-
-
-            <div class="form-group">
-              <label class="col-sm-4">Status Note</label>
-              <div class="col-sm-8">
-                <%= @issue.status_note %>
-              </div>
-            </div>
-
-          <% if @canedit %>
-
-
-            <%= link_to 'Delete', @issue, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
-              <% end %>
-
-
-
-
-
+          <%= @issue.description %>
           </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
       </div>
 
 
-
-
-
-
-
- </div>
-
-
-    <div class="col-sm-7">
+    <div class="col-sm-10">
 
 
 
       <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#viewresolution">Resolution</a></li>
+        <li class="active"><a data-toggle="tab" href="#viewresolution">General</a></li>
         <li><a data-toggle="tab" href="#viewhistory">History<div class="pull-right label label-info"><%= @numberactions if @numberactions > 0 %></div></a></li>
         <li><a data-toggle="tab" href="#viewdisputants">Disputants<div class="pull-right label label-info"><%= @numberdisputants if @numberdisputants > 0 %></div></a></li>
         <li><a data-toggle="tab" href="#viewmeetings">Agendas<div class="pull-right label label-success"><%= @numberagendas if @numberagendas > 0 %></div></a></li>
@@ -169,12 +72,137 @@
 
       <div class="tab-content">
         <div id="viewresolution" class="tab-pane fade in active">
-          <h3>Action/Resolution</h3>
 
 
-          <div class="panel panel-default">
+
+
+          <div class="col-sm-6">
+
+          <div class="panel panel-info">
             <div class="panel-heading">
 
+              <% if @canedit %>
+                  <%= link_to 'Edit', edit_issue_path(@issue), :class => "btn btn-primary pull-right" %>
+              <% end %>
+            </div>
+            <div class="panel-body">
+              <div class="form-horizontal">
+
+
+
+
+                <div class="form-group">
+                  <label class="col-sm-4">Disputants</label>
+                  <div class="col-sm-8">
+                    <%= @issue.disputant %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-4">Structure Raised</label>
+                  <div class="col-sm-8">
+                    <%= @issue.raisedby_structure %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-4">Raised by (Person)</label>
+                  <div class="col-sm-8">
+                    <%= link_to @issue.person.fullname, @issue.person if @issue.raised_by %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-4">Issue Origin</label>
+                  <div class="col-sm-8">
+                    <%= @issue.scope.name if @issue.scope_id %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4">Origin Note</label>
+                  <div class="col-sm-8">
+                    <%= @issue.originnote %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-4">Category</label>
+                  <div class="col-sm-8">
+                    <%= @issue.category.name if !@issue.category_id.nil? %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-4">Managing Council</label>
+                  <div class="col-sm-8">
+                    <%= link_to @issue.structure.name, @issue.structure %>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-4">District Location of Issue:</label>
+                  <div class="col-sm-8">
+                    <%= @issue.district.name if @issue.district_id %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4">Community Origin</label>
+                  <div class="col-sm-8">
+                    <strong><%= @issue.community %></strong>
+                  </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="form-group">
+                  <label class="col-sm-4">Status Note</label>
+                  <div class="col-sm-8">
+                    <%= @issue.status_note %>
+                  </div>
+                </div>
+
+                <% if @canedit %>
+
+
+                    <%= link_to 'Delete', @issue, method: :delete, data: { confirm: 'Are you sure?' } , :class => "btn btn-danger" %>
+                <% end %>
+
+
+
+
+
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+
+
+          </div>
+
+
+
+          <div class="col-sm-6">
+
+
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              Action Plan and Resolution
             </div>
             <div class="panel-body">
 
@@ -197,6 +225,26 @@
                 </div>
 
                 <div class="form-group">
+                  <label class="col-sm-2">Resolution Date:</label>
+                  <div class="col-sm-10">
+                    <%= @issue.resolution_date  %>
+                  </div>
+                </div>
+
+
+
+
+                <div class="form-group">
+                  <label class="col-sm-2">Resolution Type:</label>
+
+                  <div class="col-sm-10">
+                     <%= @issue.resolutiontype.name if @issue.resolutiontype_id && @issue.resolutiontype_id >= 1 %>
+                  </div>
+                </div>
+
+
+
+                <div class="form-group">
                   <label class="col-sm-2">Resolution Description:</label>
                   <div class="col-sm-10">
                     <%= @issue.resolution  %>
@@ -215,6 +263,7 @@
 
 
           </div>
+            </div>
 
         </div>
 
@@ -223,12 +272,12 @@
 
 
         <div id="viewhistory" class="tab-pane fade in ">
-          <h3>History</h3>
 
 
-          <div class="panel panel-default">
+
+          <div class="panel panel-info">
             <div class="panel-heading">
-
+              Issue History
             </div>
             <div class="panel-body">
 
@@ -340,8 +389,15 @@
 
 
                             <% if action.actiontype == Actiontype::REOPENED %>
+                                <% if action.mediation_id %>
+                                    <% thismediation = Mediation.find(action.mediation_id) %>
+                                    <strong>Issue Reopened from Mediation!: </strong>  <br>
+                                    <strong>Mediation: <%= link_to thismediation.mediationcode, thismediation  %></strong>  <br>
+                                    <% else %>
                                 <strong>Issue Reopened!: </strong>  <br>
                             <% end %>
+                                <% end %>
+
 
                             <%# if action.actiontype == Actiontype::COMMENT %>
                             <!-- <strong>Comment: </strong>  <br>-->
@@ -396,11 +452,10 @@
 
 
         <div id="viewdisputants" class="tab-pane fade in">
-          <h3>Disputants</h3>
 
-          <div class="panel panel-default">
+          <div class="panel panel-info">
             <div class="panel-heading">
-
+              Issue Disputants
 
               <%#= link_to 'Add Disputant', '#addDisputant', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
             </div>
@@ -439,12 +494,12 @@
         </div>
 
         <div id="viewmediations" class="tab-pane fade in">
-          <h3>Mediations</h3>
 
 
-          <div class="panel panel-default">
+
+          <div class="panel panel-info">
             <div class="panel-heading">
-
+                  Mediations
 
             </div>
             <div class="panel-body">
@@ -488,12 +543,12 @@
 
 
         <div id="viewmeetings" class="tab-pane fade in">
-          <h3>Meetings</h3>
 
 
-          <div class="panel panel-default">
+
+          <div class="panel panel-info">
             <div class="panel-heading">
-
+               Meeting Agendas
 
             </div>
             <div class="panel-body">
@@ -528,7 +583,14 @@
 
 
         <div id="viewdocuments" class="tab-pane fade in">
-          <h3>Documents</h3>
+
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              Documents
+
+            </div>
+            <div class="panel-body">
+
 
 
               <table class="table">
@@ -563,6 +625,8 @@
 
 
          </div>
+            </div>
+          </div>
 
 
         <div id="viewolddata" class="tab-pane fade in">
@@ -672,7 +736,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Reopen Issue (change to "ongoing" status)</h4>
-        <h2 class="modal-title" id="myModalLabel"><%= @issue.name %></h2>
+        <h3 class="modal-title" id="myModalLabel"><%= @issue.name %></h3>
       </div>
       <div class="modal-body">
         <%= render 'reopen', modal: true %>
@@ -744,7 +808,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small><%= parentlink %></small><br>
+        <small>Move this Issue to Mediation</small><br>
         <h4 class="modal-title" id="myModalLabel"><%= @issue.name %></h4>
       </div>
       <div class="modal-body">

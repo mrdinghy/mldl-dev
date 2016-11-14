@@ -120,7 +120,7 @@
 
 
           <h4>Select/Search Old Issue Ids</h4><br>
-          <select name="old_id" class="chosen-select input-md form-control">
+          <select name="old_id" class="chosen-select">
             <option value = "">Select -></option>
             <% @alloldids.each do |issue| %>
 
@@ -144,6 +144,13 @@
                 <option value="<%= issue2.id %>"><%= issue2.issuecode %></option>
             <% end %>
           </select>
+
+
+
+
+
+
+
 
 
 
