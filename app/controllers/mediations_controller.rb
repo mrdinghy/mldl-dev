@@ -10,11 +10,11 @@ class MediationsController < ApplicationController
   # GET /mediations/1
   # GET /mediations/1.json
   def show
-
-    if @mediation.issue.structure.ismanager(current_user.id) or current_user.mldlrole == 1
+    @issue=Issue.find(@mediation.issue_id)
+    if @issue.structure.ismanager(current_user.id) or current_user.mldlrole == 1
       @canedit=true
     end
-    @issue=Issue.find(@mediation.issue_id)
+    #@issue=Issue.find(@mediation.issue_id)
     @mediators = Mediator.where('mediation_id = ?', @mediation.id)
     @mediator = Mediator.new
     @new_site_document = SiteDocument.new

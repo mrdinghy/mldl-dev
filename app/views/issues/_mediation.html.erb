@@ -14,26 +14,24 @@
 
 
 
-    <div class="field">
-      <%= f.label 'Mediation Start' %><br>
+    <div class="form-group">
+      <%= f.label 'Resolution Date', :class => "col-sm-2 control-label" %>
+      <div class="col-sm-10" id="sandbox-container">
+        <div class="input-group date">
+          <input  name="mediate_start" type="text" id="datepicker-mediatestart" class="form-control" width="100">
+          <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+        </div>
 
-
-          <%= date_field_tag 'mediate_start', @date, id: "date", class: "date" %>
-
-</div>
-
+      </div>
 
     </div>
+
     <div class="actions">
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
     </div>
 <% end %>
 
-<script type="text/javascript">
-
-
-    $(".date").pickadate({
-        format: 'yyyy-mm-d',
-    })
+<script>
+    $('#datepicker-mediatestart').Zebra_DatePicker();
 
 </script>

@@ -37,7 +37,7 @@ class Structure < ActiveRecord::Base
   def ismanager(thisuser)
     s = Manager.where('structure_id = ? and user_id =?', self.id, thisuser).count
     puts 'here is the odk========================='
-    puts
+    puts s
     if s != 0
       return true
     else

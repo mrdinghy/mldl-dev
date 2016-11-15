@@ -9,10 +9,11 @@
 </style>
 
 <% statusbox1 = 'btn btn-'+@issue.issuestatus(@issue.status) %>
+<% if @issue.structure.structuretype != Structuretype::NSC %>
+    <% parentstructure = Structure.find(@issue.structure.parent_id) %>
 
-<% parentstructure = Structure.find(@issue.structure.parent_id) %>
-<% parentlink = 'Refer Issue to ' + parentstructure.name %>
-
+    <% parentlink = 'Refer Issue to ' + parentstructure.name %>
+<% end %>
 <div class="content-wrapper widerbox">
 <div class="container">
 

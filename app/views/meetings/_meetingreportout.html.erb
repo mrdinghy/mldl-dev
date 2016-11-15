@@ -8,8 +8,8 @@
 <% thisagenda = Agenda.find(agenda_id) %>
 <% thisissue = Issue.find(thisagenda.issue_id) %>
 
-
-<%= form_for(@issueaction) do |f| %>
+<%= form_for (@issueaction), :data => {:parsley_validate => "", :novalidate => ""}  do |f| %>
+<%#= form_for(@issueaction) do |f| %>
     <div class="form-horizontal">
       <% if @issueaction.errors.any? %>
           <div id="error_explanation">
@@ -78,6 +78,22 @@
 
             <%= radio_button(:issueaction,  'actiontype', Actiontype::ONGOING, checked: true) %> Ongoing<br>
             <%= radio_button(:issueaction, 'actiontype', Actiontype::MEDIATION) %> Send to Mediation<br>
+            <div class="form-group">
+              <%= f.label 'Mediation Start', :class => "col-sm-2 control-label" %>
+              <div class="col-sm-10" id="sandbox-container">
+                <div class="input-group date">
+                  <input  name="mediate_start" type="text" id="datepicker-mediatestart" class="form-control" width="100">
+                  <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+
+
             <%= radio_button(:issueaction,  'actiontype', Actiontype::ESCALATED) %> Escalate Issue<br>
             <%= radio_button(:issueaction,  'actiontype', Actiontype::CANCELLED) %> Cancel Issue<br>
 
@@ -94,3 +110,8 @@
       <br><br>
     </div>
 <% end %>
+
+<script>
+  $('#datepicker-mediatestart').Zebra_DatePicker();
+
+</script>
