@@ -87,7 +87,7 @@ class IssueactionsController < ApplicationController
       if @issueaction.save
         if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
           @agenda.update_attributes!(:result => Result::ONGOING, :addressed => true)
-        elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
+        elsif !params[:issueaction][:mediation_id].nil? and !params[:issueaction][:mediation_id].blank?
           d2 = Date.parse(params[:mediate_end])
           @mediation.update_attributes!(:result => Result::ONGOING, :mediate_end => d2)
         end
@@ -106,7 +106,7 @@ class IssueactionsController < ApplicationController
       if @issueaction.save
         if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
           @agenda.update_attributes!(:result => Result::CANCELLED, :addressed => true)
-        elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
+        elsif !params[:issueaction][:mediation_id].nil? and !params[:issueaction][:mediation_id].blank?
           d2 = Date.parse(params[:mediate_end])
           @mediation.update_attributes!(:result => Result::CANCELLED, :mediate_end => d2)
         end
@@ -126,7 +126,7 @@ class IssueactionsController < ApplicationController
       if @issueaction.save
         if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
           @agenda.update_attributes!(:result => Result::ESCALATED, :addressed => true)
-        elsif !params[:issueaction][:mediation_id].nil? and params[:issueaction][:mediation_id] > 0
+        elsif !params[:issueaction][:mediation_id].nil? and !params[:issueaction][:mediation_id].blank?
           d2 = Date.parse(params[:mediate_end])
           @mediation.update_attributes!(:result => Result::ESCALATED, :mediate_end => d2)
         end
