@@ -89,7 +89,7 @@ class IssueactionsController < ApplicationController
           @agenda.update_attributes!(:result => Result::ONGOING, :addressed => true)
         elsif !params[:issueaction][:mediation_id].nil? and !params[:issueaction][:mediation_id].blank?
           d2 = Date.parse(params[:mediate_end])
-          @mediation.update_attributes!(:result => Result::ONGOING, :mediate_end => d2)
+          @mediation.update_attributes!(:result => Result::ONGOING, :mediate_end => d2, :mediation_held => true)
         end
         sendnotice = 'Issue Remains Open'
 
@@ -108,7 +108,7 @@ class IssueactionsController < ApplicationController
           @agenda.update_attributes!(:result => Result::CANCELLED, :addressed => true)
         elsif !params[:issueaction][:mediation_id].nil? and !params[:issueaction][:mediation_id].blank?
           d2 = Date.parse(params[:mediate_end])
-          @mediation.update_attributes!(:result => Result::CANCELLED, :mediate_end => d2)
+          @mediation.update_attributes!(:result => Result::CANCELLED, :mediate_end => d2, :mediation_held => true)
         end
         sendnotice = 'Issue Cancelled Successfully.'
 
@@ -128,7 +128,7 @@ class IssueactionsController < ApplicationController
           @agenda.update_attributes!(:result => Result::ESCALATED, :addressed => true)
         elsif !params[:issueaction][:mediation_id].nil? and !params[:issueaction][:mediation_id].blank?
           d2 = Date.parse(params[:mediate_end])
-          @mediation.update_attributes!(:result => Result::ESCALATED, :mediate_end => d2)
+          @mediation.update_attributes!(:result => Result::ESCALATED, :mediate_end => d2, :mediation_held => true)
         end
         sendnotice = 'Issue Referred Up Successfully.'
       end
