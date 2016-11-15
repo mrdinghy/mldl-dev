@@ -273,11 +273,6 @@ class IssuesController < ApplicationController
   # PATCH/PUT /issues/1.json
   def update
 
-dsfdsfsdfdsf
-
-
-    puts '=================dfasfdfsdfsd====================adfasddsff================='
-
     respond_to do |format|
       if @issue.update(issue_params)
 
