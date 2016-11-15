@@ -18,6 +18,7 @@ class IssuesController < ApplicationController
     @myagendas = Agenda.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymediations = Mediation.where('issue_id=?', @issue.id).order('created_at DESC')
     @mymeetings = Meeting.where('structure_id=?', @issue.structure_id)
+    @openmeetings = @mymeetings.where(meeting_held: false)
     @openagendas = Agenda.where('issue_id = ? and addressed is null', @issue.id)
     @openmediations = Mediation.where('issue_id = ? and mediate_end is null', @issue.id)
 
@@ -208,10 +209,8 @@ class IssuesController < ApplicationController
   # GET /issues/new
   def new
     @issue = Issue.new
+    @issue.structure_id = params[:structure_id]
 
-    if params[:structure_id]
-      @issue.update_attributes(:structure_id => params[:structure_id])
-    end
   end
 
   # GET /issues/1/edit
@@ -232,30 +231,23 @@ class IssuesController < ApplicationController
   # POST /issues
   # POST /issues.json
   def create
+
     @issue = Issue.new(issue_params)
-    #@issue.update_attributes(status:Status::NEW)
-    #if params[:issue][:structure_id].present?
-      #@issue.update_attributes(:structure_id => params[:issue][:structure_id])
-
-    #end
-
+    @issue.status = Status::NEW
     respond_to do |format|
       if @issue.save
         if params[:meeting_id]
           Issueaction.create(actiontype: 2, structure_id:  params[:issue][:structure_id], meeting_id: params[:meeting_id], issue_id: @issue.id)
           Agenda.create(meeting_id: params[:meeting_id], issue_id: @issue.id)
           meeting = Meeting.find(params[:meeting_id])
-           format.html { redirect_to meeting, notice: 'Issue was successfully created.' }
-           format.json { render :show, status: :created, location: meeting }
-        elsif params[:structure_id]
-          Issueaction.create(structure_id: structure.id, issue_id: @issue.id, actiontype: 1, user_id: current_user.id)
-          structure = Structure.find(params[:structure_id])
+          format.html { redirect_to meeting, notice: 'Issue was successfully created.' }
+          format.json { render :show, status: :created, location: meeting }
+        else
+          Issueaction.create(structure_id: params[:issue][:structure_id], issue_id: @issue.id, actiontype: 1, user_id: current_user.id)
+          structure = Structure.find(params[:issue][:structure_id])
           format.html { redirect_to structure, notice: 'Issue was successfully created.' }
           format.json { render :show, status: :created, location: structure }
-        else
 
-          format.html { redirect_to @issue, notice: 'Issue was successfully created.' }
-          format.json { render :show, status: :created, location: @issue }
         end
 
 
@@ -281,7 +273,7 @@ class IssuesController < ApplicationController
   # PATCH/PUT /issues/1.json
   def update
 
-
+dsfdsfsdfdsf
 
 
     puts '=================dfasfdfsdfsd====================adfasddsff================='

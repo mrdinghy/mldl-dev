@@ -99,7 +99,7 @@ end
     @mymanagers = Manager.where('structure_id = ?', @structure.id)
 
     @meetings = Meeting.where(structure_id: @structure.id)
-    #@openmeetings = @mymeetings.where(meeting_held: true)
+    @openmeetings = @meetings.where(meeting_held: true)
 
     @parent = Structure.find(@structure.parent_id) if @structure.parent_id
     #@availablemanagers = Userrole.where('role_id = ?', 2)

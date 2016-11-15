@@ -660,12 +660,16 @@
                     <%= form_for(@issueaction, multipart: true, remote: false) do |f| %>
                         <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
                         <%= hidden_field(:issueaction, :actiontype, :value => Actiontype::AGENDA) %>
-
+                        <% if @openmeetings.count != 0 %>
                         Add To Meeting Agenda<br>
-                        <%= f.select :meeting_id, options_for_select(@mymeetings.collect{|m| [m.meetingid, m.id]}), {:include_blank => true,:class=>'user-id-widget', size: 5} %>
+                        <%= f.select :meeting_id, options_for_select(@openmeetings.collect{|m| [m.meetingid, m.id]}), {:include_blank => true,:class=>'user-id-widget', size: 5} %>
 
 
                         <%= f.submit 'Submit', :class => "btn btn-small btn-primary" %>
+                        <% else %>
+                            No Open Meetings to Add to Agenda
+                                <%= link_to "Create Meeting", new_meeting_path(:structure_id => @issue.structure.id), :class => "btn btn-success" %>
+                            <% end %>
 
 
                     <% end %>
