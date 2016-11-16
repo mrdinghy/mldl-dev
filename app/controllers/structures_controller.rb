@@ -87,14 +87,12 @@ end
          @canedit = true
     end
     @issues= Issue.where('structure_id = ?', @structure.id).order('created_at DESC')
-
-
-
+    myissueids=@issues.pluck(:id)
 
     @allcats = Category.all
     @alldistricts = District.all
     @myactions = Issueaction.where(structure_id: @structure.id).order('created_at DESC').limit(20)
-    @mediations = Mediation.all
+    @mediations = Mediation.where(issue_id: myissueids)
     @mypeople= Membership.where('structure_id = ?', @structure.id)
     @mymanagers = Manager.where('structure_id = ?', @structure.id)
 
