@@ -118,12 +118,6 @@ ActiveRecord::Schema.define(version: 20161114202808) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "countries", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "disputants", force: :cascade do |t|
     t.integer  "person_id"
     t.integer  "issue_id"
@@ -433,7 +427,8 @@ ActiveRecord::Schema.define(version: 20161114202808) do
       a.addressed,
       a.created_at,
       a.updated_at,
-      m.structure_id
+      m.structure_id,
+      m.meeting_held
      FROM agendas a,
       meetings m
     WHERE (a.meeting_id = m.id);
@@ -448,6 +443,7 @@ ActiveRecord::Schema.define(version: 20161114202808) do
       m.mediation_notes,
       m.created_at,
       m.updated_at,
+      m.mediation_held,
       i.structure_id
      FROM mediations m,
       issues i

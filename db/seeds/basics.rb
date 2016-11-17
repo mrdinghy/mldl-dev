@@ -27,6 +27,8 @@ User.create(name: 'Global Fellow', email: 'globalfellow@mldl-liberia.com', passw
 User.create(name: 'sysadmin', email: 'sysadmin@mldl-liberia.com', password: 'sysadminMLDL1234', mldlrole: 2)
 User.create(name: 'Sam Dakana', email: 'sdakana@mldl-liberia.com', password: 'dakanaMLDL1234', mldlrole: 2)
 User.create(name: 'Doegbazee Zaza', email: 'dzaza@mldl-liberia.com', password: 'zazaMLDL1234', mldlrole: 2)
+User.create(name: 'Sam Danaka', email: 'sfdanaka@yahoo.com', password: 'danakaMLDL1234', mldlrole: 2)
+
 
 
 
@@ -256,13 +258,13 @@ managers = Manager.create([
 {structure_id: 4, user_id: 14},
 {structure_id: 5, user_id: 14},
 {structure_id: 6, user_id: 14},
-{structure_id: 7, user_id: 24},
-{structure_id: 8, user_id: 24},
-{structure_id: 9, user_id: 24},
-{structure_id: 10, user_id: 24},
-{structure_id: 11, user_id: 24},
-{structure_id: 12, user_id: 24},
-{structure_id: 13, user_id: 24},
+{structure_id: 7, user_id: 20},
+{structure_id: 8, user_id: 20},
+{structure_id: 9, user_id: 20},
+{structure_id: 10, user_id: 20},
+{structure_id: 11, user_id: 20},
+{structure_id: 12, user_id: 20},
+{structure_id: 13, user_id: 20},
 {structure_id: 14, user_id: 16},
 {structure_id: 15, user_id: 16},
 {structure_id: 16, user_id: 16},

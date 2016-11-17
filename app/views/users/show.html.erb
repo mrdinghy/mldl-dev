@@ -13,7 +13,7 @@
         </div>
         <div class="panel-body">
 
-          <div class="col-sm-6">
+          <div class="col-sm-3">
 
 
           <h3>User</h3>
@@ -28,26 +28,41 @@
          </div>
 
 
-    <div class="col-sm-6">
-
+    <div class="col-sm-3">
           <h4>Assigned to Structures</h4>
-
-          <% mystructures = Manager.where('user_id = ?', @user.id) %>
-
-
-
           <ul>
-            <% mystructures.each do |mgmt| %>
+            <% @mystructures.each do |mgmt| %>
                 <li><%= link_to mgmt.structure.name, mgmt.structure %></li>
             <% end %>
           </ul>
+  </div>
+
+
+
+          <div class="col-sm-3">
+
+            <h4>Issue Action History</h4>
+
+
+
+
+
+            <ul>
+             Under development
+            </ul>
 
 
 
 
 
 
-    </div>
+          </div>
+
+
+
+
+
+
 
 
 </div>

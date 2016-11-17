@@ -143,7 +143,7 @@ class AppissuesController < ApplicationController
 
           if !issue.mediationdate.nil?
             if vresult == 5
-              addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate,  mediate_end: mldlissue.resolution_date, result: Result::RESOLVED)
+              addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate,  mediate_end: mldlissue.resolution_date, result: Result::RESOLVED, mediation_held: true)
 
             else
               addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate, result: Result::ONGOING)

@@ -27,7 +27,7 @@ class Meeting < ActiveRecord::Base
 
   def status
     if self.meeting_held
-      sname = 'Held'
+      sname = 'Closed (Held)'
     else
       sname = 'Scheduled'
     end

@@ -6,6 +6,7 @@
     m.mediation_notes,
     m.created_at,
     m.updated_at,
+    m.mediation_held,
     i.structure_id
    FROM mediations m,
     issues i

@@ -18,5 +18,12 @@ class Mediation < ActiveRecord::Base
 
 
 
+  def status
+    if self.mediation_held
+      sname = 'Closed'
+    else
+      sname = 'Open'
+    end
+  end
 
 end

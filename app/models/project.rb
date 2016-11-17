@@ -108,8 +108,10 @@ end
   end
 
 
-  def currentopen(d2,s1,cat, dist)
+  def currentopen(d2,s1,cat,dist)
+
     qresult = Issue.where('(status = ? or status = ?)',  Status::NEW, Status::ONGOING)
+
     if s1 != 0
       qresult = qresult.where('structure_id in (?)', s1)
     end
@@ -154,7 +156,7 @@ end
 
 
   def quarter_resolved(d2,s1,cat,dist)
-    puts '.....................................................qresolved.............................'
+
     qresult = Issue.where('resolution_date >= ? and resolution_date <= ?', self.qstart(d2), self.qend(d2))
     if s1 != 0
       qresult = qresult.where('structure_id in (?)', s1)
@@ -169,10 +171,8 @@ end
   end
 
 
-
-
-  def cumulative_resolved(d2,s1,cat,dist)
-    qresult = Issue.where('resolution_date <= ?', self.qend(d2))
+  def total_resolved(s1,cat,dist)
+    qresult = Issue.where('resolution_date is not NULL')
     if s1 != 0
       qresult = qresult.where('structure_id in (?)', s1)
     end
@@ -184,6 +184,24 @@ end
     end
     return qresult
   end
+
+  def cumulative_resolved(d2,s1,cat,dist)
+    if d2 != 0
+    qresult = Issue.where('resolution_date <= ?', self.qend(d2))
+    end
+    if s1 != 0
+      qresult = qresult.where('structure_id in (?)', s1)
+    end
+    if cat !=0
+      qresult = qresult.where(category_id: cat)
+    end
+    if dist !=0
+      qresult = qresult.where(district_id: dist)
+    end
+    return qresult
+  end
+
+
 
 
   def meetings(d2,s1,cat,dist)
@@ -288,8 +306,10 @@ end
 
 
   def mediation_results(d2,s1,r1,cat,dist)
+    if d2 != 0
     qresult = MediationIssue.where('extract(year from mediate_end) = ?', self.qstart(d2).year)
     qresult = qresult.where('extract(month from mediate_end) in (?)', self.qmonths(d2))
+    end
     if r1
       qresult = qresult.where(result: r1)
     end
@@ -305,6 +325,19 @@ end
     return qresult
   end
 
+
+
+  def openmediations(d2,s1)
+    qresult = MediationIssue.where('mediation_held is null')
+    if d2 != 0
+    qresult = qresult.where('extract(year from mediate_end) = ?', self.qstart(d2).year)
+    qresult = qresult.where('extract(month from mediate_end) in (?)', self.qmonths(d2))
+    end
+    if s1 != 0
+      qresult = qresult.where('structure_id in (?)', s1)
+    end
+    return qresult
+  end
 
 
 

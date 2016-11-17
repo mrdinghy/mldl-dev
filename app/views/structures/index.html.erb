@@ -66,7 +66,7 @@
 
               <div class="pull-right">
                 <%= fa_icon "users", :style => "color: green" %>
-                <%= csc.qmeetings(0,0,csc.id,0).count %>
+                <%= csc.openmeetings(0,0,csc.id,0).count %>
                 <%= fa_icon "wrench", :style => "color: blue" %>
                 <%= csc.openissues(0,0,csc.id,0).count %>
               </div>
@@ -88,7 +88,7 @@
                   <div class="pull-right">
 
                     <%= fa_icon "users", :style => "color: green" %>
-                    <%= dsc.qmeetings(0,0,dsc.id,0).count %>
+                    <%= dsc.openmeetings(0,0,dsc.id,0).count %>
 
                     <%= fa_icon "wrench", :style => "color: blue" %>
                     <%= dsc.openissues(0,0,dsc.id,0).count %>
@@ -112,7 +112,7 @@
 
                       <div class="pull-right">
                         <%= fa_icon "users", :style => "color: green" %>
-                        <%= cf.qmeetings(0,0,cf.id,0).count %>
+                        <%= cf.openmeetings(0,0,cf.id,0).count %>
 
                         <%= fa_icon "wrench", :style => "color: blue" %>
                         <%= cf.openissues(0,0,cf.id,0).count %>

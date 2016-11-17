@@ -40,6 +40,51 @@
 
 
 
+
+
+<% @peepdiv = 'p' + agenda_id.to_s %>
+<% @linkdiv = 'addpeep' + agenda_id.to_s %>
+
+
+          <div class="field">
+
+            <label><input type="checkbox" name="<%= @linkdiv %>" id="<%= @linkdiv %>" value="1">   <small>Or click here to add new person to MLDL</small></label><br>
+
+          </div>
+          <div id="<%= @peepdiv %>" style="display:none;">
+            <div class="field">
+              <%= label_tag "First Name" %><br>
+              <input type="text" name="fname" />
+            </div>
+            <div class="field">
+              <%= label_tag "Last Name" %><br>
+              <input type="text" name="lname" />
+            </div>
+
+            <div class="field">
+              <%= label_tag "Organization" %><br>
+
+              <%= select_tag "organization_id", options_from_collection_for_select(Organization.all, "id", "name"), include_blank: true, :class => "form-control" %>
+
+            </div>
+
+
+
+
+            <div class="field">
+              <%= label_tag "Title" %><br>
+              <input type="text" name="title" />
+            </div>
+
+            <div class="field">
+              <%= label_tag "Email" %><br>
+              <input type="text" name="email" />
+            </div>
+          </div>
+
+
+
+
           <div style="font-size: 16px">
 
             <h3>Meeting Result</h3>
@@ -63,16 +108,6 @@
 
               </div>
             </div>
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -114,4 +149,19 @@
 <script>
   $('#datepicker-mediatestart').Zebra_DatePicker();
 
+</script>
+
+<script type="text/javascript">
+
+
+
+  var checkbox = document.getElementById('<%= @linkdiv %>');
+  var details_div = document.getElementById('<%= @peepdiv %>');
+  checkbox.onchange = function() {
+    if(this.checked) {
+      details_div.style['display'] = 'block';
+    } else {
+      details_div.style['display'] = 'none';
+    }
+  };
 </script>

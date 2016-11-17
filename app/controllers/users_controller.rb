@@ -10,7 +10,8 @@ class UsersController < ApplicationController
    @userroles = Userrole.where('user_id = ?', @user.id)
    @allroles = Role.all
     @alluserroles = Userrole.all
-
+    @mystructures = Manager.where('user_id = ?', @user.id)
+    @myactions = Issueaction.where('user_id = ?', @user.id)
     #unless @user == current_user
       #redirect_to :back, :alert => "Access denied."
     #end

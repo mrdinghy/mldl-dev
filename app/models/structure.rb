@@ -193,8 +193,8 @@ end
   end
 
   def openmeetings(thisyear,thismonth,structure_id,district)
-    qnumber = self.qissues(thisyear,thismonth,structure_id,district)
-    qopen = qnumber.where('resolution_date is NULL and cancelled_at is NULL')
+    qnumber = self.qmeetings(thisyear,thismonth,structure_id,district)
+    qopen = qnumber.where('meeting_held is NULL')
     return qopen
   end
 

@@ -83,6 +83,38 @@ end
 
 
 
+    @summaryissues = @structure.project.cumulative_issues(0,@structure.id,0,0).count
+    @summarymeetings = @structure.project.meetings(0,@structure.id,0,0).count
+    @summarymediations = @structure.project.mediation_starts(0,@structure.id,0,0).count
+    @summaryresolved = @structure.project.total_resolved(@structure.id,0,0).count
+    @summaryopenissues =  @structure.project.currentopen(0,@structure.id,0,0).count
+    @summaryopenmediations = @structure.project.openmediations(0,@structure.id).count
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     if @structure.ismanager(current_user.id) or current_user.mldlrole == 1
          @canedit = true
     end

@@ -1,15 +1,9 @@
 
 
-<script>
-
-    $('#beginopen_modal').on('submit', function() {
-        $('#new_report_model').modal('hide');
-    })
-</script>
 <style>
 
 
-    .modal-beginopen {
+    .modal-beginopen, .modal-newissue, .modal-ag-resolve, .modal-ag-mediate, .modal-ag-escalate, .modal-ag-canceled, .modal-medstart, .modal-medend {
         width: 1200px;
     }
 </style>
@@ -21,93 +15,13 @@
 
 
 
+<%= render 'projects/dashboardsummary' %>
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="panel panel-info">
-    <div class="panel-heading">
-      <div class="panel-title">Summary to Date</div>
-    </div>
-    <div class="panel-body">
-      <div class="col-lg-12">
-      <!-- START widget-->
-      <div class="panel widget">
-        <div class="row row-table row-flush">
-          <div class="col-xs-6 bb br">
-            <div class="row row-table row-flush">
-              <div class="col-xs-4 text-center text-info">
-                <em class="fa fa-wrench fa-2x"></em>
-              </div>
-              <div class="col-xs-8">
-                <div class="panel-body text-center">
-                  <h4 class="mt0"><%= Issue.all.count %></h4>
-                  <p class="mb0 text-muted">Total Issues</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xs-6 bb">
-            <div class="row row-table row-flush">
-              <div class="col-xs-4 text-center text-danger">
-                <em class="fa fa-users fa-2x"></em>
-              </div>
-              <div class="col-xs-8">
-                <div class="panel-body text-center">
-                  <h4 class="mt0"><%= Meeting.all.count + Mediation.all.count %></h4>
-                  <p class="mb0 text-muted">Meetings/Mediations</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row row-table row-flush">
-          <div class="col-xs-6 br">
-            <div class="row row-table row-flush">
-              <div class="col-xs-4 text-center text-inverse">
-                <em class="fa fa-check fa-2x"></em>
-              </div>
-              <div class="col-xs-8">
-                <div class="panel-body text-center">
-                  <h4 class="mt0"><%= @resolved.count %></h4>
-                  <p class="mb0 text-muted">Issues Resolved</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xs-6">
-            <div class="row row-table row-flush">
-              <div class="col-xs-4 text-center text-success">
-                <em class="fa fa-inbox fa-2x"></em>
-              </div>
-              <div class="col-xs-8">
-                <div class="panel-body text-center">
-                  <h4 class="mt0"><%= @open.count %></h4>
-                  <p class="mb0 text-muted">Open Issues</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- END widget-->
-    </div>
-   </div>
-    </div>
 
 
 
@@ -185,7 +99,7 @@
               <td>New Issues this Quarter</td>
 
               <td><%= @project.quarter_issues(@d2,0,0,0).count %></td>
-              <td></td>
+              <td>    <%= link_to '#newissue_modal', 'data-toggle' => 'modal', :class => "fa fa-arrow-down" do %><i fa fa-arrow-down %></i><% end %></td>
             </tr>
             <tr>
 
@@ -198,23 +112,24 @@
 
             <tr>
               <td>&nbsp;&nbsp;&nbsp;&nbsp;Agenda Result: Resolved</td>
-              <td><%= @project.agenda_results(@d2,0,Result::RESOLVED,0,0).count %></td>
-              <td></td>
+              <td>
+                <%= @project.agenda_results(@d2,0,Result::RESOLVED,0,0).count %></td>
+              <td> <%= link_to '#agendasresolved_modal', 'data-toggle' => 'modal', :class => "fa fa-arrow-down" do %><i fa fa-arrow-down %></i><% end %></td>
             </tr>
             <tr>
               <td>&nbsp;&nbsp;&nbsp;&nbsp;Agenda Result: Mediation</td>
               <td><%= @project.agenda_results(@d2,0,Result::MEDIATION,0,0).count %></td>
-              <td></td>
+              <td> <%= link_to '#agendasmediations_modal', 'data-toggle' => 'modal', :class => "fa fa-arrow-down" do %><i fa fa-arrow-down %></i><% end %></td>
             </tr>
             <tr>
-              <td>&nbsp;&nbsp;&nbsp;&nbsp;Agenda Result: Referred (Escalated)</td>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;Agenda Result: Referred (Escalated to Structure)</td>
               <td><%= @project.agenda_results(@d2,0,Result::ESCALATED,0,0).count %></td>
-              <td></td>
+              <td> <%= link_to '#agendasescalated_modal', 'data-toggle' => 'modal', :class => "fa fa-arrow-down" do %><i fa fa-arrow-down %></i><% end %></td>
             </tr>
             <tr>
               <td>&nbsp;&nbsp;&nbsp;&nbsp;Agenda Result: Cancelled</td>
               <td><%= @project.agenda_results(@d2,0,Result::CANCELLED,0,0).count %></td>
-              <td></td>
+              <td><%= link_to '#agendascancelled_modal', 'data-toggle' => 'modal', :class => "fa fa-arrow-down" do %><i fa fa-arrow-down %></i><% end %></td>
             </tr>
             <tr>
               <td>&nbsp;&nbsp;&nbsp;&nbsp;Agenda Result: Unresolved</td>
@@ -229,14 +144,14 @@
               <td>Mediations Opened</td>
 
               <td><%= @project.mediation_starts(@d2,0,0,0).count %></td>
-              <td></td>
+              <td><%= link_to '#mediationsstart_modal', 'data-toggle' => 'modal', :class => "fa fa-arrow-down" do %><i fa fa-arrow-down %></i><% end %></td>
             </tr>
             <tr>
 
               <td>Mediations Closed</td>
 
               <td><%= @project.mediation_ends(@d2,0,0,0).count %></td>
-              <td></td>
+              <td><%= link_to '#mediationsend_modal', 'data-toggle' => 'modal', :class => "fa fa-arrow-down" do %><i fa fa-arrow-down %></i><% end %></td>
             </tr>
 
 
@@ -316,9 +231,19 @@
       </div>
       <div class="modal-body">
         <table class="table">
+        <thead>
+        <td>Issue Code</td>
+        <td>Name</td>
+        <td>Status</td>
+        <td>Created On</td>
+        <td>Resolution Date</td>
+        </thead>
+
+
           <% @project.beginissues(@d2,0,0,0).each do |i| %>
 
               <tr><td><%= i.issuecode %> </td>
+             <td width="40%"><%= i.name %> </td>
                 <td><%= i.status_humanize %> </td>
                 <td><%= i.created_at.strftime("%m/%d/%Y") %> </td>
                 <td><%= i.resolution_date.strftime("%m/%d/%Y") if !i.resolution_date.nil? %> </td>
@@ -338,6 +263,185 @@
 
     </div>
   </div>
+</div>
+
+
+
+
+
+
+    <div class="modal fade" id="newissue_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-newissue">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <small>New Issues This Quarter</small><br>
+            <h4 class="modal-title" id="myModalLabel">Open</h4>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <thead>
+              <td>Issue Code</td>
+              <td>Name</td>
+              <td>Status</td>
+              <td>Created On</td>
+              <td>Resolution Date</td>
+              </thead>
+
+
+              <% @project.quarter_issues(@d2,0,0,0).each do |i| %>
+
+                  <tr><td><%= i.issuecode %> </td>
+                    <td width="40%"><%= i.name %> </td>
+                    <td><%= i.status_humanize %> </td>
+                    <td><%= i.created_at.strftime("%m/%d/%Y") %> </td>
+                    <td><%= i.resolution_date.strftime("%m/%d/%Y") if !i.resolution_date.nil? %> </td>
+                  </tr>
+              <% end %>
+            </table>
+           </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+</div>
+
+
+<div class="modal fade" id="agendasresolved_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-ag-resolve">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Agenda Results - Resolved</small><br>
+        <h4 class="modal-title" id="myModalLabel">Open</h4>
+      </div>
+      <div class="modal-body">
+        <% @agendalist = @project.agenda_results(@d2,0,Result::RESOLVED,0,0) %>
+        <%= render 'agendalist' %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="agendasmediations_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-ag-mediate">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Agenda Results - To Mediation</small><br>
+        <h4 class="modal-title" id="myModalLabel">Open</h4>
+      </div>
+      <div class="modal-body">
+        <% @agendalist = @project.agenda_results(@d2,0,Result::MEDIATION,0,0) %>
+        <%= render 'agendalist' %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="agendasescalated_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-ag-escalate">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Agenda Results - Escalated</small><br>
+        <h4 class="modal-title" id="myModalLabel">Open</h4>
+      </div>
+      <div class="modal-body">
+        <% @agendalist = @project.agenda_results(@d2,0,Result::ESCALATED,0,0) %>
+        <%= render 'agendalist' %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="agendascancelled_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-ag-canceled">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Agenda Results - Cancelled</small><br>
+        <h4 class="modal-title" id="myModalLabel">Open</h4>
+      </div>
+      <div class="modal-body">
+        <% @agendalist = @project.agenda_results(@d2,0,Result::CANCELLED,0,0) %>
+        <%= render 'agendalist' %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="mediationsstart_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-medstart">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Mediations - Started</small><br>
+        <h4 class="modal-title" id="myModalLabel">Open</h4>
+      </div>
+      <div class="modal-body">
+        <% @mediationlist = @project.mediation_starts(@d2,0,0,0) %>
+        <%= render 'mediationlist' %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="mediationsend_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-medend">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Mediations - Ended</small><br>
+        <h4 class="modal-title" id="myModalLabel">Open</h4>
+      </div>
+      <div class="modal-body">
+        <% @mediationlist = @project.mediation_ends(@d2,0,0,0) %>
+        <%= render 'mediationlist' %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
 
 
 

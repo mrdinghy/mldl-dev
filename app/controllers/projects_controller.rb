@@ -66,12 +66,23 @@ class ProjectsController < ApplicationController
 
 
   def dashboard
+
+
+
+
     self.settime
-    @resolved = Issue.where(status: Status::RESOLVED)
+
+    @summaryissues = Issue.all.count
+    @summarymeetings = Meeting.all.count
+    @summarymediations = Mediation.all.count
+    @summaryresolved = Issue.where('resolution_date is not NULL').count
+    @summaryopenissues =  Issue.where('status = ? or status = ?', Status::ONGOING, Status::NEW).count
+    @summaryopenmediations = Mediation.where(mediation_held: nil).count
+
+
+
 
     self.categorydata
-
-    @open = Issue.where('status = ? or status = ?', Status::ONGOING, Status::NEW)
 
 
 

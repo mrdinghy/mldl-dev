@@ -81,9 +81,6 @@ Rails.application.routes.draw do
 
 
 
-
-
-
   get 'resultaudit', to: 'projects#resultaudit', as: 'resultaudit'
   post 'adddisputant', to: 'issues#adddisputant', as: 'adddisputant'
   post 'addparticipant', to: 'meetings#addparticipant', as: 'addparticipant'
