@@ -288,10 +288,8 @@ ActiveRecord::Schema.define(version: 20161114202808) do
   end
 
   create_table "posts", force: :cascade do |t|
-    t.date     "start_date"
-    t.date     "end_date"
-    t.integer  "post_type"
-    t.decimal  "post_value"
+    t.string   "title"
+    t.text     "body"
     t.date     "published_at"
     t.boolean  "is_featured"
     t.datetime "created_at"

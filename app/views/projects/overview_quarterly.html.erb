@@ -15,7 +15,8 @@
     <tr>
     <td rowspan="2" class="rt">Year</td>
     <td rowspan="2" class="rt">Qtr</td>
-    <td rowspan="2" class="rt">To Date Issues</td>
+    <td rowspan="2" class="rt">Total Issues</td>
+      <td rowspan="2" class="rt">Total Resolved</td>
     <td rowspan="2" class="rt">Begin Open</td>
     <td rowspan="2" class="rt">New in Qtr</td>
     <td rowspan="2" class="rt">Resolved in Qt</td>
@@ -53,7 +54,9 @@
             <td class="rt"><%= y %></td>
             <td class="rt"><%= @project.qtrname(q) %></td>
             <td class="rt"><%= @project.cumulative_issues(d2,0,0,0).count %></td>
-            <td class="rt"><%= @project.beginissues(d2,0,0,0).count %></td>
+            <td class="rt"><%= @project.cumulative_resolved(d2,0,0,0).count %></td>
+
+            <td class="rt" style = "border-left: #000 solid 1px"><%= @project.beginissues(d2,0,0,0).count %></td>
             <td class="rt"><%= @project.quarter_issue_total(d2,0,0,0) %></td>
 
 

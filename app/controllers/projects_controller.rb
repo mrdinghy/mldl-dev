@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
-  include Setupdates
+
   # GET /projects
   # GET /projects.json
 

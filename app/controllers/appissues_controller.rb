@@ -7,7 +7,7 @@ class AppissuesController < ApplicationController
 
 
       Appissue.where('issueid in (?)', [501,363,176,177]).destroy_all
-      @cleanissues2 = Appissue.order('id').where('id < 700')
+      @cleanissues2 = Appissue.order('id')
 
       @uniquemeetings = Appissue.select(:meetingcode, :originalmeetingdate, :structurecounty, :structuredistrict, :structure).order(:meetingcode).uniq
 
@@ -94,6 +94,7 @@ class AppissuesController < ApplicationController
               vstatus = Status::RESOLVED
               vresult = Result::RESOLVED
           else
+              rd = nil
               vstatus = Status::ONGOING
               vresult = Result::ONGOING
           end
@@ -116,6 +117,7 @@ class AppissuesController < ApplicationController
               raisedby_structure: issue.raisedby,
               actioncommittee: issue.actionplancommittee,
               actionplan: issue.actionplandescription,
+              resolution_date: rd,
               resolutiontype_id: rt,
               status: vstatus,
              resolution_date: rd)
@@ -135,25 +137,32 @@ class AppissuesController < ApplicationController
 
 
           # all issues get an agenda and Resolved or Ongoing
-          action = Issueaction.create(issue_id: mldlissue.id, actiontype: 2, user_id: vuser, meeting_id: meetid, structure_id: mldlissue.structure_id)
-          action.update_attributes!(created_at: issue.originalmeetingdate)
-          agenda = Agenda.create(issue_id: mldlissue.id, meeting_id: meetid, :addressed => true, result: vresult)
+          # won't record actions for meeting agendas...
+          # action = Issueaction.create(issue_id: mldlissue.id, actiontype: 2, user_id: vuser, meeting_id: meetid, structure_id: mldlissue.structure_id)
+          #action.update_attributes!(created_at: issue.originalmeetingdate)
+          agenda = Agenda.create(issue_id: mldlissue.id, meeting_id: meetid, :addressed => true, result: Result::ONGOING)
           agenda.update_attributes!(created_at: issue.originalmeetingdate)
 
 
           if !issue.mediationdate.nil?
+
+            addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate, mediation_held: true)
+
             if vresult == 5
-              addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate,  mediate_end: mldlissue.resolution_date, result: Result::RESOLVED, mediation_held: true)
+              addmed.result = Result::RESOLVED
+              if issue.mediationdate > issue.resolutiondate
+                addmed.mediate_start > issue.resolutiondate
+              end
+              addmed.mediate_end = issue.resolutiondate
 
             else
-              addmed = Mediation.create(issue_id: mldlissue.id, mediate_start: issue.mediationdate, result: Result::ONGOING)
+              addmed.result = Result::ONGOING
+              addmed.mediate_end = issue.mediationdate
             end
-
-            medaction=Issueaction.create(issue_id: mldlissue.id, actiontype: 7, user_id: vuser, mediation_id: addmed.id, actionbody: issue.mediationoutcome, structure_id: mldlissue.structure_id)
-            medaction.update_attributes(created_at: issue.mediationdate)
-
-
-            medaction.save!
+           addmed.save!
+            #medaction=Issueaction.create(issue_id: mldlissue.id, actiontype: 7, user_id: vuser, mediation_id: addmed.id, actionbody: issue.mediationoutcome, structure_id: mldlissue.structure_id)
+            #medaction.update_attributes(created_at: issue.mediationdate)
+            #medaction.save!
           end
          # if !issue.statusnotes.blank?
            # statusnote = Issueaction.create(issue_id: mldlissue.id,actiontype: 3, actionbody: issue.statusnotes, user_id: vuser, structure_id: mldlissue.structure_id)
@@ -167,50 +176,101 @@ class AppissuesController < ApplicationController
 
 
           #end
+          if !issue.referraldate.nil?
 
+            if mldlissue.old_id == 654
+              sold = 21
+              snew = 14
+             elsif mldlissue.old_id == 619
+                sold = 11
+                snew =10
+            elsif mldlissue.old_id == 622
+              sold = 13
+              snew =12
+            elsif mldlissue.old_id == 563
+              sold = 17
+              snew = 14
+            elsif mldlissue.old_id == 566
+              sold = 23
+              snew = 14
+            elsif mldlissue.old_id == 569
+              sold = 24
+              snew = 14
+            elsif mldlissue.old_id == 565
+              sold = 18
+              snew = 17
+            elsif mldlissue.old_id == 604
+              sold = 7
+              snew = 7
+            elsif mldlissue.old_id == 539
+              sold = 13
+              snew =12
+            elsif mldlissue.old_id == 537
+              sold = 11
+              snew =10
+            elsif mldlissue.old_id == 538
+              sold = 11
+              snew =10
+            elsif mldlissue.old_id == 538
+              sold = 11
+              snew =10
+            elsif mldlissue.old_id == 613
+              sold = 11
+              snew =10
+            elsif mldlissue.old_id == 605
+              sold = 9
+              snew =8
+            elsif mldlissue.old_id == 607
+              sold = 9
+              snew =8
+            elsif mldlissue.old_id == 534
+              sold = 7
+              snew = 1
+            elsif mldlissue.old_id == 556
+              sold = 25
+              snew = 14
+            elsif mldlissue.old_id == 506
+              sold = 26
+              snew = 14
+            elsif mldlissue.old_id == 500
+              sold = 5
+              snew = 2
+            elsif mldlissue.old_id == 181
+              sold = 10
+              snew = 7
+            end
+            refaction=Issueaction.create(issue_id: mldlissue.id, actiontype: 6, user_id: vuser, actionbody: issue.referralnote, structure_id: snew, laststructure_id: sold)
+            refaction.update_attributes(created_at: issue.referraldate)
+            refaction.save!
+          end
 
           if !issue.issuenotes.blank?
             issuenote = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.issuenotes, user_id: vuser, structure_id: mldlissue.structure_id)
             if !issue.originalmeetingdate.nil?
               issuenote.update_attributes!(created_at: issue.originalmeetingdate)
-
             else
-
               issuenote.update_attributes!(created_at:  issue.originaltimestamp)
             end
 
-            #actplan.save!
           end
 
           if !issue.actionplannotes.blank?
             actplan = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.actionplannotes, user_id: vuser, structure_id: mldlissue.structure_id)
             if !issue.originalmeetingdate.nil?
               actplan.update_attributes!(created_at: issue.originalmeetingdate)
-
             else
-
               actplan.update_attributes!(created_at:  issue.originaltimestamp)
             end
 
             #actplan.save!
           end
 
-          if !issue.updatedescription.blank? and !issue.updatetype.nil?
+          if !issue.updatedescription.blank?
 
-            if issue.updatetype.include? 'Resolution'
-              acttype=5
-            elsif issue.updatetype.include? 'Referred'
-              acttype=6
 
-            elsif issue.updatetype.include? 'Mediation'
-              acttype=7
-            else
-              acttype=3
-            end
-
-            updater = Issueaction.create(issue_id: mldlissue.id, actiontype: acttype, actionbody: issue.updatedescription, user_id: vuser, structure_id: mldlissue.structure_id)
+            updater = Issueaction.create(issue_id: mldlissue.id, actiontype: 3, actionbody: issue.updatedescription, user_id: vuser, structure_id: mldlissue.structure_id)
             if !issue.updatedate.nil?
-              updater.update_attributes(created_at: issue.originalmeetingdate)
+              updater.update_attributes(created_at: issue.updatedate)
 
             else
               updater.update_attributes(created_at:  issue.originaltimestamp)
@@ -429,52 +489,52 @@ end
   def retdist(district)
      if !district.nil?
       if district.include? 'Voinjama'
-        d=16
+        d=38
       elsif district.include? 'Buu-Yao'
-        d=19
+        d=51
       elsif district.include? 'Quardu Boundi'
-        d=0
+        d=37
       elsif district.include? 'Gbehlay-Geh'
-        d=18
+        d=50
       elsif district.include? 'Gbao'
-        d=30
+        d=64
       elsif district.include? 'Tchien'
-        d=0
+        d=66
       elsif district.include? 'Kparblee'
-      d=21
+      d=53
       elsif district.include? 'Kpaai'
       d=7
       elsif district.include? 'Zorzor'
-      d=17
+      d=39
       elsif district.include? 'Yarpea Mahn'
-      d=0
+      d=62
       elsif district.include? 'Foya'
-      d=12
+      d=33
       elsif district.include? 'Leewehpea-Mahn'
-      d=0
+      d=61
       elsif district.include? 'Suakoko'
       d=8
       elsif district.include? 'Kolahun'
-      d=13
+      d=34
       elsif district.include? 'Konobo'
-      d=31
+      d=65
       elsif district.include? 'hai'
-      d=29
+      d=63
       elsif district.include? 'Garr-Bain'
-      d=22
+      d=54
       elsif district.include? 'Wee-Gbehyi-Mahn'
-      d=20
+      d=52
       elsif district.include? 'Sanniquellie Mahn'
-      d=25
+      d=58
       elsif district.include? 'Fuamah'
       d=5
       elsif district.include? 'Yarmein'
-      d=23
+      d=55
       else
-        d=0
+        d= nil
       end
      else
-       d=0
+       d=nil
      end
 
       return d

@@ -23,7 +23,7 @@
   <td><%= s.project.allbystatus(Status::MEDIATION,s,0,0).count %></td>
   <td><%= s.project.allbystatus(Status::CANCELLED,s,0,0).count %></td>
   <td><%= s.project.allbystatus(Status::RESOLVED,s,0,0).count %></td>
-  <td><%= s.project.percentresolved(s.project.allbystatus(0,s,0,0).count,s.project.allbystatus(Status::RESOLVED,s,0,0).count).round(2) %>%</td>
+  <td><%= s.project.percentresolved(s.project.allbystatus(0,s,0,0).count,s.project.allbystatus(Status::RESOLVED,s,0,0).count).round(1) %>%</td>
 
 
 </tr>

@@ -31,6 +31,25 @@ class UsersController < ApplicationController
   end
 
 
+  def newmldluser
+    @user = User.new
+    render 'addmldluser'
+  end
+  def createuser
+    @user = User.new(user_params)
+ddddddddddddddddddd
+    respond_to do |format|
+      if @user.save
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        format.json { render :show, status: :created, location: @district }
+      else
+        format.html { render :new }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+
+
+  end
 
   # PATCH/PUT /resources/1
   # PATCH/PUT /resources/1.json

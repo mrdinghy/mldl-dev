@@ -143,7 +143,7 @@
                 <div class="form-group">
                   <label class="col-sm-4">District Location of Issue:</label>
                   <div class="col-sm-8">
-                    <%= @issue.district.name if @issue.district_id %>
+                    <%= @issue.district.name if !@issue.district_id.nil? %>
                   </div>
                 </div>
                 <div class="form-group">

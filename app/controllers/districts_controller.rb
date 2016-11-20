@@ -4,7 +4,7 @@ class DistrictsController < ApplicationController
   # GET /districts
   # GET /districts.json
   def index
-    @districts = District.order(:name)
+    @districts = District.order(:county_id)
 
   end
 

@@ -141,7 +141,7 @@
       <table class="table">
         <% @myactions.each do |act| %>
             <tr>
-              <td><%= act.created_at.strftime("%F") %></td>
+              <td width="100px"><%= act.created_at.strftime("%F") %></td>
 
               <td>
                 <%if act.comment? %>

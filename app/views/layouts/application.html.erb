@@ -30,17 +30,18 @@
 
 
 
+        <% if user_signed_in? %>
+            <header class="topnavbar-wrapper">
+                <%= render 'layouts/mldl_navbar' %>
+            </header>
+        <% end %>
+        <%= render 'layouts/messages' %>
 
-      <header class="topnavbar-wrapper">
-      <%= render 'layouts/mldl_navbar' %>
-    </header>
-       <%= render 'layouts/messages' %>
 
+        <div class="container">
+        <%= yield %>
 
-      <div class="container">
-       <%= yield %>
-
-      </div>
+        </div>
 
 
 

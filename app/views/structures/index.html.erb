@@ -54,6 +54,27 @@
 
 
     <div class="row">
+      <div class="col-sm-12">
+        <div class="col-sm-12 cscbox">
+
+          <span class="short"><%= @nsc.short %></span> <strong><%= link_to @nsc.name, @nsc %></strong><br>
+
+
+          <div class="pull-right">
+            <%= fa_icon "users", :style => "color: green" %>
+            <%= @nsc.openmeetings(0,0,@nsc.id,0).count %>
+            <%= fa_icon "wrench", :style => "color: blue" %>
+            <%= @nsc.openissues(0,0,@nsc.id,0).count %>
+          </div>
+          <small>
+            <% nscmanagers = @nsc.listmanagers(@nsc.id) %>
+            <% nscmanagers.each do |nsc| %>
+                <%= nsc.user.name %><br>
+            <% end %>
+          </small>
+        </div>
+      </div>
+
       <% @csc_structures.each do |csc| %>
 
           <%# csc.getdistricts(csc.county_id) %>

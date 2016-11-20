@@ -116,6 +116,12 @@ communities.each do |x|
   scl = Structure.create(short: 'CF-KP', name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id, project_id: 1)
 end
 
+
+
+
+
+
+
 d = District.create(name: 'Suakoko', county_id: c.id)
 sd = Structure.create(short: 'DS-SU', name: 'Suakoko DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id, project_id: 1)
 communities = ['Sinyea CF']
@@ -127,11 +133,42 @@ end
 d = District.create(name: 'Salala', county_id: c.id)
 d = District.create(name: 'Sanayea', county_id: c.id)
 d = District.create(name: 'Zota', county_id: c.id)
+d = District.create(name: 'Jorquelleh', county_id: c.id)
+
 
 # Gbarpolu
+c = County.create(name: 'Gbarpolu')
+d = District.create(name: 'Belleh', county_id: c.id)
+d = District.create(name: 'Bokomu', county_id: c.id)
+d = District.create(name: 'Bopolu', county_id: c.id)
+d = District.create(name: 'Gbarma', county_id: c.id)
+d = District.create(name: 'Kongba', county_id: c.id)
 
 
+# Grand Bassa
+c = County.create(name: 'Grand Bassa')
+d = District.create(name: 'District #1', county_id: c.id)
+d = District.create(name: 'District #2', county_id: c.id)
+d = District.create(name: 'District #3', county_id: c.id)
+d = District.create(name: 'District #4', county_id: c.id)
+d = District.create(name: 'Owensgrove', county_id: c.id)
+d = District.create(name: 'St. John River', county_id: c.id)
 
+# Grand Cape
+c = County.create(name: 'Grand Cape Mount')
+d = District.create(name: 'Commonwealth', county_id: c.id)
+d = District.create(name: 'Garwula', county_id: c.id)
+d = District.create(name: 'Gola Konneh', county_id: c.id)
+d = District.create(name: 'Porkpa', county_id: c.id)
+d = District.create(name: 'Tewor', county_id: c.id)
+
+
+# Grand Kru
+c = County.create(name: 'Grand Kru')
+d = District.create(name: 'Buah', county_id: c.id)
+d = District.create(name: 'Lower Kru Coast', county_id: c.id)
+d = District.create(name: 'Sasstown', county_id: c.id)
+d = District.create(name: 'Upper Kru Coast', county_id: c.id)
 
 
 
@@ -148,6 +185,7 @@ end
 d = District.create(name: 'Kolahun', county_id: c.id)
 d = District.create(name: 'Salayea', county_id: c.id)
 d = District.create(name: 'Vahun', county_id: c.id)
+d = District.create(name: 'Quardu Gboni', county_id: c.id)
 
 d = District.create(name: 'Voinjama', county_id: c.id)
 sd = Structure.create(short: 'DS-VJ', name: 'Voinjama DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id, project_id: 1)
@@ -166,7 +204,22 @@ communities.each do |x|
 end
 
 
+c = County.create(name: 'Margibi')
+d = District.create(name: 'Firestone', county_id: c.id)
+d = District.create(name: 'Gibi', county_id: c.id)
+d = District.create(name: 'Karkata', county_id: c.id)
+d = District.create(name: 'Mambah-Kaba', county_id: c.id)
 
+
+c = County.create(name: 'Maryland')
+d = District.create(name: 'Barrobo', county_id: c.id)
+d = District.create(name: 'Pleebo/Sodeken', county_id: c.id)
+
+c = County.create(name: 'Montserrado')
+d = District.create(name: 'Careysburg', county_id: c.id)
+d = District.create(name: 'Greater Monrovia', county_id: c.id)
+d = District.create(name: 'St. Paul River', county_id: c.id)
+d = District.create(name: 'Todee', county_id: c.id)
 
 
 c = County.create(name: 'Nimba')
@@ -178,9 +231,6 @@ communities = ['Garplay CF']
 communities.each do |x|
   scl = Structure.create(short: 'CF-GL', name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id, project_id: 1)
 end
-
-
-
 
 d = District.create(name: 'Buu-Yao', county_id: c.id)
 sd = Structure.create(short: 'DS-BY', name: 'Buu-Yao DSC', structuretype: Structuretype::DSC, county_id: c.id, district_id: d.id, parent_id: sc.id, project_id: 1)
@@ -218,12 +268,13 @@ communities = ['Bonlah CF']
 communities.each do |x|
   scl = Structure.create(short: 'CF-YM', name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id, project_id: 1)
 end
-
-d = District.create(name: 'Saclepea District', county_id: c.id)
-d = District.create(name: 'Sanniquelleh-Mahn District', county_id: c.id)
-d = District.create(name: 'Tappita District', county_id: c.id)
-d = District.create(name: 'Yarwein-Mehnsohnneh District', county_id: c.id)
-d = District.create(name: 'Zoegeh District', county_id: c.id)
+d = District.create(name: 'Yarmein-Mehnsohnneh', county_id: c.id)
+d = District.create(name: 'Saclepea', county_id: c.id)
+d = District.create(name: 'Sanniquelleh-Mahn', county_id: c.id)
+d = District.create(name: 'Tappita', county_id: c.id)
+d = District.create(name: 'Zoegeh', county_id: c.id)
+d = District.create(name: 'Leewehpea-Mahn', county_id: c.id)
+d = District.create(name: 'Yarpea Mahn', county_id: c.id)
 
 c = County.create(name: 'Grand Gedeh')
 sc = Structure.create(short: 'CS-GG', name: 'Grand Gedeh CSC', structuretype: Structuretype::CSC, county_id: c.id, parent_id: 1, project_id: 1)
@@ -248,7 +299,19 @@ communities = ['Ziah CF']
 communities.each do |x|
   scl = Structure.create(short: 'CF-KO', name: x, structuretype: Structuretype::CF, county_id: c.id, district_id: d.id, parent_id: sd.id, project_id: 1)
 end
+d = District.create(name: 'Tchien', county_id: c.id)
+d = District.create(name: 'Gbarzon', county_id: c.id)
 
+
+
+c = County.create(name: 'Sinoe')
+d = District.create(name: 'Butaw', county_id: c.id)
+d = District.create(name: 'Dugbe River', county_id: c.id)
+d = District.create(name: 'Greenville', county_id: c.id)
+d = District.create(name: 'Jaedae Jaedepo', county_id: c.id)
+d = District.create(name: 'Juarzon', county_id: c.id)
+d = District.create(name: 'Kpayan', county_id: c.id)
+d = District.create(name: 'Pyneston', county_id: c.id)
 
 
 managers = Manager.create([

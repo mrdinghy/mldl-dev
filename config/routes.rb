@@ -79,6 +79,8 @@ Rails.application.routes.draw do
   get 'searchmeetings', to: 'meetings#searchmeetings', as: 'searchmeetings'
   get 'meetingresults', to: 'meetings#meetingresults', as: 'meetingresults'
 
+  get 'newmldluser', to: 'users#newmldluser', as: 'newmldluser'
+  get 'createuser', to: 'users#createuser', as: 'createuser'
 
 
   get 'resultaudit', to: 'projects#resultaudit', as: 'resultaudit'

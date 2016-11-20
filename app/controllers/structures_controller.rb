@@ -2,7 +2,6 @@ class StructuresController < ApplicationController
 
   before_action :set_structure, only: [:show, :edit, :update, :destroy]
 
-  include Issuereporting
 
   # GET /structures
   # GET /structures.json
@@ -72,7 +71,7 @@ end
 
   def index
     self.settime
-    @nsc = Structure.where('structuretype_id =?', 4)
+    @nsc = Structure.find(1)
     @csc_structures = Structure.where('structuretype =?', Structuretype::CSC)
   end
 
@@ -89,27 +88,6 @@ end
     @summaryresolved = @structure.project.total_resolved(@structure.id,0,0).count
     @summaryopenissues =  @structure.project.currentopen(0,@structure.id,0,0).count
     @summaryopenmediations = @structure.project.openmediations(0,@structure.id).count
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
