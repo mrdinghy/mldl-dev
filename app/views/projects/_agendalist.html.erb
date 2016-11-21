@@ -1,0 +1,20 @@
+<table class="table">
+  <thead>
+  <td>Issue Code</td>
+  <td>Name</td>
+  <td>Status</td>
+  <td>Agenda Date</td>
+  <td>Resolution Date</td>
+  </thead>
+
+
+  <% @agendalist.each do |a| %>
+      <% i = Issue.find(a.issue_id) %>
+      <tr><td><%= i.issuecode %> </td>
+        <td width="40%"><%= i.name %> </td>
+        <td><%= i.status_humanize %> </td>
+        <td><%= i.created_at.strftime("%m/%d/%Y") %> </td>
+        <td><%= i.resolution_date.strftime("%m/%d/%Y") if !i.resolution_date.nil? %> </td>
+      </tr>
+  <% end %>
+</table>
