@@ -308,6 +308,12 @@ class AppissuesController < ApplicationController
         thisuser = 13
       elsif yname.include? 'Koll'
         thisuser = 20
+      elsif yname.include? 'Abbas'
+        thisuser = 28
+      elsif yname.include? 'Samp'
+        thisuser = 26
+      elsif yname.include? 'Worloh'
+        thisuser = 27
       else
         thisuser = 1
       end
@@ -388,7 +394,7 @@ class AppissuesController < ApplicationController
           if structure == 'CSC'
             s=2
           elsif district
-            if district.include? 'Kpaai'
+            if district.include? 'Kpai'
               if structure == 'DSC'
               s=3
               elsif structure == 'CF'
@@ -449,7 +455,7 @@ class AppissuesController < ApplicationController
           if structure == 'CSC'
            s=27
           elsif district
-            if district.include? 'Bhai'
+            if district.include? "B'hai"
               if structure == 'DSC'
               s=28
               else

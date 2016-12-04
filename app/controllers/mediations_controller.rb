@@ -116,7 +116,7 @@ class MediationsController < ApplicationController
 
     respond_to do |format|
       if @mediator.save
-        format.html { redirect_to mediation, notice: 'Participation was successfully created.' }
+        format.html { redirect_to mediation, notice: 'Mediator assigned to Mediation.' }
         format.json { render :show, status: :created, location: @mediator }
       else
         format.html { render :new }
@@ -127,7 +127,14 @@ class MediationsController < ApplicationController
   end
 
 
-
+  def deletemediator
+    p=Mediator.find(params[:mediator_id]).destroy
+    m = Mediation.find(p.mediation_id)
+    respond_to do |format|
+      format.html { redirect_to m, notice: 'Mediator has been removed.' }
+      format.json { head :no_content }
+    end
+  end
 
 
 

@@ -257,8 +257,9 @@
                     <thead>
                     <th>Name</th>
                     <th>Title</th>
+                    <td>Email</td>
                     <th>Organization</th>
-
+                    <th></th>
                     </thead>
                     <tbody>
                     <% @participants.each do |p| %>
@@ -266,7 +267,12 @@
                           <td>  <%= link_to p.person.fullname, p.person %> </td>
                           <td><%= p.person.title %></td>
                           <td><%= p.person.email %></td>
-                          <td><%= p.person.phone %></td>
+                          <td><%= p.person.organization.name if p.person.organization_id %></td>
+                          <td>
+                            <% if @canedit %>
+                            <%= link_to deleteparticipation_path(:participation_id => p.id),  data: { confirm: 'Are you sure?' } do %><em class="fa fa-minus-circle"></em><% end %>
+                            <% end %>
+                          </td>
                         </tr>
                     <% end %>
                     </tbody>

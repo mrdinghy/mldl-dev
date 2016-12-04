@@ -120,11 +120,12 @@
 
 
           <h4>Select/Search Old Issue Ids</h4><br>
+          <small>Note: Hypens removed to allow select search</small>
           <select name="old_id" class="chosen-select">
             <option value = "">Select -></option>
             <% @alloldids.each do |issue| %>
 
-                <option value="<%= issue.id %>"><%= issue.uuid %></option>
+                <option value="<%= issue.id %>"><%= issue.uuid.tr("-", " ") %></option>
             <% end %>
           </select>
 
@@ -137,16 +138,14 @@
 
 
           <h4>Select/Search New Issue IDs</h4><br>
-          <select name="new_id" class="chosen-select input-md form-control">
+          <small>Note: Hypens removed to allow select search</small>
+          <select name="new_id" class="chosen-select">
             <option value = "">Select -></option>
             <% @allnewids.each do |issue2| %>
 
-                <option value="<%= issue2.id %>"><%= issue2.issuecode %></option>
+                <option value="<%= issue2.id %>"><%= issue2.issuecode.tr("-"," ") %></option>
             <% end %>
           </select>
-
-
-
 
 
 
@@ -247,3 +246,4 @@
         $(selector).chosen(config[selector]);
     }
 </script>
+

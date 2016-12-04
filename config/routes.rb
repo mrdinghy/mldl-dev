@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :mediators
   resources :mediations
   resources :participations
+  resources :managers
   resources :assignments
   resources :roles
   resources :scopes
@@ -81,6 +82,11 @@ Rails.application.routes.draw do
 
   get 'newmldluser', to: 'users#newmldluser', as: 'newmldluser'
   get 'createuser', to: 'users#createuser', as: 'createuser'
+  get 'deletemanager', to: 'structures#deletemanager', as: 'deletemanager'
+  get 'deletemediator', to: 'mediations#deletemediator', as: 'deletemediator'
+  get 'deletemembership', to: 'structures#deletemembership', as: 'deletemembership'
+  get 'deleteparticipation', to: 'meetings#deleteparticipation', as: 'deleteparticipation'
+  get 'deletedisputant', to: 'issues#deletedisputant', as: 'deletdisputant'
 
 
   get 'resultaudit', to: 'projects#resultaudit', as: 'resultaudit'

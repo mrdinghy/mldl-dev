@@ -241,6 +241,35 @@ end
     end
   end
 
+  def deletemanager
+
+    manager=Manager.find(params[:manager_id]).destroy
+    s = Structure.find(manager.structure_id)
+
+
+    respond_to do |format|
+      format.html { redirect_to s, notice: 'Manager has been removed.' }
+      format.json { head :no_content }
+    end
+
+
+  end
+
+
+  def deletemembership
+
+    m=Membership.find(params[:membership_id]).destroy
+    s = Structure.find(m.structure_id)
+
+
+    respond_to do |format|
+      format.html { redirect_to s, notice: 'Manager has been removed.' }
+      format.json { head :no_content }
+    end
+
+
+  end
+
 
 
   def addmembership
@@ -257,7 +286,7 @@ end
 
     respond_to do |format|
       if @membership.save
-        format.html { redirect_to structure, notice: 'Participation was successfully created.' }
+        format.html { redirect_to structure, notice: 'Membership was successfully added to Structure.' }
         format.json { render :show, status: :created, location: @membership }
       else
         format.html { render :new }
@@ -277,7 +306,7 @@ end
 
     respond_to do |format|
       if @manager.save
-        format.html { redirect_to structure, notice: 'Participation was successfully created.' }
+        format.html { redirect_to structure, notice: 'Manager was successfully added.' }
         format.json { render :show, status: :created, location: @membership }
       else
         format.html { render :new }

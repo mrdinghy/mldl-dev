@@ -159,12 +159,6 @@
 
 
 
-                <div class="form-group">
-                  <label class="col-sm-4">Status Note</label>
-                  <div class="col-sm-8">
-                    <%= @issue.status_note %>
-                  </div>
-                </div>
 
                 <% if @canedit %>
 
@@ -466,6 +460,7 @@
                 <thead>
                 <th>Name</th>
                 <th>Title</th>
+                <th>Email</th>
                 <th>Organization</th>
 
                 </thead>
@@ -476,6 +471,14 @@
                       <td><%= p.person.title %></td>
                       <td><%= p.person.email %></td>
                       <td><%= p.person.phone %></td>
+                      <td><%= p.person.organizatioin.name if p.person.organization_id %></td>
+
+
+                      <td>
+                        <% if @canedit %>
+                        <%= link_to deletedisputant_path(:disputant_id => a.id),  data: { confirm: 'Are you sure you want to remove this Disputant?' } do %><em class="fa fa-minus-circle"></em><% end %>
+                        <% end %>
+                      </td>
                     </tr>
                 <% end %>
                 </tbody>
@@ -553,6 +556,146 @@
 
             </div>
             <div class="panel-body">
+
+
+
+
+
+
+
+              <form>
+                <input type="text">
+
+                <select class="chosen-select">
+                  <option value="587">DS GL 587</option>
+                  <option value="62">CS NI 62</option>
+
+                  <option value="315">DS BH 315</option>
+
+                  <option value="270">DS KP 270</option>
+
+                  <option value="145">DS FO 145</option>
+
+                  <option value="509">DS GO 509</option>
+
+                  <option value="606">CS LO 606</option>
+
+                  <option value="643">DS BY 643</option>
+
+                  <option value="398">CF GO 398</option>
+
+                  <option value="601">CF FO 601</option>
+
+                  <option value="280">CF GB 280</option>
+
+                  <option value="366">DS BY 366</option>
+
+                  <option value="517">DS KO 517</option>
+
+                  <option value="20">CS NI 20</option>
+
+                  <option value="499">DS GL 499</option>
+
+                  <option value="227">CF GB 227</option>
+
+                  <option value="685">CS LO 685</option>
+
+                  <option value="206">DS SU 206</option>
+
+                  <option value="163">DS FO 163</option>
+
+                  <option value="461">DS GL 461</option>
+
+                  <option value="526">CF BH 526</option>
+
+                  <option value="580">DS BH 580</option>
+
+                  <option value="5">DS GL 5</option>
+
+                  <option value="468">CF ZO 468</option>
+
+                  <option value="474">DS WG 474</option>
+
+                  <option value="653">CF GO 653</option>
+
+                  <option value="683">CS LO 683</option>
+
+                  <option value="231">CF WG 231</option>
+
+                  <option value="599">CF FO 599</option>
+
+                  <option value="70">DS GL 70</option>
+
+                  <option value="693">CF FO 693</option>
+
+                  <option value="679">CF KO 679</option>
+
+                  <option value="199">DS GL 199</option>
+
+                  <option value="690">DS VJ 690</option>
+
+                  <option value="161">CF VJ 161</option>
+
+                  <option value="426">DS KO 426</option>
+
+                  <option value="187">CF GL 187</option>
+
+                  <option value="264">CS LO 264</option>
+
+                  <option value="30">CS NI 30</option>
+
+                  <option value="472">CF GO 472</option>
+
+                  <option value="629">DS BH 629</option>
+
+                  <option value="201">CF BY 201</option>
+
+                  <option value="396">CF GO 396</option>
+
+                  <option value="27">DS GB 27</option>
+
+                  <option value="268">DS KP 268</option>
+
+                  <option value="641">CF GL 641</option>
+
+                  <option value="251">CS LO 251</option>
+                </select>
+
+                <input type="text">
+              </form>
+
+              <script>
+
+                  var config = {
+                      '.chosen-select': {
+                          disable_search_threshold: 10,
+                          no_results_text: "Oops, nothing found!",
+                          width: "150px"
+                      }
+                  }
+                  for (var selector in config) {
+                      $(selector).chosen(config[selector]);
+                  }
+
+
+              </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
               <%= render 'agendas/agendas_table' %>
@@ -722,7 +865,8 @@
 
             <% end %>
         <% end %>
-        <button class="btn btn-default">Print Issue Form</button><br><br>
+
+        <%= link_to 'Download Issue PDF', issue_path(@issue, :format => "pdf"), :class => "btn btn-default" %><br><br>
 </div>
 
 

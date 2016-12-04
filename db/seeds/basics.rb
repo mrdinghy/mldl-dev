@@ -29,6 +29,10 @@ User.create(name: 'Sam Dakana', email: 'sdakana@mldl-liberia.com', password: 'da
 User.create(name: 'Doegbazee Zaza', email: 'dzaza@mldl-liberia.com', password: 'zazaMLDL1234', mldlrole: 2)
 User.create(name: 'Sam Danaka', email: 'sfdanaka@yahoo.com', password: 'danakaMLDL1234', mldlrole: 2)
 
+User.create(name: 'Rachel Sampson', email: 'xsampson@mldl-liberia.com', password: 'nopassword1', mldlrole: 2)
+User.create(name: 'Sam Worloh', email: 'xworloh@ymldl-liberia.com', password: 'nopassword2', mldlrole: 2)
+User.create(name: 'Abbas Mahvash', email: 'xmahvash@mldl-liberia.com', password: 'nopassword3', mldlrole: 2)
+
 
 
 

@@ -164,6 +164,15 @@ class MeetingsController < ApplicationController
   end
 
 
+  def deleteparticipation
+    p=Participation.find(params[:participation_id]).destroy
+    m = Meeting.find(p.meeting_id)
+    respond_to do |format|
+      format.html { redirect_to m, notice: 'Meeting Participant has been removed.' }
+      format.json { head :no_content }
+    end
+  end
+
 
 
 

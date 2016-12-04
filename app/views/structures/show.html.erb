@@ -119,16 +119,25 @@ width: 800px;
                   <table class="table">
                     <thead>
                     <th>Name</th>
-                    <th>Organization/Title</th>
+                    <td>Title</td>
                     <th>Email</th>
+                    <th>Organization/Title</th>
+                    <th></th>
 
                     </thead>
                     <tbody>
                     <% @mypeople.each do |p| %>
                         <tr>
                           <td>  <%= link_to p.person.fullname, p.person %> </td>
-                          <td><small><%= p.person.organization.name if p.person.organization_id %></small><br><%= p.person.title %></td>
+
+                          <td><%= p.person.title %></td>
                           <td><%= p.person.email %></td>
+                          <td><%= p.person.organization.name if p.person.organization_id %></td>
+                          <td>
+                            <% if @canedit %>
+                            <%= link_to deletemembership_path(:membership_id => p.id),  data: { confirm: 'Are you sure?' } do %><em class="fa fa-minus-circle"></em><% end %>
+                            <% end %>
+                          </td>
 
                         </tr>
                     <% end %>

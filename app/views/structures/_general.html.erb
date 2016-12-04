@@ -60,11 +60,22 @@
         <%#= link_to 'Add Manager', '#new_mgmt_modal', 'data-toggle' => 'modal', :class => "btn btn-success pull-right" %>
       </div>
       <div class="panel-body">
-
+<table class="table">
         <% @mymanagers.each do |a| %>
-            <%= a.user.name %><br>
+      <tr>
+        <td>
+          <%= a.user.name %>
+        </td>
+        <td>
+          <% if @canedit %>
+          <%= link_to deletemanager_path(:manager_id => a.id),  data: { confirm: 'Are you sure?' } do %><em class="fa fa-minus-circle"></em><% end %>
+            <% end %>
+        </td>
+
+      </tr>
 
         <% end %>
+</table>
         <hr><br><br>
         <small>Add Manager</small><br>
 

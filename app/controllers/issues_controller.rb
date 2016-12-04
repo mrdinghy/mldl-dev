@@ -173,8 +173,10 @@ class IssuesController < ApplicationController
     @alldistricts = District.all
     @allpersons = Person.all
     @allusers = User.all
-    @alloldids = Issue.select(:id, :uuid).where('uuid is not NULL').uniq
-    @allnewids = Issue.select(:id, :structure_id).where('structure_id is not NULL').uniq
+    alloldids = Issue.select(:id, :old_id, :uuid).where('uuid is not NULL').uniq
+    @alloldids = alloldids.order(:old_id)
+    allnewids = Issue.select(:id, :structure_id).where('structure_id is not NULL').uniq
+    @allnewids = allnewids.order(:id)
     @alldisputants = Disputant.select(:person_id).uniq
 
   end
@@ -379,21 +381,24 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @disputant.save
-        format.html { redirect_to issue, notice: 'Participation was successfully created.' }
+        format.html { redirect_to issue, notice: 'Disputant was successfully added to Issue.' }
         format.json { render :show, status: :created, location: @participation }
       else
         format.html { render :new }
         format.json { render json: @disputant.errors, status: :unprocessable_entity }
       end
     end
-
-
-
-
   end
 
 
-
+  def deletedisputant
+    d=Disputant.find(params[:disputant_id]).destroy
+    i = Issue.find(d.issue_id)
+    respond_to do |format|
+      format.html { redirect_to i, notice: 'Issue Disputant has been removed.' }
+      format.json { head :no_content }
+    end
+  end
 
 
   private
