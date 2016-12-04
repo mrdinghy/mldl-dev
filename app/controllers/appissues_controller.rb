@@ -3,7 +3,7 @@ class AppissuesController < ApplicationController
 
   # GET /appissues
   # GET /appissues.json
-  def index
+  def xxxindex
 
 
       Appissue.where('issueid in (?)', [501,363,176,177]).destroy_all
