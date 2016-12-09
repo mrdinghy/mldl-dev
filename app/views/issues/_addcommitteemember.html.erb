@@ -1,0 +1,52 @@
+
+
+<%= form_tag addcommitteemember_path do %>
+
+
+    <div class="field" id="e2">
+
+
+
+
+      <small>Select/Search Person</small><br>
+      <select name="membership_id" class="chosen-select">
+        <option value = "">Select -></option>
+
+        <% @available_members.each do |m| %>
+
+            <option value="<%= m.id %>"><%= m.person.fullname %></option>
+        <% end %>
+      </select>
+
+
+
+
+
+    </div>
+
+
+    <br><br>
+
+
+
+
+
+    <%= hidden_field_tag(:issue_id, @issue.id) %>
+    <div class="actions">
+      <%= submit_tag 'Submit', :class => "btn btn-small btn-primary" %>
+    </div>
+<% end %>
+
+
+<script type="text/javascript">
+    var config = {
+        '.chosen-select'           : {},
+        '.chosen-select-deselect'  : {allow_single_deselect:true},
+        '.chosen-select-no-single' : {disable_search_threshold:10},
+        '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+        '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+</script>

@@ -3,7 +3,62 @@ class AppissuesController < ApplicationController
 
   # GET /appissues
   # GET /appissues.json
-  def xxxindex
+
+def fixissues
+  grabissues = Appissue.where('disputant is not null')
+
+   grabissues.each do |issue|
+
+
+
+    mldlissue = Issue.find_by_old_id(issue.issueid)
+    if mldlissue
+    mldlissue.update_attributes(disputant:  issue.disputant)
+    end
+
+   end
+
+
+
+  defaultdef = 'Enter Field Definition Here'
+  pops = Infopopup.create([
+
+                              {code: 'issue_name', title: 'Issue Name' , body: defaultdef },
+                              {code: 'issue_structure', title: 'Structure (CSC,DSC,CF,NSC)' , body: defaultdef },
+                              {code: 'issue_community', title: 'Community' , body: defaultdef },
+                              {code: 'issue_district', title: 'District' , body: defaultdef },
+                              {code: 'issue_disputantstext', title: 'Disputants (General)' , body: defaultdef },
+                              {code: 'issue_raisedby', title: 'Issue Raised By' , body: defaultdef },
+                              {code: 'issue_origin', title: 'Issue Origin' , body: defaultdef },
+                              {code: 'issue_origintext', title: 'Origin Notes' , body: defaultdef },
+                              {code: 'issue_category', title: 'Category' , body: defaultdef },
+                              {code: 'issue_othercategory', title: 'Other (New) Category' , body: defaultdef },
+                              {code: 'issue_description', title: 'Issue Description' , body: defaultdef },
+                              {code: 'issue_actionplan', title: 'Action Plan' , body: defaultdef },
+                              {code: 'issue_committee', title: 'Action Plan Committee' , body: defaultdef }
+
+                          ])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end
+
+    def xxxindex
 
 
       Appissue.where('issueid in (?)', [501,363,176,177]).destroy_all
@@ -109,7 +164,7 @@ class AppissuesController < ApplicationController
               category_id: c,
               other_category: catother,
               description: issue.issuedescription,
-              name: vname,
+              title: vname,
               originaltimestamp:issue.originaltimestamp,
               originaluser: issue.yourname,
               uuid: issue.uuid,

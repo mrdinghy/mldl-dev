@@ -17,6 +17,11 @@ class Issue < ActiveRecord::Base
   extend EnumerateIt
   has_enumeration_for :status
 
+
+  has_many :committeemembers, :dependent => :destroy
+  has_many :memberships, :through => :committeemembers
+
+
   has_many :disputants, :dependent => :destroy
   has_many :people, :through => :disputants
 
@@ -43,8 +48,7 @@ class Issue < ActiveRecord::Base
   end
 
   def issuestatus(status)
-    puts 'YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY'
-    puts status
+
     if status == Status::ONGOING
       vclass='ongoing'
     elsif status == Status::RESOLVED
@@ -78,14 +82,11 @@ class Issue < ActiveRecord::Base
   end
 
   def openmediation
-    mediationchk = Mediation.where('issue_id =? and mediate_end is not NULL', self.id).count
+    mediationchk = Mediation.where('issue_id =? and mediate_end is NULL', self.id).count
 
       return mediationchk
 
   end
-
-
-
 
 
 

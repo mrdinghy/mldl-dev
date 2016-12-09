@@ -1,0 +1,1 @@
+json.partial! "infopopups/infopopup", infopopup: @infopopup

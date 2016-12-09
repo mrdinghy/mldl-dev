@@ -1,0 +1,43 @@
+<table class="table">
+
+
+  <thead>
+  <tr>
+    <th>Issue</th>
+    <th>View</th>
+    <th>Status</th>
+    <th>Mediation start</th>
+    <th>Mediation end</th>
+    <th>Mediators</th>
+
+    <th>Result</th>
+    <th>Issue Resolution</th>
+    <th>Mediation notes</th>
+
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @mediations.each do |mediation| %>
+      <% mymediators = Mediator.where(:mediation_id => mediation.id) %>
+      <tr>
+        <td><%= link_to mediation.issue.issuecode, mediation.issue %></td>
+        <td><%= link_to 'View', mediation %></td>
+        <td><%= mediation.status %></td>
+        <td><%= mediation.mediate_start.strftime("%m/  %d/%Y") if mediation.mediate_start %></td>
+        <td><%= mediation.mediate_end.strftime("%m/  %d/%Y") if mediation.mediate_end %></td>
+        <td>
+
+          <% mymediators.each do |med| %>
+              <%= med.person.fullname %><br>
+          <% end %>
+        </td>
+
+        <td><%= mediation.result_humanize %></td>
+        <td><%= mediation.issue.resolution_date if mediation.issue.resolution_date %></td>
+        <td><%= mediation.mediation_notes %></td>
+
+      </tr>
+  <% end %>
+  </tbody>
+</table>

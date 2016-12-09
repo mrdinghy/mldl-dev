@@ -14,8 +14,7 @@ class ApplicationController < ActionController::Base
   #delophans = Issue.where('structure_id not in (?)', allstructs).delete_all
 
 
-
-
+  @project = Project.find(1)
 
 
 

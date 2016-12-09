@@ -10,7 +10,7 @@
 
   <% @agendalist.each do |a| %>
       <% i = Issue.find(a.issue_id) %>
-      <tr><td><%= i.issuecode %> </td>
+      <tr><td><%= link_to i.issuecode, i %> </td>
         <td width="40%"><%= i.name %> </td>
         <td><%= i.status_humanize %> </td>
         <td><%= i.created_at.strftime("%m/%d/%Y") %> </td>

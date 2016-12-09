@@ -46,9 +46,9 @@ class MediationsController < ApplicationController
     d1 = Date.parse(params[:mediate_start])
 
 
-    @mediation.update_attributes!(:mediation_start => d1)
+    @mediation.mediation_start = d1
 
-   @mediation.save!
+
 
     issueaction= Issueaction.new
     issue = Issue.find(@mediation.issue_id)
@@ -56,6 +56,7 @@ class MediationsController < ApplicationController
     Issueaction.create(mediation_id: @mediation.id, issue_id: params[:issue_id], user_id: current_user.id, actiontype: Actiontype::MEDIATION, structure_id: issue.structure_id)
     respond_to do |format|
       if @mediation.save
+
         format.html { redirect_to issue, notice: 'Mediation was successfully created.' }
         format.json { render :show, status: :created, location: @mediation }
       else
@@ -81,6 +82,7 @@ class MediationsController < ApplicationController
     #@mediation.update_attributes!(:mediation_end => d2)
     respond_to do |format|
       if @mediation.update(mediation_params)
+        Userlog.create(user_id: current_user.id, loggable_type: 'Mediation', loggable_id: @mediation.id, action: 'Update')
         format.html { redirect_to @mediation, notice: 'Mediation was successfully updated.' }
         format.json { render :show, status: :ok, location: @mediation }
       else

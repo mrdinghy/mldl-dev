@@ -146,7 +146,7 @@ class IssueactionsController < ApplicationController
       @mediation = Mediation.new
       @mediation.update_attributes!(:mediate_start => d2, :issue_id => params[:issueaction][:issue_id])
       @mediation.save!
-
+     Userlog.create(user_id: current_user.id, loggable_type: 'Mediation', loggable_id: @mediation.id, action: 'Create')
       if @issueaction.save
         if !params[:issueaction][:meeting_id].nil? and !params[:issueaction][:meeting_id].blank?
           @agenda.update_attributes!(:result => Result::MEDIATION, :addressed => true)
@@ -241,16 +241,7 @@ class IssueactionsController < ApplicationController
 
   end
 
-  def createagenda
 
-    if @issueaction.mediation?  #INTO MEDIATION
-      Mediation.create(issue_id: params[:issueaction][:issue_id], mediation_start: params[:mediation][:mediation_start])
-      @issue.update_attributes!(status: Status::MEDIATION)
-
-    end
-
-
-  end
 
 
 

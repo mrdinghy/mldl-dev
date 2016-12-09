@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @infopopup.title %>
+</p>
+
+<p>
+  <strong>Body:</strong>
+  <%= @infopopup.body %>
+</p>
+
+<%= link_to 'Edit', edit_infopopup_path(@infopopup) %> |
+<%= link_to 'Back', infopopups_path %>

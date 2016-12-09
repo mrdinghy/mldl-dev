@@ -1,0 +1,44 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th width="80px">ID</th>
+    <th>Structure</th>
+    <th>Name</th>
+    <th>Category</th>
+
+    <th>Community</th>
+    <th>District</th>
+    <th>Disputants</th>
+    <th>Created</th>
+
+
+  </tr>
+  </thead>
+  <tbody>
+  <% @issues.each do |issue| %>
+      <% statusbox1 = 'btn btn-'+issue.issuestatus(issue.status) %>
+      <% mydisputants = Disputant.where(:issue_id => issue.id) %>
+      <tr>
+        <td><%= link_to issue.issuecode, issue %></td>
+
+        <td><%= issue.structure.name if !issue.structure_id.nil? %></td>
+        <td><%= issue.name %></td>
+
+        <td><%= issue.category.name if !issue.category_id.nil? %></td>
+        <td><%= issue.community %></td>
+        <td><%= issue.district.name if issue.district_id %></td>
+        <td><%= issue.disputant %><br>
+
+
+          <% mydisputants.each do |d| %>
+              <%= d.person.fullname %><br>
+          <% end %>
+
+        </td>
+        <td><%= issue.created_at.strftime("%m/  %d/%Y") %></td>
+
+
+      </tr>
+  <% end %>
+  </tbody>
+</table>

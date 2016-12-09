@@ -1,4 +1,5 @@
-Rails Devise
+Maktabat GlobalSolr
+has Globalize and Sunspot Solr
 ========================
 
 This application was generated with the rails_apps_composer gem:

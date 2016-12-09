@@ -1,0 +1,44 @@
+<h3>Monthly Report</h3>
+
+
+<%= form_tag monthlyresults_path, :method => :get do %>
+
+    <%#= select_tag(:reportmonth, options_for_select(@mymonths.to_a), :selected => :jan) %>
+    <div class="field">
+      <h4>Select Month</h4>
+    <select name="reportmonth" id="reportmonth" selected="selected">
+      <option value="1">Jan</option>
+      <option value="2">Feb</option>
+      <option value="3">Mar</option>
+      <option value="4">Apr</option>
+      <option value="5">May</option>
+      <option value="6">Jun</option>
+      <option value="7">Jul</option>
+      <option value="8">Aug</option>
+       <option value="9">Sep</option>
+      <option value="10">Oct</option>
+       <option value="11">Nov</option>
+      <option value="12">Dec</option>
+     </select>
+</div>
+
+    <div class="field">
+      <h4>Select Year</h4>
+    <%= select_tag(:reportyear, options_for_select(['2013', '2014','2015', '2016', '2017']), :selected => 2016)  %>
+</div>
+    <div class="field">
+      <h4>Select County </h4>
+      <%= select_tag "county_id", options_from_collection_for_select(@cscs, "id", "name")  %>
+      </div>
+
+
+
+    <div class="field">
+
+    <div class="actions">
+      <h4>&nbsp;</h4>
+      <%= submit_tag 'Search', :class => "btn btn-primary" %>
+    </div>
+</div>
+
+<% end %>

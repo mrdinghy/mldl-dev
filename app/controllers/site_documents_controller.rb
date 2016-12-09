@@ -32,6 +32,8 @@ class SiteDocumentsController < ApplicationController
       d = Post.find(did)
     elsif dtype == 'meeting'
       d = Meeting.find(did)
+    elsif dtype == 'structure'
+      d = Structure.find(did)
     elsif dtype == 'issue'
       d = Issue.find(did)
     elsif dtype == 'mediation'

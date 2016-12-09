@@ -1,0 +1,1 @@
+json.array! @infopopups, partial: 'infopopups/infopopup', as: :infopopup

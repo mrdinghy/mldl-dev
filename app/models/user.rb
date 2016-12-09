@@ -24,8 +24,13 @@ class User < ActiveRecord::Base
   end
 
 
-
-
+  def isadmin
+       if current_user.mldlrole == 1
+          return true
+       else
+         return false
+       end
+  end
 
   #def roles=(roles)
     #roles = [*roles].map { |r| r.to_sym }

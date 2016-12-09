@@ -1,0 +1,50 @@
+<h3>County Admin Report</h3>
+
+
+<% if @newissues.count != 0 %>
+    <% @issues = @newissues %>
+    <h3>New Issues</h3>
+
+            <%= render 'issues/issues_admintable' %>
+<% else %>
+    <h3>No Open Issues</h3>
+
+<% end %>
+
+<% if @openissues.count != 0 %>
+<% @issues = @openissues %>
+<h3>Open Issues</h3>
+    <%= render 'issues/issues_admintable' %>
+
+<% else %>
+<h3>No new issues</h3>
+
+<% end %>
+
+<% if @inmediation.count != 0 %>
+<% @issues = @inmediation %>
+
+    <h3>Open Mediations</h3>
+
+    <%= render 'issues/issues_admintable' %>
+
+<% else %>
+<h3>No Issues in Mediation</h3>
+
+<% end %>
+
+
+
+<% if @openmeetings.count != 0 %>
+<% @meetings = @openmeetings %>
+    <h3>Open Meetings</h3>
+
+    <%= render 'meetings/meetings_admintable' %>
+
+<% else %>
+<h3>No Open Meetings</h3>
+
+<% end %>
+
+
+

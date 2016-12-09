@@ -20,7 +20,8 @@
     <span class="pull-right">
       <% if user_signed_in? %>
       Welcome <%= current_user.name %>!
-          <% end %>
+          <% end %><br>
+      For Help:  <%= mail_to 'operations@mldl-liberia.com', "operations@mldl-liberia.com" %>
     </span>
   </div>
 </div>
@@ -65,6 +66,8 @@
           <li><%= link_to 'Dashboard', projectdashboard_path %></li>
           <li><%= link_to 'Structures Table', structurereport_path %></li>
           <li><%= link_to 'Quarterly Table', quarterlyreport_path %></li>
+          <li><%= link_to 'Monthly Report', monthlyreport_path %></li>
+          <li><%= link_to 'County Admin Report', countyadminreport_path %></li>
           <li><%= link_to 'Lofa', projectlofa_path %></li>
           <li><%= link_to 'Bong', projectbong_path %></li>
           <li><%= link_to 'Grand Gedeh', projectgrandgedeh_path %></li>
@@ -81,7 +84,8 @@
 
 
       <li><%= link_to "People", people_path %></li>
-      <li><%= link_to "Help", posts_path %></li>
+      <li>
+        <%= link_to 'Help', '#helppop', 'data-toggle' => 'modal' %></li>
 
     </ul>
     <!-- END Left navbar-->
@@ -94,6 +98,8 @@
         <ul class="dropdown-menu">
           <li><%= link_to 'All Users', users_path %></li>
           <li><%= link_to 'Managers Map', managersmap_path %></li>
+          <li><%= link_to 'Form Info Pops', infopopups_path %></li>
+
 
           <li><%= link_to 'Add Structures', new_structure_path %></li>
           <li><%= link_to 'Counties', counties_path %></li>

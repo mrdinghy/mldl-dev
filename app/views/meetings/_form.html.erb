@@ -122,6 +122,7 @@
 
                         <%= hidden_field_tag "meeting[issue_ids][]", nil %>
                         <h3><%= @meeting.structure.name %> Open Issues</h3>
+                        <small>Does not include Resolved Issues or Issues in Mediation</small>
                         <table class="table table-striped">
                         <thead>
 

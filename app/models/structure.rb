@@ -3,7 +3,7 @@ class Structure < ActiveRecord::Base
   belongs_to :county
   belongs_to :district
   belongs_to :project
-
+  has_many :site_documents
 
   #enum structuretype: [ :cf, :dsc, :csc, :nsc ]
   extend EnumerateIt

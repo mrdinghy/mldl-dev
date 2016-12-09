@@ -1,0 +1,38 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Meeting Date</th>
+    <th>Time Start</th>
+
+    <th>Structure</th>
+    <th>Agenda Issues</th>
+
+
+  </tr>
+  </thead>
+
+
+  <tbody>
+  <% @meetings.each do |meeting| %>
+
+      <% agendaitems = Issueaction.where('meeting_id = ? and actiontype = ?', meeting.id, Actiontype::AGENDA) %>
+      <tr>
+        <td><%= link_to meeting.meetingid, meeting %></td>
+        <td><%= meeting.status %></td>
+        <td><%=  meeting.meeting_on.strftime("%m/  %d/%Y") if meeting.meeting_on %></td>
+        <td><%=  meeting.starts_at.strftime("%H:%M") if meeting.starts_at %></td>
+
+
+        <td>
+          <% if meeting.structure_id.present? && meeting.structure_id.to_i > 0 %>
+              <%= link_to meeting.structure.name, meeting.structure if meeting.structure_id %>
+          <% end %>
+        </td>
+
+        <td><%= agendaitems.count if agendaitems %></td>
+
+      </tr>
+  <% end %>
+  </tbody>
+</table>

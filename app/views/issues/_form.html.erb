@@ -1,3 +1,21 @@
+<style>
+    .popover-title{
+        background: #80ffdf;
+       font-weight: bold;
+    }
+    .popover{
+        background: #80ffdf;
+        border: solid 1px #000000;
+    }
+    .popover-content{
+        background: #80ffdf;
+
+    }
+</style>
+
+
+
+
 <div class="container">
 
   <div class="panel panel-info">
@@ -29,9 +47,9 @@
   <% end %>--->
 
 
-
   <div class="form-group">
-    <%= f.label :name, :class => "col-sm-2 control-label" %>
+    <a href="#" title="<%= @project.infopoptitle('issue_name') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_name') %>">Info?</a>
+    <%= f.label 'Issue Name *', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.input :name, label: false, :class => "form-control", :required => 'required', input_html: {:style => 'width: 75%'} %>
 
@@ -40,7 +58,8 @@
 
 
   <div class="form-group">
-    <%= f.label :structure_id, :class => "col-sm-2 control-label" %>
+    <a href="#" title="<%= @project.infopoptitle('issue_structure') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_structure') %>">Info?</a>
+    <%= f.label 'MLDL Structure *', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%#= f.select :category_id, Category.all, {}, {class: 'form-control', required: true } %>
       <%= f.association :structure, include_blank: true, label: false, :class => "form-control", input_html: {:style => 'width: 40%'} %>
@@ -53,7 +72,8 @@
 
 
   <div class="form-group">
-    <%= f.label 'Community of Origin', :class => "col-sm-2 control-label" %>
+    <a href="#" title="<%= @project.infopoptitle('issue_community') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_community') %>">Info?</a>
+    <%= f.label 'Community of Origin *', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.input :community, label: false, :class => "form-control", :required => 'required', input_html: {:style => 'width: 40%'}  %>
 
@@ -62,17 +82,17 @@
 
 
   <div class="form-group">
-    <%= f.label 'District', :class => "col-sm-2 control-label" %>
+    <a href="#" title="<%= @project.infopoptitle('issue_district') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_district') %>">Info?</a>
+    <%= f.label 'District Location of Issue *', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.association :district,  label: false, :class => "form-control", required: true, input_html: {:style => 'width: 40%'}%>
     </div>
   </div>
 
 
-
-
-
   <div class="form-group">
+    <a href="#" title="<%= @project.infopoptitle('issue_disputantstext') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_disputantstext') %>">Info?</a>
+
     <%= f.label 'Disputants', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.input :disputant, label: false, :size => 100, :class => "form-control", input_html: {:style => 'width: 80%'} %>
@@ -84,19 +104,7 @@
 
 
   <div class="form-group">
-    <%= f.label 'Structure Raised', :class => "col-sm-2 control-label" %>
-    <div class="col-sm-10">
-      <%= f.input :raisedby_structure, label: false, :size => 50, :class => "form-control", input_html: {:style => 'width: 25%'} %>
-
-    </div>
-  </div>
-
-
-
-
-  <div class="form-group">
-
-
+    <a href="#" title="<%= @project.infopoptitle('issue_raisedby') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_district') %>">Info?</a>
 
     <%= f.label 'Raised by', :class => "col-sm-2 control-label" %>
     <div class="col-sm-4">
@@ -142,6 +150,7 @@
 
 
   <div class="form-group">
+    <a href="#" title="<%= @project.infopoptitle('issue_origin') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_origin') %>">Info?</a>
     <%= f.label 'Issue Origin', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%#= f.select :category_id, Category.all, {}, {class: 'form-control', required: true } %>
@@ -151,6 +160,7 @@
   </div>
 
   <div class="form-group">
+    <a href="#" title="<%= @project.infopoptitle('issue_origintext') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_origintext') %>">Info?</a>
     <%= f.label 'Origin Note', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.input :originnote, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 3 } %>
@@ -162,18 +172,31 @@
 
 
   <div class="form-group">
+    <a href="#" title="<%= @project.infopoptitle('issue_category') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_category') %>">Info?</a>
     <%= f.label :category_id, :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%#= f.select :category_id, Category.all, {}, {class: 'form-control', required: true } %>
       <%= f.association :category, include_blank: true, label: false, :class => "form-control", input_html: {:style => 'width: 40%'} %>
-      <%#= f.collection_select(:category_id, Category.all, :id, :name, {}, {required: true, include_blank: true } ) %>
+
+  </div>
+
+  <div class="form-group">
+    <a href="#" title="<%= @project.infopoptitle('issue_othercategory') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_othercategory') %>">Info?</a>
+    <%= f.label 'Category (if other)', :class => "col-sm-2 control-label" %>
+    <div class="col-sm-10">
+      <%= f.input :other_category,  label: false, :input_html => { :width => 80} %>
 
     </div>
+
   </div>
 
 
 
+
+
   <div class="form-group">
+    <a href="#" title="<%= @project.infopoptitle('issue_description') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_description') %>">Info?</a>
+
     <%= f.label :description, :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.input :description, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 8 } %>
@@ -187,6 +210,7 @@
 
 
     <div class="form-group">
+      <a href="#" title="<%= @project.infopoptitle('issue_actionplan') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_actionplan') %>">Info?</a>
       <%= f.label :actionplan, :class => "col-sm-2 control-label" %>
       <div class="col-sm-10">
         <%= f.input :actionplan, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 8 } %>
@@ -195,6 +219,7 @@
     </div>
 
   <div class="form-group">
+    <a href="#" title="<%= @project.infopoptitle('issue_committee') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_committee') %>">Info?</a>
     <%= f.label 'Action Plan Committee', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.input :actioncommittee, :id => "descedit",  label: false, :input_html => { :cols => 80, :rows => 8 } %>
@@ -204,7 +229,9 @@
 
 
 
-  <div class="form-group">
+
+
+    <div class="form-group">
       <div class = "col-sm-2 control-label"></div>
       <div class="col-sm-10">
         <%= f.submit :class => "btn btn-primary" %>
@@ -219,7 +246,11 @@
   </div>
 </div>
 
-
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();
+    });
+</script>
 <script type="text/javascript">
     var config = {
         '.chosen-select'           : {},
@@ -246,5 +277,4 @@
         }
     };
 </script>
-
 

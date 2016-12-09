@@ -61,6 +61,65 @@ class ProjectsController < ApplicationController
   end
 
 
+  def monthlyreport
+     @cscs= County.where('id in (2,7,11,12)')
+
+     render 'projects/monthlyreport'
+
+  end
+  def monthlyresults
+     @county = County.find(params[:county_id])
+
+
+
+    @project = Project.find(1)
+     @countystructures = Structure.where(county_id: params[:county_id])
+     @sids = @countystructures.pluck(:id)
+     @monthstart = Date.new(params[:reportyear].to_i,params[:reportmonth].to_i,1)
+     @monthend = @monthstart.end_of_month
+    render 'projects/monthlyresults'
+
+  end
+
+
+  def countyadminreport
+    @cscs= County.where('id in (2,7,11,12)')
+
+    render 'projects/countyadminreport'
+
+  end
+  def countyadminresults
+    @project = Project.find(1)
+    @countystructures = Structure.where(county_id: params[:county_id])
+    @sids = @countystructures.pluck(:id)
+    c_issues=Issue.where(structure_id: @sids)
+    @newissues = c_issues.where(status: Status::NEW).order(:structure_id)
+    @openissues = c_issues.where(status: Status::ONGOING).order(:structure_id)
+    @inmediation = c_issues.where(status: Status::MEDIATION).order(:structure_id)
+    @openmeetings = Meeting.where(structure_id: @sids, meeting_held: false).order(:structure_id)
+    #@openmediations = Mediation.where(structure_id: @sids, mediation_held: false)
+
+    render 'projects/countyadminresults'
+
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

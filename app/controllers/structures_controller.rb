@@ -105,7 +105,8 @@ end
     @mediations = Mediation.where(issue_id: myissueids)
     @mypeople= Membership.where('structure_id = ?', @structure.id)
     @mymanagers = Manager.where('structure_id = ?', @structure.id)
-
+    @structuredocs = SiteDocument.where('documentable_type = ? and documentable_id = ?', 'structure', @structure.id)
+    @new_site_document = SiteDocument.new
     @meetings = Meeting.where(structure_id: @structure.id)
     @openmeetings = @meetings.where(meeting_held: true)
 
@@ -207,6 +208,7 @@ end
 
     respond_to do |format|
       if @structure.save
+        Userlog.create(user_id: current_user.id, loggable_type: 'Structure', loggable_id: @structure.id, action: 'Create')
         format.html { redirect_to @structure, notice: 'Structure was successfully created.' }
         format.json { render :show, status: :created, location: @structure }
       else
@@ -222,6 +224,7 @@ end
 
     respond_to do |format|
       if @structure.update(structure_params)
+        Userlog.create(user_id: current_user.id, loggable_type: 'Structure', loggable_id: @structure.id, action: 'Update')
         format.html { redirect_to @structure, notice: 'Structure was successfully updated.' }
         format.json { render :show, status: :ok, location: @structure }
       else

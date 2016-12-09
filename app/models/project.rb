@@ -33,6 +33,22 @@ class Project < ActiveRecord::Base
   end
 
 
+  def showmonth
+    if m == 1
+      mn = 'January'
+
+
+
+    end
+
+
+
+
+
+
+
+  end
+
 
   def allbystatus(status,s1,cat,dist)
 
@@ -218,7 +234,28 @@ end
     return qresult
   end
 
+
+
   def get_agendas(d2,s1,cat,dist)
+
+    qresult = Meeting.all
+    if d2 != 0
+        qresult = qresult.where('extract(year from meeting_on) = ?', self.qstart(d2).year)
+        qresult = qresult.where('extract(month from meeting_on) in (?)', self.qmonths(d2))
+    end
+
+    if s1 != 0
+      qresult = qresult.where('structure_id in (?)', s1)
+    end
+    meetingids = qresult.pluck(:id)
+    qresult = AgendaMeeting.where(meeting_id: meetingids)
+
+    return qresult
+  end
+
+
+
+  def old_get_agendas(d2,s1,cat,dist)
 
     qresult = AgendaMeeting.where('extract(year from created_at) = ?', self.qstart(d2).year)
     qresult = qresult.where('extract(month from created_at) in (?)', self.qmonths(d2))
@@ -238,19 +275,21 @@ end
 
 
   def agenda_results(d2,s1,r1,cat,dist)
-    qresult = AgendaMeeting.where(result: r1)
 
+    qresult = Meeting.all
     if d2 != 0
-      qresult = qresult.where('extract(year from created_at) = ?', self.qstart(d2).year)
-      qresult = qresult.where('extract(month from created_at) in (?)', self.qmonths(d2))
-
+      qresult = qresult.where('extract(year from meeting_on) = ?', self.qstart(d2).year)
+      qresult = qresult.where('extract(month from meeting_on) in (?)', self.qmonths(d2))
     end
-
-
 
     if s1 != 0
       qresult = qresult.where('structure_id in (?)', s1)
     end
+    meetingids = qresult.pluck(:id)
+    qresult = AgendaMeeting.where(meeting_id: meetingids)
+
+    qresult = qresult.where(result: r1)
+
     if cat !=0
       qresult = qresult.where(category_id: cat)
     end
@@ -362,6 +401,174 @@ end
     return number
 
   end
+
+
+
+def monthreport(country,monthstart)
+
+
+
+end
+def monthnew(monthstart,s1,sids)
+  monthend = monthstart.end_of_month
+  mresult = Issue.all
+  mresult = mresult.where('extract(year from created_at) = ?', monthstart.year)
+  mresult = mresult.where('extract(month from created_at) = ?',monthstart.month)
+  if s1 != 0
+    mresult = mresult.where(structure_id: s1)
+  else
+    mresult = mresult.where('structure_id in (?)', sids)
+  end
+  return mresult
+end
+
+  def monthtotalbegin(monthstart,s1,sids,resolved)
+    monthend = monthstart.end_of_month
+    mresult = Issue.all
+    mresult = mresult.where('created_at < ?', monthstart)
+    if resolved != 0
+       mresult = mresult.where('resolution_date >= ? or resolution_date is null', monthstart)
+    end
+
+
+    if s1 != 0
+      mresult = mresult.where(structure_id: s1)
+    else
+      mresult = mresult.where('structure_id in (?)', sids)
+    end
+    return mresult
+  end
+
+
+
+  def monthmeetings(monthstart,s1,sids)
+    monthend = monthstart.end_of_month
+    mresult = Meeting.all
+    mresult = mresult.where('extract(year from meeting_on) = ?', monthstart.year)
+    mresult = mresult.where('extract(month from meeting_on) = ?',monthstart.month)
+
+    if s1 != 0
+      mresult = mresult.where(structure_id: s1)
+    else
+      mresult = mresult.where('structure_id in (?)', sids)
+    end
+    return mresult
+  end
+
+
+  def monthagendas(monthstart,s1,sids)
+    monthend = monthstart.end_of_month
+    mresult = Meeting.all
+    mresult = mresult.where('extract(year from meeting_on) = ?', monthstart.year)
+    mresult = mresult.where('extract(month from meeting_on) = ?',monthstart.month)
+
+    if s1 != 0
+      mresult = mresult.where(structure_id: s1)
+    else
+      mresult = mresult.where('structure_id in (?)', sids)
+    end
+    meetingids = mresult.pluck(:id)
+    agendas = Agenda.where(meeting_id: meetingids)
+
+    return agendas
+  end
+
+
+  def monthmediationsstart(monthstart,s1,sids)
+    monthend = monthstart.end_of_month
+    mresult = MediationIssue.all
+    mresult = mresult.where('extract(year from mediate_start) = ?', monthstart.year)
+    mresult = mresult.where('extract(month from mediate_start) = ?',monthstart.month)
+    if s1 != 0
+      mresult = mresult.where(structure_id: s1)
+    else
+      mresult = mresult.where('structure_id in (?)', sids)
+    end
+    return mresult
+  end
+
+
+  def monthmediationsend(monthstart,s1,sids)
+    monthend = monthstart.end_of_month
+    mresult = MediationIssue.all
+    mresult = mresult.where('extract(year from mediate_end) = ?', monthstart.year)
+    mresult = mresult.where('extract(month from mediate_end) = ?',monthstart.month)
+    if s1 != 0
+      mresult = mresult.where(structure_id: s1)
+    else
+      mresult = mresult.where('structure_id in (?)', sids)
+    end
+    return mresult
+  end
+
+  def monthissuesresolved(monthstart,s1,sids)
+    monthend = monthstart.end_of_month
+    mresult = Issue.all
+    mresult = mresult.where('extract(year from resolution_date) = ?', monthstart.year)
+    mresult = mresult.where('extract(month from resolution_date) = ?',monthstart.month)
+    if s1 != 0
+      mresult = mresult.where(structure_id: s1)
+    else
+      mresult = mresult.where('structure_id in (?)', sids)
+    end
+    return mresult
+  end
+
+
+  def endmonthresolved(monthstart,s1,sids)
+    monthend = monthstart.end_of_month
+    mresult = Issue.where('resolution_date is not NULL')
+    mresult = Issue.where('resolution_date <= ?', monthend)
+      if s1 != 0
+      mresult = mresult.where(structure_id: s1)
+    else
+      mresult = mresult.where('structure_id in (?)', sids)
+    end
+    return mresult
+  end
+
+
+
+
+  def infopoptitle(code)
+    vpop = Infopopup.find_by_code(code)
+    if vpop.nil?
+      return 'n/a'
+    else
+
+      return vpop.title
+    end
+
+  end
+  def infopopbody(code)
+    vpop = Infopopup.find_by_code(code)
+    if vpop.nil?
+      return 'n/a'
+    else
+
+      return vpop.body
+    end
+
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

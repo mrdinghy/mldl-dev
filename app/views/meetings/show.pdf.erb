@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <%#= wicked_pdf_stylesheet_link_tag "pdf" -%>
+  <%#= wicked_pdf_javascript_include_tag "number_pages" %>
+</head>
+
+
+
+<style>
+    p {
+        font-size: 12px;
+    }
+    .contentarea {
+        font-size: 14px;
+
+
+    }
+    table {
+        font-size: 12px;
+    }
+    .isection {
+        background-color: #999;
+        color: #fff;
+        font-size: 12px;
+
+    }
+
+    .issuedesc {
+        background-color: #ccc;
+        color: #000;
+        font-size: 10px;
+    }
+
+    div.meetnotes {
+        border: #666 solid 2px;
+        height: 100px;
+    }
+
+    table.pdfgen {
+        width: 100%;
+    }
+
+    table.pdfbox {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+
+    .tdpdf {
+        border: solid #666 1px;
+
+    }
+
+
+
+</style>
+
+
+<body onload='number_pages'>
+<div id="header">
+  <%= wicked_pdf_image_tag 'mysite.jpg' %>
+</div>
+<div id="content">
+
+
+
+
+
+
+
+
+
+
+
+
+<div>
+  <div class="row">
+    <div class="col-md-6">
+      <span style="font-size: 24px; font-weight: bold; color: coral;">MLDL2</span><br>
+      <span style="font-size: 16px">Mitigating Local Disputes in Liberia, Phase II</span><br>
+      Report Date: <%= Date.today() %>
+    </div>
+    <div style="text-align: right;" class="col-md-6">
+
+      <span style="color: #666; font-size: 32px"><%= @meeting.meetingid %></span><br>
+      <%= @meeting.meeting_on %>   at   <%=  @meeting.starts_at.strftime("%H:%M") if @meeting.starts_at %><br>
+      Status:
+      <% if @meeting.meeting_held == true %>
+          Meeting Closed
+      <% end %>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+
+
+
+<div>
+  <table class="pdfgen">
+    <tr>
+      <td class="tdpdf">Structure: <strong><%= @meeting.structure.name %></strong></td>
+      <td class="tdpdf">Meeting Duration: </td>
+      <td class="tdpdf">Scope: <strong><%= @issue.scope.name if @issue.scope_id %></strong></td>
+
+    </tr>
+
+    <tr>
+      <td class="tdpdf">Location: <strong><%=  @meeting.location %></strong></td>
+      <td class="tdpdf">Structure: <strong><%#= @issue.structure.name %></strong></td>
+      <td class="tdpdf">District: <strong><%= @issue.district.name if @issue.district_id %></strong></td>
+
+    </tr>
+
+
+    <tr>
+      <td class="tdpdf"></td>
+      <td class="tdpdf"><br><strong></strong></td>
+      <td class="tdpdf"><br><strong></strong></td>
+
+    </tr>
+
+
+
+
+
+
+
+  </table>
+</div>
+
+<% @myagendas.each do |agenda| %>
+<div class="contentarea">
+  <strong><%= agenda.issue.issuecode %></strong><br>
+   Name: <%= agenda.issue.name %><br>
+   REsult: <% if agenda.addressed == true %><%= agenda.result_humanize %><br><% end %><br>
+   Community: <%= agenda.issue.district.name  %></strong><br>
+    District: <%= agenda.issue.district.name if agenda.issue.district_id %><br>
+    <div class="issuedesc">
+      <%= agenda.issue.description %>
+
+</div>
+<div class="meetnotes">
+
+&nbsp;
+</div>
+<div>
+<% end %>
+
+
+
+
+
+
+
+
+
+<div>
+    <strong>Closeout Note:</strong>
+    <% if !@meeting.closenote.blank? %>
+        <p><%= @meeting.closenote %></p>
+    <% end %>
+</div>
+
+
+
+  <%#= yield %>
+  </div>
+  </body>
+</html>

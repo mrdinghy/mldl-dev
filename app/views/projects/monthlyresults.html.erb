@@ -1,0 +1,96 @@
+
+<H3> Month Reported: <%= @monthstart.strftime("%B") %>, <%= @monthstart.strftime("%Y") %> </h3>
+
+<h3>County: <%= @county.name %>
+  </h3>
+
+
+<table class="table">
+<thead>
+<th>Structure</th>
+<th>Total Beginning</th>
+<th>Open Beginning</th>
+
+<th>New</th>
+<th>Meetings Held</th>
+<th>Agendas</th>
+<th>Med.Start</th>
+<th>Med.End</th>
+<th>Resolutions</th>
+
+</thead>
+  <% @countystructures.each do |s| %>
+      <tr>
+        <td>
+          [<%= s.id %>] <%= s.name %>
+        </td>
+        <td>
+          <%= @project.monthtotalbegin(@monthstart,s.id,0,0).count %>
+        </td>
+        <td>
+          <%= @project.monthtotalbegin(@monthstart,s.id,0,1).count %>
+        </td>
+
+        <td>
+          <%= @project.monthnew(@monthstart,s.id,0).count %>
+        </td>
+        <td>
+          <%= @project.monthmeetings(@monthstart,s.id,0).count %>
+        </td>
+        <td>
+          <%= @project.monthagendas(@monthstart,s.id,0).count %>
+        </td>
+        <td>
+          <%= @project.monthmediationsstart(@monthstart,s.id,0).count %>
+        </td>
+        <td>
+          <%= @project.monthmediationsend(@monthstart,s.id,0).count %>
+        </td>
+        <td>
+          <%= @project.monthissuesresolved(@monthstart,s.id,0).count %>
+        </td>
+        <td>
+          <%= @project.endmonthresolved(@monthstart,s.id,0).count %>
+        </td>
+      </tr>
+
+  <% end %>
+
+  <tr style="font-weight: bold">
+    <td>
+      Total County
+    </td>
+    <td>
+      <%= @project.monthtotalbegin(@monthstart,0,@sids,0).count %>
+    </td>
+    <td>
+      <%= @project.monthtotalbegin(@monthstart,0,@sids,1).count %>
+    </td>
+
+    <td>
+      <%= @project.monthnew(@monthstart,0,@sids).count %>
+    </td>
+    <td>
+      <%= @project.monthmeetings(@monthstart,0,@sids).count %>
+    </td>
+    <td>
+      <%= @project.monthagendas(@monthstart,0,@sids).count %>
+    </td>
+    <td>
+      <%= @project.monthmediationsstart(@monthstart,0,@sids).count %>
+    </td>
+    <td>
+      <%= @project.monthmediationsend(@monthstart,0,@sids).count %>
+    </td>
+    <td>
+      <%= @project.monthissuesresolved(@monthstart,0,@sids).count %>
+    </td>
+    <td>
+      <%= @project.endmonthresolved(@monthstart,0,@sids).count %>
+    </td>
+
+  </tr>
+
+
+
+</table>

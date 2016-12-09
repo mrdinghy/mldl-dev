@@ -3,4 +3,6 @@ class SiteDocument < ActiveRecord::Base
   has_attached_file :document
   belongs_to :issue
   belongs_to :meeting
+  belongs_to :structure
+  belongs_to :mediation
 end

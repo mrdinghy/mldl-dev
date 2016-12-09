@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :dataentries
+  resources :infopopups
   resources :metrics
   resources :quarters
   resources :projects
@@ -74,11 +74,16 @@ Rails.application.routes.draw do
   get 'qtrreport', to: 'projects#qtrreport', as: 'qtrreport'
   get 'searchissues', to: 'issues#searchissues', as: 'searchissues'
   get 'issueresults', to: 'issues#searchresults', as: 'issueresults'
+  get 'fixissue', to: 'appissues#fixissues', as: 'fixissues'
 
   get 'searchbyqtr', to: 'issues#searchbyqtr', as: 'searchbyqtr'
   get 'searchbyqtrresults', to: 'issues#searchbyqtrresults', as: 'searchbyqtrresults'
   get 'searchmeetings', to: 'meetings#searchmeetings', as: 'searchmeetings'
   get 'meetingresults', to: 'meetings#meetingresults', as: 'meetingresults'
+  get 'monthlyreport', to: 'projects#monthlyreport', as: 'monthlyreport'
+  get 'monthlyresults', to: 'projects#monthlyresults', as: 'monthlyresults'
+  get 'countyadminreport', to: 'projects#countyadminreport', as: 'countyadminreport'
+  get 'countyadminresults', to: 'projects#countyadminresults', as: 'countyadminresults'
 
   get 'newmldluser', to: 'users#newmldluser', as: 'newmldluser'
   get 'createuser', to: 'users#createuser', as: 'createuser'
@@ -87,10 +92,13 @@ Rails.application.routes.draw do
   get 'deletemembership', to: 'structures#deletemembership', as: 'deletemembership'
   get 'deleteparticipation', to: 'meetings#deleteparticipation', as: 'deleteparticipation'
   get 'deletedisputant', to: 'issues#deletedisputant', as: 'deletdisputant'
+  get 'deletecommitteemember', to: 'issues#deletecommitteemember', as: 'deletecommitteemember'
+
 
 
   get 'resultaudit', to: 'projects#resultaudit', as: 'resultaudit'
   post 'adddisputant', to: 'issues#adddisputant', as: 'adddisputant'
+  post 'addcommitteemember', to: 'issues#addcommitteemember', as: 'addcommitteemember'
   post 'addparticipant', to: 'meetings#addparticipant', as: 'addparticipant'
   post 'addmediator', to: 'mediations#addmediator', as: 'addmediator'
   post 'addmemember', to: 'structures#addmembership', as: 'addmember'

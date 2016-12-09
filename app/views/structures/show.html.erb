@@ -82,6 +82,7 @@ width: 800px;
             <li><a data-toggle="tab" href="#viewmeetings">Meetings</a></li>
             <li><a data-toggle="tab" href="#viewmediations">Mediations</a></li>
             <li><a data-toggle="tab" href="#viewmembers">Members</a></li>
+            <li><a data-toggle="tab" href="#viewdocs">Documents</a></li>
           </ul>
 
           <div class="tab-content">
@@ -163,6 +164,75 @@ width: 800px;
 
               </div>
             </div>
+
+
+
+
+
+            <div id="viewdocs" class="tab-pane fade">
+
+
+
+
+
+
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  Documents
+
+                </div>
+                <div class="panel-body">
+
+
+
+                  <table class="table">
+
+                    <% @structuredocs.each do |doc| %>
+                        <tr>
+
+                          <td>
+                            <%= link_to doc.document_file_name , doc.document.url(:original, false) %>
+                          </td>
+                          <td>
+                            <%= doc.document_updated_at %><br>
+                          </td>
+                        </tr>
+
+                    <% end %>
+                  </table>
+
+
+                  <br><BR>
+
+                  <% if @canedit %>
+                      <%= simple_form_for @new_site_document do |form| %>
+                          <%= form.hidden_field :documentable_id, :value => @structure.id %>
+                          <%= form.hidden_field :documentable_type, :value => 'structure' %>
+                          <%= form.input :document, as: :file, :label => false %>
+                          <%= form.button :submit, :value => 'Upload Document', :class => "mb-sm btn btn-primary" %>
+                      <% end %>
+                  <% end %>
+
+
+
+
+                </div>
+              </div>
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
           </div>
 
 

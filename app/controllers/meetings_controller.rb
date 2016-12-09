@@ -25,6 +25,27 @@ class MeetingsController < ApplicationController
     @meetingdocs = SiteDocument.where('documentable_type = ? and documentable_id = ?', 'meeting', @meeting.id)
     @new_site_document = SiteDocument.new
 
+
+    @pdfname = 'mldl_meeting_' + @meeting.id.to_s
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: @pdfname
+        # pdf = IssuePdf.new(@issue)
+        #send_data pdf.render, filename: "order_#{@issue.issuecode}.pdf",
+        #         type: "application/pdf",
+        #        disposition: "inline"
+      end
+    end
+
+
+
+
+
+
+
+
   end
 
 
@@ -68,12 +89,12 @@ class MeetingsController < ApplicationController
   def new
     @meeting = Meeting.new
     @meeting.structure_id = params[:structure_id] if params[:structure_id]
-    @openissues = Issue.where('structure_id = ?', @meeting.structure_id)
+    @openissues = Issue.where(structure_id: @meeting.structure_id, status: Status::ONGOING)
   end
 
   # GET /meetings/1/edit
   def edit
-    @openissues = Issue.where('structure_id = ?', @meeting.structure_id)
+    @openissues = Issue.where('structure_id = ? and (status = ? or status = ?)',  @meeting.structure_id, Status::NEW, Status::ONGOING)
   end
 
   # POST /meetings
@@ -84,6 +105,7 @@ class MeetingsController < ApplicationController
 
     respond_to do |format|
       if @meeting.save
+        Userlog.create(user_id: current_user.id, loggable_type: 'Meeting', loggable_id: @meeting.id, action: 'Create')
         format.html { redirect_to @meeting, notice: 'Meeting was successfully created.' }
         format.json { render :show, status: :created, location: @meeting }
       else
@@ -114,6 +136,7 @@ class MeetingsController < ApplicationController
 
     respond_to do |format|
       if @meeting.update(meeting_params)
+        Userlog.create(user_id: current_user.id, loggable_type: 'Meeting', loggable_id: @meeting.id, action: 'Update')
         format.html { redirect_to @meeting, notice: 'Meeting was successfully updated.' }
         format.json { render :show, status: :ok, location: @meeting }
       else

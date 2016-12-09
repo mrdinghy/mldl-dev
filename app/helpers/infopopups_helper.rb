@@ -1,0 +1,2 @@
+module InfopopupsHelper
+end

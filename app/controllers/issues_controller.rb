@@ -22,7 +22,8 @@ class IssuesController < ApplicationController
     @openagendas = Agenda.where('issue_id = ? and addressed is null', @issue.id)
     @openmediations = Mediation.where('issue_id = ? and mediate_end is null', @issue.id)
 
-    @mydisputants = Disputant.where('issue_id=?', @issue.id)
+    @mydisputants = Disputant.where(issue_id: @issue.id)
+    @mycommitteemembers = Committeemember.where(issue_id: @issue.id)
 
     @numberactions = @myactions.count
     @numbermediations = @mymediations.count
@@ -31,9 +32,10 @@ class IssuesController < ApplicationController
 
 
 
-
+    @committeemember = Committeemember.new
     @disputant = Disputant.new
     @available_people = Person.all
+    @available_members = Membership.where(structure_id: @issue.structure_id)
 
 
     @raisedby = Person.find(@issue.raised_by) if @issue.raised_by
@@ -210,13 +212,20 @@ class IssuesController < ApplicationController
 
   # GET /issues/new
   def new
+    @project = Project.find(1)
     @issue = Issue.new
     @issue.structure_id = params[:structure_id]
+
+
+
+
+
 
   end
 
   # GET /issues/1/edit
   def edit
+    @project = Project.find(1)
   end
 
   def resolution
@@ -238,6 +247,7 @@ class IssuesController < ApplicationController
     @issue.status = Status::NEW
     respond_to do |format|
       if @issue.save
+        Userlog.create(user_id: current_user.id, loggable_type: 'Issue', loggable_id: @issue.id, action: 'Create')
         if params[:meeting_id]
           Issueaction.create(actiontype: 2, structure_id:  params[:issue][:structure_id], meeting_id: params[:meeting_id], issue_id: @issue.id)
           Agenda.create(meeting_id: params[:meeting_id], issue_id: @issue.id)
@@ -277,7 +287,7 @@ class IssuesController < ApplicationController
 
     respond_to do |format|
       if @issue.update(issue_params)
-
+        Userlog.create(user_id: current_user.id, loggable_type: 'Issue', loggable_id: @issue.id, action: 'Update')
 
         if params[:addraiser] == '1'
 
@@ -363,6 +373,35 @@ class IssuesController < ApplicationController
 
 
 
+
+  def addcommitteemember
+
+    @committeemember = Committeemember.new
+    issue=Issue.find(params[:issue_id])
+    @committeemember.issue_id = issue.id
+    @committeemember.membership_id = params[:membership_id]
+
+    respond_to do |format|
+      if @committeemember.save
+        format.html { redirect_to issue, notice: 'Disputant was successfully added to Issue.' }
+        format.json { render :show, status: :created, location: @committeemember }
+      else
+        format.html { render :new }
+        format.json { render json: @committeemember.errors, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
+
+  def deletecommitteemember
+    d=Committeemember.find(params[:committeemember_id]).destroy
+    i = Issue.find(d.issue_id)
+    respond_to do |format|
+      format.html { redirect_to i, notice: 'Committe member removed from Issue.' }
+      format.json { head :no_content }
+    end
+  end
 
 
 
