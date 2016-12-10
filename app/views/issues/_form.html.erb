@@ -1,3 +1,9 @@
+
+<% @project=Project.find(1) %>
+<% content_for(:body_attributes) do %>
+    data-no-turbolink="true"
+<% end %>
+
 <style>
     .popover-title{
         background: #80ffdf;
@@ -67,7 +73,6 @@
 
     </div>
   </div>
-
 
 
 
@@ -245,36 +250,17 @@
 
   </div>
 </div>
+</div>
 
 <script>
-    $(document).ready(function(){
+
+    ready = function(){
         $('[data-toggle="popover"]').popover();
-    });
-</script>
-<script type="text/javascript">
-    var config = {
-        '.chosen-select'           : {},
-        '.chosen-select-deselect'  : {allow_single_deselect:true},
-        '.chosen-select-no-single' : {disable_search_threshold:10},
-        '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
-        '.chosen-select-width'     : {width:"95%"}
-    }
-    for (var selector in config) {
-        $(selector).chosen(config[selector]);
-    }
-</script>
-<script type="text/javascript">
-
-
-
-    var checkbox = document.getElementById('addraiser');
-    var details_div = document.getElementById('person_details');
-    checkbox.onchange = function() {
-        if(this.checked) {
-            details_div.style['display'] = 'block';
-        } else {
-            details_div.style['display'] = 'none';
-        }
+        $('form#my-form').on("submit", function(e) {
+            return $(this).parsley().validate();
+        });
     };
-</script>
+    $(document).ready(ready);
+    $(document).on('page:load', ready);
 
+</script>

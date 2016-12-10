@@ -44,7 +44,7 @@
         <td><%= issue.name %></td>
 
         <td><%= issue.category.name if !issue.category_id.nil? %></td>
-        <td><%#= issue.district.name if issue.district_id.blank %></td>
+        <td><%= issue.district.name if issue.district_id %></td>
         <td><%= issue.disputant %><br>
 
 

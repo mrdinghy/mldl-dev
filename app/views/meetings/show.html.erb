@@ -371,8 +371,8 @@
 
         <% end %>
 
-        <%= link_to 'Download Meeting PDF', meeting_path(@meeting, :format => "pdf"), :class => "btn btn-default" %><br><br>
-
+        <%= link_to 'Download Meeting PDF', meeting_path(@meeting, :format => "pdf"), :target => "_blank", :class => "btn btn-default" %><br><br>
+        <%= link_to 'Download Blank PDF', meettemplate_path(:structure_id => @meeting.structure.id, :format => "pdf"), :target => "_blank", :class => "btn btn-default" %><br><br>
 
 
         <% if @canedit %>

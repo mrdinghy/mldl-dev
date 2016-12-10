@@ -11,8 +11,8 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
-//= require turbolinks
 //= require bootstrap-sprockets
 //= require bootstrap-datepicker
 //= require zebra_datepicker
@@ -21,6 +21,7 @@
 //= require jquery.easing
 //= require animo
 //= require moment
+//= require turbolinks
 // require picker
 // require picker.date
 // require pickers

@@ -5,12 +5,6 @@
 </style>
 
 
-
-
-
-
-
-
 <% modal ||= false %>
 <% remote = modal ? true : false %>
 <%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'mediateresult_form'}) do |f| %>
@@ -21,68 +15,62 @@
     <%= hidden_field(:issueaction, :mediation_id, :value => @mediation.id) %>
 
 <%# Added Bootstrap classes, and help-block container for error messages %>
-    <div class="field">
-      <%= f.label 'Note:' %><br>
-      This Note will be saved in the Issue history table.
-      <%= f.text_area :actionbody,  cols: "120", rows: "3" %>
-    </div>
+
+<div class="row">
+
+        <div class="col-sm-12">
+           <div class="field">
+            Mediation End Date<br> REQUIRED  <small> If Resolved will be Resolution Date</small><br>
+            <input type="text" name="mediate_end" id = "datepicker-mediateend" required="required">
+          </div>
 
 
-    <div class="field">
+          <h4>Results Notes from Mediation for this Issue:</h4>
+          (saved in Issue history)<br>
+          <div class="field">
+          <%= f.text_area :actionbody, cols: "100", rows: "3" %>
+          </div>
+        </div>
 
-
-
-
-
-      Mediation End Date<br>   <small> If Resolved will be Resolution Date</small><br>
-
-      <input type="text" name="mediate_end" id = "datepicker-mediateend">
-
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="field">
+        <div class="col-sm-3">
       <div style="font-size: 16px">
+        <h4>MediationResult</h4>
+        <%= radio_button(:issueaction, 'actiontype', Actiontype::RESOLVED) %> Resolved<br>
+        <%= radio_button(:issueaction,  'actiontype', Actiontype::ONGOING, checked: true) %> Ongoing<br>
+       <%= radio_button(:issueaction,  'actiontype', Actiontype::ESCALATED) %> Escalate Issue<br>
+        <%= radio_button(:issueaction,  'actiontype', Actiontype::CANCELLED) %> Cancel Issue<br>
 
-        <h3>Mediation Result</h3>
-        <%= radio_button(:issueaction, :actiontype, Actiontype::RESOLVED) %> Resolved<br>
+      </div>
 
-        <div>
+    </div>
 
-          Enter Resolution Description if Resolved. Will save to Issue record<br>
-          <%= text_area('issueresolved', :input_html => { :cols => 80, :rows => 8 }) %>
 
+    <div class="col-sm-9">
+
+      <div class="row">
+        <div class="col-sm-12">
+          <h4>Resolution Description</h4>
+          Will save to Issue Record<br>
+          <%= text_area :issueresolved, cols: "100", rows: "40"  %><br>
 
         </div>
-        <div class="form-group">
-          <%= f.label :resolutiontype, :class => "col-sm-2 control-label" %>
-          <div class="col-sm-10">
-            <%= f.collection_select(:resolutiontype_id, Resolutiontype.all, :id, :name, include_blank: true, :class => "form-control") %>
+
+        Resolution Type<br>
+        <%= f.collection_select(:resolutiontype_id, Resolutiontype.all, :id, :name, include_blank: true, :class => "form-control") %>
 
 
-          </div>
-        </div><br><br>
 
-        <%= radio_button(:issueaction, :actiontype, Actiontype::ONGOING, :checked => true )%> Ongoing<br>
-        <%= radio_button(:issueaction, :actiontype, Actiontype::ESCALATED) %> Escalate Issue<br>
-        <%= radio_button(:issueaction, :actiontype, Actiontype::CANCELLED) %> Cancel Issue<br>
+
+      </div>
+
+
      </div>
+
+
+
+
+
     </div>
-
-
-
-
-
 
 
 

@@ -24,6 +24,7 @@
     <th>Affiliation (*)</th>
     <th>Email</th>
     <th>Organization</th>
+    <th>Is Mediator</th>
     <th>Structures</th>
 
   </tr>
@@ -39,6 +40,7 @@
         <td><%= person.agencyname %></td>
         <td><%= person.email %></td>
         <td><%= person.organization.name if person.organization_id %></td>
+        <td><%= person.is_mediator %></td>
         <td>
           <% mystructures.each do |s| %>
           <%= s.structure.name %>

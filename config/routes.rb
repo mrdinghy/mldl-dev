@@ -61,12 +61,6 @@ Rails.application.routes.draw do
 
   get 'resolution', to: 'issues#resolution', as: 'resolution'
 
-  get 'publish', to: 'visitors#publish', as: 'publish'
-  get 'moveup', to: 'sections#moveup', as: 'moveup'
-  get 'movedown', to: 'sections#movedown', as: 'movedown'
-  get 'staffguide', to: 'visitors#staff_guide', as: 'staffguide'
-  get 'granteeguide', to: 'visitors#grantee_guide', as: 'granteeguide'
-  get 'adminguide', to: 'visitors#admin_guide', as: 'adminguide'
   post 'addnote', to: 'issues#addnote', as: 'addnote'
   post 'addperson', to: 'structures#addperson', as: 'addperson'
   get 'adjustroles', to: 'users#adjustroles', as: 'adjustroles'
@@ -94,8 +88,8 @@ Rails.application.routes.draw do
   get 'deletedisputant', to: 'issues#deletedisputant', as: 'deletdisputant'
   get 'deletecommitteemember', to: 'issues#deletecommitteemember', as: 'deletecommitteemember'
 
-
-
+  get 'meettemplate', to: 'meetings#blankmeeting', as: 'meettemplate'
+  get 'othercategories', to: 'projects#othercategories', as: 'othercategories'
   get 'resultaudit', to: 'projects#resultaudit', as: 'resultaudit'
   post 'adddisputant', to: 'issues#adddisputant', as: 'adddisputant'
   post 'addcommitteemember', to: 'issues#addcommitteemember', as: 'addcommitteemember'

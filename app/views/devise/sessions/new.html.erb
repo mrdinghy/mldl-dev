@@ -27,9 +27,17 @@
           <%= link_to "Forgot password?", new_password_path(resource_name), class: 'right' %>
       <% end -%>
 <br><BR>
-      <%- if devise_mapping.registerable? %>
-          <%= link_to 'Sign up', new_registration_path(resource_name), class: 'right'  %>
-      <% end -%>
+      <%#- if devise_mapping.registerable? %>
+          <%#= link_to 'Sign up', new_registration_path(resource_name), class: 'right'  %>
+      <%# end -%>
   <% end %>
+
+
+  <h4>Contact us for logon assistance</h4>
+  Email:  <%= mail_to 'operations@mldl-liberia.com', "operations@mldl-liberia.com", :class => "btn btn-default btn-success" %>
+
+
+
+
 </div>
 </div>

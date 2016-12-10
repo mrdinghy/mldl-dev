@@ -330,8 +330,7 @@ catcolor = 1
 
       calceach = Issue.where('district_id = ?', d.id).count
 
-      puts calceach
-      puts 'pppppppppppppppppppppppppppppppppppppppppppppppppppppppp'
+
       if calceach != 0
         if d == districtids.count
           d1 = calceach.to_s
@@ -368,7 +367,15 @@ catcolor = 1
 
 
 
+def othercategories
+  @theothers = Issue.select(:other_category).uniq
 
+
+
+
+
+
+end
 
   def qtrreport
     @project = Project.find(1)

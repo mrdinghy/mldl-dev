@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   end
 
 
-  def isadmin
+  def isadmin(current_user)
        if current_user.mldlrole == 1
           return true
        else

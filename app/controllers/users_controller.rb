@@ -11,7 +11,7 @@ class UsersController < ApplicationController
    @allroles = Role.all
     @alluserroles = Userrole.all
     @mystructures = Manager.where('user_id = ?', @user.id)
-    @myactions = Issueaction.where('user_id = ?', @user.id)
+    @myactions = Issueaction.where('user_id = ?', @user.id).order('created_at DESC')
     #unless @user == current_user
       #redirect_to :back, :alert => "Access denied."
     #end
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   end
   def createuser
     @user = User.new(user_params)
-ddddddddddddddddddd
+
     respond_to do |format|
       if @user.save
         format.html { redirect_to @user, notice: 'User was successfully created.' }
@@ -74,7 +74,7 @@ ddddddddddddddddddd
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:name, :email, :mldlrole, role_ids: [])
+    params.require(:user).permit(:name, :email, :mldlrole, :confirmed_at, role_ids: [])
   end
 
 

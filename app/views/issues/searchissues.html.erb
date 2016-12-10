@@ -23,7 +23,7 @@
 
   <h2>Search Issues</h2>
 <div class="row">
-  <%= form_tag issueresults_path, :method => :get do %>
+  <%= form_tag issueresults_path, :method => :get do  %>
     <%= hidden_field_tag :locale, I18n.locale %>
 
 
@@ -95,7 +95,11 @@
 
 
 
-        <%#= select_tag(:category_ids, Category.all, :id, :name) {:include_blank => "Select"}, { :multiple => true })%><br><br>
+
+
+
+
+
         <div class="field">
           <h4>Categories</h4>
        <%= select_tag "category_ids", options_from_collection_for_select(Category.all, "id", "name"), :include_blank => "Select", :multiple => true  %>

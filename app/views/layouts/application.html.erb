@@ -20,7 +20,15 @@
 
 
 
-  <body class="layout-h" style="background-color: #ffffff;">
+  <!--<body class="layout-h"   style="background-color: #ffffff;">-->
+
+
+
+
+
+  <body <% if content_for?(:body_attributes) %>
+        <%= yield(:body_attributes) %>
+        <% end %>>
 
 
 
@@ -30,7 +38,10 @@
 
 
 
-        <% if user_signed_in? %>
+
+
+
+  <% if user_signed_in? %>
             <header class="topnavbar-wrapper">
                 <%= render 'layouts/mldl_navbar' %>
             </header>

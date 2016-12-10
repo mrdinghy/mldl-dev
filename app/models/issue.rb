@@ -1,9 +1,9 @@
 class Issue < ActiveRecord::Base
 
-  #validates :name, presence: true
-  #validates :structure_id, presence: true
-  #validates :district_id, presence: true
-  #validates :community, presence: true
+  validates :name, presence: true
+  validates :structure_id, presence: true
+  validates :district_id, presence: true
+  validates :community, presence: true
 
 
   belongs_to :structure

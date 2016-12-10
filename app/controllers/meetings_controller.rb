@@ -94,7 +94,10 @@ class MeetingsController < ApplicationController
 
   # GET /meetings/1/edit
   def edit
-    @openissues = Issue.where('structure_id = ? and (status = ? or status = ?)',  @meeting.structure_id, Status::NEW, Status::ONGOING)
+
+    agendaissueids = Agenda.where(meeting_id: @meeting.id).pluck(:issue_id)
+
+    @openissues = Issue.where('(structure_id = ? and (status = ? or status = ?)) or id in (?)',  @meeting.structure_id, Status::NEW, Status::ONGOING, agendaissueids )
   end
 
   # POST /meetings
@@ -185,6 +188,34 @@ class MeetingsController < ApplicationController
 
 
   end
+
+  def blankmeeting
+    @structure= Structure.find(params[:structure_id])
+
+  @pdfname = 'mldl_meeting_template'
+
+  respond_to do |format|
+    format.html
+    format.pdf do
+      render pdf: @pdfname
+      # pdf = IssuePdf.new(@issue)
+      #send_data pdf.render, filename: "order_#{@issue.issuecode}.pdf",
+      #         type: "application/pdf",
+      #        disposition: "inline"
+    end
+  end
+
+
+
+
+
+
+end
+
+
+
+
+
 
 
   def deleteparticipation

@@ -265,6 +265,7 @@ class IssuesController < ApplicationController
 
       else
         if params[:structure_id]
+          @project = Project.find(1)
           format.html { render :action => :new, :params => {:structure_id => params[:structure_id]}}
         else
           format.html { render :new }

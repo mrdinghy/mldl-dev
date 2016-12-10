@@ -88,7 +88,9 @@
       <%= @meeting.meeting_on %>   at   <%=  @meeting.starts_at.strftime("%H:%M") if @meeting.starts_at %><br>
       Status:
       <% if @meeting.meeting_held == true %>
-          Meeting Closed
+          Closed
+          <% else %>
+          Open
       <% end %>
     </div>
 
