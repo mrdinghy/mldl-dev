@@ -38,8 +38,19 @@
         height: 100px;
     }
 
+    div.newnotes {
+        border: #666 solid 2px;
+        height: 200px;
+    }
+
+    div.closenotes {
+        border: #666 solid 2px;
+        height: 400px;
+    }
+
     table.pdfgen {
         width: 100%;
+        border-collapse: collapse;
     }
 
     table.pdfbox {
@@ -48,11 +59,17 @@
     }
 
 
-    .tdpdf {
-        border: solid #666 1px;
+    .tdpdfhead {
+        border: solid #333 1px;
+        font-weight: bold;
+        background-color: #58ceb1;
 
     }
 
+    .tdpdf {
+        border: solid #333 1px;
+
+    }
 
 
 </style>
@@ -60,8 +77,33 @@
 
 <body onload='number_pages'>
 <div id="header">
-  <%= wicked_pdf_image_tag 'mysite.jpg' %>
+  <table class="pdfgen">
+    <tr>
+      <td>
+        <span style="font-size: 24px; font-weight: bold; color: coral;">MLDL2</span><br>
+        <span style="font-size: 12px">Mitigating Local Disputes in Liberia, Phase II</span><br>
+        Report Date: <%= Date.today() %>
+      </td>
+      <td style="text-align: right">
+
+        <span style="color: #666; font-size: 24px"><%= @meeting.meetingid %></span><br>
+        Meeting Date: <%= @meeting.meeting_on %>   at   <%=  @meeting.starts_at.strftime("%H:%M") if @meeting.starts_at %><br>
+        Status:
+        <% if @meeting.meeting_held == true %>
+            Closed
+        <% else %>
+            Open
+        <% end %>
+
+      </td>
+    </tr>
+
+
+
+  </table>
+
 </div>
+
 <div id="content">
 
 
@@ -74,31 +116,6 @@
 
 
 
-
-<div>
-  <div class="row">
-    <div class="col-md-6">
-      <span style="font-size: 24px; font-weight: bold; color: coral;">MLDL2</span><br>
-      <span style="font-size: 16px">Mitigating Local Disputes in Liberia, Phase II</span><br>
-      Report Date: <%= Date.today() %>
-    </div>
-    <div style="text-align: right;" class="col-md-6">
-
-      <span style="color: #666; font-size: 32px"><%= @meeting.meetingid %></span><br>
-      <%= @meeting.meeting_on %>   at   <%=  @meeting.starts_at.strftime("%H:%M") if @meeting.starts_at %><br>
-      Status:
-      <% if @meeting.meeting_held == true %>
-          Closed
-          <% else %>
-          Open
-      <% end %>
-    </div>
-
-  </div>
-
-
-
-</div>
 
 
 
@@ -122,9 +139,9 @@
 
 
     <tr>
-      <td class="tdpdf"></td>
-      <td class="tdpdf"><br><strong></strong></td>
-      <td class="tdpdf"><br><strong></strong></td>
+      <td class="tdpdf">&nbsp;</td>
+      <td class="tdpdf"><br>Attendees (Male): <strong><%= @meeting.attendees_male %></strong></td>
+      <td class="tdpdf"><br>Attendees (Female): <strong><%= @meeting.attendees_females %></strong></td>
 
     </tr>
 
@@ -136,14 +153,14 @@
 
   </table>
 </div>
-
+<h3>Agenda Items</h3>
 <% @myagendas.each do |agenda| %>
 <div class="contentarea">
-  <strong><%= agenda.issue.issuecode %></strong><br>
-   Name: <%= agenda.issue.name %><br>
-   REsult: <% if agenda.addressed == true %><%= agenda.result_humanize %><br><% end %><br>
-   Community: <%= agenda.issue.district.name  %></strong><br>
-    District: <%= agenda.issue.district.name if agenda.issue.district_id %><br>
+
+  <strong><%= agenda.issue.issuecode %></strong>
+   <%= agenda.issue.name %><br>
+    District: <%= agenda.issue.district.name if agenda.issue.district_id %> Community: <%= agenda.issue.district.name  %></strong><br>
+
     <div class="issuedesc">
       <%= agenda.issue.description %>
 
@@ -156,7 +173,69 @@
 <% end %>
 
 
+  <% (1..15).each do |i| %>
+      <div class="contentarea">
 
+        <strong>New Issue</strong>
+        Name: ____________________________________________________________________________________
+       <br>
+        District: _______________________________  Community: ____________________________________<br>
+
+
+        <div class="newnotes">
+
+          &nbsp;
+        </div>
+        <div>
+  <% end %>
+
+
+
+
+
+
+
+  <div>
+    <h3>Meeting Particpants</h3>
+    <table class="pdfgen">
+      <tr>
+        <td class="tdpdfhead">Name</td>
+        <td class="tdpdfhead">Title</td>
+        <td class="tdpdfhead">Organization</td>
+
+      </tr>
+
+
+
+      <% @participants.each do |p| %>
+          <tr>
+            <td class="tdpdf"><%= p.fullname %></td>
+            <td class="tdpdf"><%= p.title %></td>
+
+            <td class="tdpdf"><%= p.organization.name if p.organization_id %></td>
+
+
+          </tr>
+
+
+    <% end %>
+      <% (1..15).each do %>
+          <tr>
+            <td class="tdpdf">&nbsp;</td>
+            <td class="tdpdf">&nbsp;</td>
+            <td class="tdpdf">&nbsp;</td>
+
+          </tr>
+
+
+      <% end %>
+
+
+
+
+
+    </table>
+  </div>
 
 
 
@@ -164,11 +243,17 @@
 
 
 <div>
-    <strong>Closeout Note:</strong>
-    <% if !@meeting.closenote.blank? %>
-        <p><%= @meeting.closenote %></p>
+    <h3>Closeout Note:</h3>
+  <div class="closenotes">
+
+  <% if !@meeting.closenote.blank? %>
+        <%= @meeting.closenote %>
+        &nbsp;
+
     <% end %>
-</div>
+  </div>
+
+  </div>
 
 
 

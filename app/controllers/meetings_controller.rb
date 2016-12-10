@@ -240,6 +240,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def meeting_params
-      params.require(:meeting).permit(:meeting_on, :structure_id, :location, :duration, :starts_at, :meeting_held, :closenote, :reopennote, issue_ids: [])
+      params.require(:meeting).permit(:meeting_on, :structure_id, :location, :duration, :starts_at, :attendees_male, :attendees_females, :meeting_held, :closenote, :reopennote, issue_ids: [])
     end
 end
