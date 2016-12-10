@@ -187,6 +187,8 @@ class IssuesController < ApplicationController
 
     searchterm = params[:search_term]
     searchresults = Issue.all
+    searchresults = searchresults.where(status: params[:status]) if params[:status].present?
+
     searchresults = searchresults.where(category_id: params[:category_ids]) if params[:category_ids].present?
     searchresults = searchresults.where(structure_id: params[:structure_ids]) if params[:structure_ids].present?
     searchresults = searchresults.where('district_id in (?)', params[:district_ids]) if params[:district_ids].present?

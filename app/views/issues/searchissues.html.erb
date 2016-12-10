@@ -10,7 +10,7 @@
 
 </style>
 <script>
-    $(document).ready(function() { $("#issuedisputants").select2(); });
+   /* $(document).ready(function() { $("#issuedisputants").select2(); });*/
 </script>
 
 
@@ -21,233 +21,140 @@
 <div class="container">
 
 
-  <h2>Search Issues</h2>
-<div class="row">
-  <%= form_tag issueresults_path, :method => :get do  %>
-    <%= hidden_field_tag :locale, I18n.locale %>
+<h2>Search Issues</h2>
 
+  <%= form_tag issueresults_path, :method => :get do %>
 
+  <div class="row">
 
-
-
-
-
-
-
-
-
-      <div class = "col-sm-4">
-<h4>MLDL Structures</h4>
-<div class="chkpanel">
+    <div class = "col-sm-4">
+      <h4>MLDL Structures</h4>
+      <div class="chkpanel">
 
         <% @allstructures.each do |item| %>
 
 
-      <% if item.structuretype == Structuretype::NSC %>
-          <strong>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br><br></strong>
-      <% elsif item.structuretype ==  Structuretype::CSC %>
-          <strong>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br></strong>
-      <% elsif item.structuretype ==  Structuretype::DSC  %>
+            <% if item.structuretype == Structuretype::NSC %>
+                <strong>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br><br></strong>
+            <% elsif item.structuretype ==  Structuretype::CSC %>
+                <strong>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br></strong>
+            <% elsif item.structuretype ==  Structuretype::DSC  %>
 
-          &nbsp;&nbsp;&nbsp;&nbsp;  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br>
-      <% elsif item.structuretype ==  Structuretype::CF  %>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br></em>
-      <% end %>
-
-
-
-
-
-
-
-
-
-
-
+                &nbsp;&nbsp;&nbsp;&nbsp;  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br>
+            <% elsif item.structuretype ==  Structuretype::CF  %>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>  <%= check_box_tag "structure_ids[]", item.id %><%= item.name %><br></em>
+            <% end %>
 
 
         <% end %>
-</div>
+      </div>
 
-</div>
-
-
+    </div>
 
 
 
+    <div class = "col-sm-4">
 
+      <h4>Search String</h4>
+      <div class="field">
+            <%= text_field_tag 'search_term' %><br>
+                <small>Community names, Issue names descriptions, Action comments, resolutions</small>
+      </div>
 
-        <div class = "col-sm-4">
-
-
-
-
-
-
-
-
-<h4>Search String</h4>
       <div class="field">
 
-        <%= text_field_tag 'search_term' %><br>
-        <small>Community names, Issue names descriptions, Action comments, resolutions</small>
+          <h4>Issue Status</h4>
+          <select name="status" class = "form-control">
+            <option value="1">New</option>
+            <option value="2" selected="selected">Ongoing</option>
+            <option value="3">Resolved</option>
+            <option value="4">Mediation</option>
+            <option value="5">Cancelled</option>
+          </select>
       </div>
 
 
+      <div class="field">
+        <h4>Categories</h4>
+        <%= select_tag "category_ids", options_from_collection_for_select(Category.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
+      </div>
 
 
-
-
-
-
-        <div class="field">
-          <h4>Categories</h4>
-       <%= select_tag "category_ids", options_from_collection_for_select(Category.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
-</div>
-         <!---<div class="field">
-              <h4>Organizations</h4>
-        <%#= select_tag "organization_ids", options_from_collection_for_select(Organization.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
-            </div>--->
-              <div class="field">
-                <h4>Districts <small>(where Issue Occured)</small></h4>
+      <div class="field">
+        <h4>Districts <small>(where Issue Occured)</small></h4>
         <%= select_tag "district_ids", options_from_collection_for_select(District.all, "id", "name"), :include_blank => "Select", :multiple => true  %>
-              </div>
+      </div>
 
-</div>
-
-      <div class="col-sm-4">
-
-
-
-        <div class="field">
-
-
-
-          <h4>Select/Search Old Issue Ids</h4><br>
-          <small>Note: Hypens removed to allow select search</small>
-          <select name="old_id" class="chosen-select">
-            <option value = "">Select -></option>
-            <% @alloldids.each do |issue| %>
-
-                <option value="<%= issue.id %>"><%= issue.uuid.tr("-", " ") %></option>
-            <% end %>
-          </select>
-
-
-
-        </div>
-
-        <div class="field">
-
-
-
-          <h4>Select/Search New Issue IDs</h4><br>
-          <small>Note: Hypens removed to allow select search</small>
-          <select name="new_id" class="chosen-select">
-            <option value = "">Select -></option>
-            <% @allnewids.each do |issue2| %>
-
-                <option value="<%= issue2.id %>"><%= issue2.issuecode.tr("-"," ") %></option>
-            <% end %>
-          </select>
-
-
-
-
-
-
-
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!---<h4>Search by Issue Actions</h4>
-
-        Action types<br>
-        <%#= select_tag "actiontype_ids", options_from_collection_for_select(Actiontype.keys.to_a), :include_blank => "Select", :multiple => true  %><br><br>
-
-        <%#= select_tag :actiontype_ids, Actiontype.keys.to_a, :multiple => true %>
-        <%#= select_tag(:actiontypes_ids, Actiontype.keys.to_a, :include_blank => "Select", :multiple => true )%>
-        <%#= select_tag(:actiontypes_ids, Actiontype.to_a, :include_blank => "Select", :multiple => true ) %>
-        <%#= select_tag :actiontype_ids, Actiontype.to_a,  {:include_blank => "Select", :multiple => true }  %>
-
---->
-
-
-
-        <%#= select_tag(:reportmonth, options_for_select(Month.to_a), :selected => :aug) %>
-
-        <%#= select_tag(:reportyear, options_for_select(['2014','2015', '2016']), :selected => 2016)  %>
-        <br><br>
-
-
-        <div class="field">
-
-          <script type="text/javascript">
-              $(document).ready(function() {
-                  $(".chosen-select").select2();
-              });
-
-          </script>
-
-          <h4>Select/Search Disputants</h4><br>
-          <select name="person_id" class="chosen-select input-md form-control">
-            <option value = "">Select -></option>
-            <% @alldisputants.each do |disp| %>
-
-                <option value="<%= disp.person_id %>"><%= disp.person.fullname %></option>
-            <% end %>
-          </select>
-
-
-
-        </div>
-
-
-
-
-<hr>
-        <div class="actions">
-      <%= submit_tag 'Search', :class => "btn btn-primary" %>
     </div>
-    <br><BR>    <div class="actions">
-          <%= button_tag "Reset", type: :reset, :class => 'btn btn-default' %>
-        </div>
-</div>
-<% end %>
 
+
+
+    <div class="col-sm-4">
+
+
+
+      <div class="field">
+        <h4>Select/Search Old Issue Ids</h4><br>
+        <small>Note: Hypens removed to allow select search</small>
+        <select name="old_id" class="chosen-select">
+          <option value = "">Select -></option>
+          <% @alloldids.each do |issue| %>
+
+              <option value="<%= issue.id %>"><%= issue.uuid.tr("-", " ") %></option>
+          <% end %>
+        </select>
+
+
+
+      </div>
+
+      <div class="field">
+
+
+
+        <h4>Select/Search New Issue IDs</h4><br>
+        <small>Note: Hypens removed to allow select search</small>
+        <select name="new_id" class="chosen-select">
+          <option value = "">Select -></option>
+          <% @allnewids.each do |issue2| %>
+
+              <option value="<%= issue2.id %>"><%= issue2.issuecode.tr("-"," ") %></option>
+          <% end %>
+        </select>
   </div>
+
+
+
+      <br><br>
+
+
+      <div class="field">
+
+
+
+        <h4>Select/Search Disputants</h4><br>
+        <select name="person_id" class="chosen-select input-md form-control">
+          <option value = "">Select -></option>
+          <% @alldisputants.each do |disp| %>
+
+              <option value="<%= disp.person_id %>"><%= disp.person.fullname %></option>
+          <% end %>
+        </select>
+      </div>
+
+
+      <div class="actions">
+        <%= submit_tag 'Search', :class => "btn btn-primary" %>
+      </div>
+      <br><BR>    <div class="actions">
+      <%= button_tag "Reset", type: :reset, :class => 'btn btn-default' %>
+    </div>
+    </div>
+
+
+
+</div>
+  <% end %>
 </div>
 
-
-
-<script type="text/javascript">
-    var config = {
-        '.chosen-select'           : {},
-        '.chosen-select-deselect'  : {allow_single_deselect:true},
-        '.chosen-select-no-single' : {disable_search_threshold:10},
-        '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
-        '.chosen-select-width'     : {width:"95%"}
-    }
-    for (var selector in config) {
-        $(selector).chosen(config[selector]);
-    }
-</script>
 
