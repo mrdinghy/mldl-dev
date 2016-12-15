@@ -1,37 +1,44 @@
-<% modal ||= false %>
-<% remote = modal ? true : false %>
-<%= simple_form_for(@issueaction) do |f| %>
+<style>
+    .notefield {
+width: 100%;
+}
+    </style>
+
+<%= simple_form_for @issueaction, html: { name: "mpop", id: "mpop" } do |f| %>
     <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field_tag(:fromissue, true) %>
     <%= hidden_field(:issueaction, :actiontype,  :value => Actiontype::MEDIATION) %>
 
-
     <div class="field">
 
-    <%= f.label 'Note:' %><br>
-    <%= f.input :actionbody, cols: "120", rows: "12" %>
+      <%= f.label 'Mediation Note (optional):' %><br>
+      <%= f.input :actionbody, class: "notefield", rows: "12", label: false %>
     </div>
 
 
 
     <div class="form-group">
-      <%= f.label 'Mediation Start', :class => "col-sm-2 control-label" %>
+      <%= f.label 'Mediation Start (required)', :class => "col-sm-2 control-label" %>
       <div class="col-sm-10" id="sandbox-container">
         <div class="input-group date">
-          <input  name="mediate_start" type="text" id="datepicker-mediatestart" class="form-control" width="100">
+
+          <input  name="mediate_start" type="text" id="mediatestart" required >
           <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
         </div>
 
       </div>
 
     </div>
-
+<br>
+    <br>
     <div class="actions">
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
     </div>
 <% end %>
 
+
 <script>
-    $('#datepicker-mediatestart').Zebra_DatePicker();
+    $('#mpop').parsley();
+    $('#mediatestart').Zebra_DatePicker();
 
 </script>

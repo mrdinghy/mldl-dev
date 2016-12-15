@@ -115,7 +115,7 @@
                     <%= dsc.openissues(0,0,dsc.id,0).count %>
                   </div>
                   <small>
-                  <% dscmanagers = csc.listmanagers(csc.id) %>
+                  <% dscmanagers = csc.listmanagers(dsc.id) %>
                   <% dscmanagers.each do |m| %>
                       <%= m.user.name %><br>
                   <% end %>

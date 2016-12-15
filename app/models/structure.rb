@@ -31,7 +31,32 @@ class Structure < ActiveRecord::Base
   end
 
 
+   def iscscmanager(thisuser)
+     puts '--------------------firing? ----------------------------------'
+     if self.structuretype == Structuretype::CF or self.structuretype == Structuretype::DSC
 
+        if self.structuretype == Structuretype::CF
+           dparent = Structure.find(self.parent_id)
+           cparent = Structure.find(dparent.parent_id)
+         elsif self.structuretype == Structuretype::DSC
+           cparent = Structure.find(self.parent_id)
+         end
+
+         puts cparent.id
+
+        puts 'cparetndddddddddddddddddddddddddddddddd'
+
+         s = Manager.where('structure_id = ? and user_id =?', cparent.id, thisuser).count
+
+
+         if s != 0
+           return true
+         else
+           return false
+         end
+       end
+
+   end
 
 
   def ismanager(thisuser)

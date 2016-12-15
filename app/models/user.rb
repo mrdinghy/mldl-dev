@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   #belongs_to :person
 
   #ROLES = %i[admin structure_admin structure_manager]
-
+ has_many :agendas
 
   has_many :userroles, :dependent => :destroy
   has_many :roles, :through => :userroles

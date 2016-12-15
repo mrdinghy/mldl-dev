@@ -1,4 +1,6 @@
 class Mediation < ActiveRecord::Base
+  validates :mediate_start, presence: true
+
   belongs_to :issue
 
 

@@ -85,7 +85,7 @@ Rails.application.routes.draw do
   get 'deletemediator', to: 'mediations#deletemediator', as: 'deletemediator'
   get 'deletemembership', to: 'structures#deletemembership', as: 'deletemembership'
   get 'deleteparticipation', to: 'meetings#deleteparticipation', as: 'deleteparticipation'
-  get 'deletedisputant', to: 'issues#deletedisputant', as: 'deletdisputant'
+  get 'deletedisputant', to: 'issues#deletedisputant', as: 'deletedisputant'
   get 'deletecommitteemember', to: 'issues#deletecommitteemember', as: 'deletecommitteemember'
 
   get 'meettemplate', to: 'meetings#blankmeeting', as: 'meettemplate'

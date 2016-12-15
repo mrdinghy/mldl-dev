@@ -1,4 +1,8 @@
-<h1>Editing Agenda</h1>
+Meeting Agenda Result Reporting
+
+<h3>Meeting: <%= @agenda.meeting.meetingid %></h3>
+<h3>Issue: <%= @agenda.issue.issuecode %> <%= @agenda.issue.name %></h3>
+
 
 <%= render 'form' %>
 

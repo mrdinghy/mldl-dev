@@ -1,6 +1,7 @@
 <% modal ||= false %>
 <% remote = modal ? true : false %>
-<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'new_note_form'}) do |f| %>
+<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', name: 'cancelpop', id: 'cancelpop'}) do |f| %>
+
 
     <%= hidden_field(:issueaction, :issue_id, :value => @issue.id) %>
     <%= hidden_field(:issueaction, :structure_id, :value => @issue.structure_id) %>
@@ -9,11 +10,19 @@
 
 <%# Added Bootstrap classes, and help-block container for error messages %>
     <div class="field">
-      <%= f.label 'Note:' %><br>
-      This Note will be saved in the Issue history table.
-      <%= f.text_area :actionbody,  cols: "120", rows: "12" %>
+      <%= f.label 'Explanation for Cancellation:' %><br>
+
+      <%= f.text_area :actionbody,  cols: "120", rows: "12", required: true %><br>
+      This explanation will be saved in the Issue history table.
     </div>
     <div class="actions">
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
     </div>
 <% end %>
+
+
+<script>
+    $('#cancelpop').parsley();
+
+
+</script>

@@ -188,7 +188,7 @@
                       <% elsif action.mediation_id %>
                           <% thismediation= Mediation.find(action.mediation_id) %>
                           <strong>Resolved in Mediation!: </strong>  <br>
-                          <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
+                          <strong>Mediation: <%= link_to thismediation.mediate_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
                       <% else %>
                           <strong>Issue Resolved!: </strong>  <br>
                       <% end %>
@@ -206,7 +206,7 @@
                       <% elsif action.mediation_id %>
                           <% thismediation= Mediation.find(action.mediation_id) %>
                           <strong>Cancelled in Mediation!: </strong>  <br>
-                          <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
+                          <strong>Mediation: <%= link_to thismediation.mediate_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
                       <% else %>
                           <strong>Issue Cancelled!: </strong>  <br>
                       <% end %>
@@ -225,7 +225,7 @@
                       <% elsif action.mediation_id %>
                           <% thismediation= Mediation.find(action.mediation_id) %>
                           <strong>Unresolved in Mediation!: </strong>  <br>
-                          <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
+                          <strong>Mediation: <%= link_to thismediation.mediate_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
                       <% else %>
 
                       <% end %>

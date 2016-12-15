@@ -1,0 +1,159 @@
+
+<style>
+    .actionbox {
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+    .radioin {
+        font-size: 16px;
+    }
+
+</style>
+
+
+<%= form_for (@issueaction), html: {id: rform} do |f| %>
+<%#= form_for(@issueaction) do |f| %>
+
+
+    <%= hidden_field(:issueaction, :meeting_id, :value => @meeting.id) %>
+    <%= hidden_field(:issueaction, :structure_id, :value => @meeting.structure_id) %>
+
+    <%= hidden_field(:issueaction, :issue_id, :value => thisagenda.issue_id) %>
+    <%= hidden_field_tag(:parent_id, thisissue.structure.parent_id) %>
+
+    <%= hidden_field(:issueaction, :structure_id, :value => @meeting.structure_id) %>
+    <%= hidden_field_tag(:agenda_id, agenda_id) %>
+
+
+
+
+    <div class="row">
+      <div class="col-sm-12">
+        <h4>Results Notes from Meeting for this Issue:</h4>
+        (saved in Issue history)<br>
+        <%#= f.text_area :actionbody, cols: "100", rows: "3" %>
+        <textarea name="<%= actnote %>", id ="<%= actnote %>"></textarea><br>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-sm-12 actionbox">
+
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction, 'actiontype', Actiontype::RESOLVED, :id => @divlink) %> Resolved<br>
+        </div>
+        <div class="col-sm-9">
+          <h4>Resolution Date</h4>
+          <div id="sandbox-container">
+            <div class="input-group date">
+              <input  name="<%= rdate %>" type="text" id="<%= rdate %>" class="form-control" width="100">
+              <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+            </div>
+          </div>
+
+          Resolution Type<br>
+          <select name="<%= rtype %>" id="<%= rtype %>"><option value=""></option>
+            <option value="1">Resolved by Structure</option>
+            <option value="2">Resolved by the community</option>
+            <option value="3">Resolved with MLDL support</option>
+            <option value="4">Other</option></select>
+          <%#= f.collection_select(:resolutiontype_id, Resolutiontype.all, :id, :name, include_blank: true, html: {:id => rtype, :class => "form-control"}) %>
+
+          <h4>Resolution Description</h4>
+          Will save to Issue Record<br>
+
+          <textarea name="<%= rtext %>", id ="<%= rtext %>"></textarea><br>
+
+
+
+        </div>
+
+      </div>
+      <div class="col-sm-12 actionbox">
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction,  'actiontype', Actiontype::ONGOING, checked: true) %> Ongoing<br>
+        </div>
+        <div class="col-sm-9">
+
+        </div>
+
+      </div>
+      <div class="col-sm-12 actionbox">
+
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction, 'actiontype', Actiontype::MEDIATION, :id => medlink) %> Send to Mediation<br>
+        </div>
+        <div class="col-sm-9">
+          <h4>Mediation Start</h4>
+          <div id="sandbox-container">
+            <div class="input-group date">
+              <input  name="mediate_start" type="text" id="<%= medstart %>" class="form-control" width="100">
+              <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+      <div class="col-sm-12 actionbox">
+
+
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction,  'actiontype', Actiontype::ESCALATED,  :id => referlink) %> Escalate Issue<br>
+        </div>
+        <div class="col-sm-9">
+
+        </div>
+
+
+      </div>
+      <div class="col-sm-12 actionbox">
+
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction,  'actiontype', Actiontype::CANCELLED,  :id => cancellink) %> Cancel Issue<br>
+        </div>
+        <div class="col-sm-9">
+
+        </div>
+
+
+      </div>
+
+
+
+
+
+
+
+      <div class="pull-left"><%= f.submit 'Record Meeting Result', :class => "btn btn-primary" %></div>
+      <br><br>
+    </div>
+<% end %>
+
+<script>
+    $('<%= medstartdiv %>').Zebra_DatePicker();
+    $('<%= rdatediv %>').Zebra_DatePicker();
+
+</script>
+
+
+<script>
+
+    $( "<%= rformref %>" ).validate({
+        rules: {
+    <%= medstart %>: { required: "<%= medlinkcheck %>" },
+
+    <%= rtext %>: { required: "<%= rcheck %>" },
+    <%= rdate %>: { required: "<%= rcheck %>" },
+    <%= rtype %>: { required: "<%= rcheck %>" },
+    <%= actnote %>: { required: true }
+    }
+    });
+</script>

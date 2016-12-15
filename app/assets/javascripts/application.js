@@ -17,6 +17,8 @@
 //= require bootstrap-datepicker
 //= require zebra_datepicker
 //= require modernizr.custom
+//= require jquery.validate
+//= require additional-methods
 //= require jquery.storageapi
 //= require jquery.easing
 //= require animo

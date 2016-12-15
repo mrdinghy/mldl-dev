@@ -1,14 +1,161 @@
-<%= simple_form_for(@agenda) do |f| %>
-  <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :meeting_id %>
-    <%= f.input :issue_id %>
-    <%= f.input :result_id %>
-    <%= f.input :agenda_note %>
-  </div>
+<style>
+  .actionbox {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  .radioin {
+    font-size: 16px;
+  }
+  .notefield {
+    width: 100%;
+  }
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
-<% end %>
+</style>
+
+
+
+
+<%= form_for (@agenda), html: {id: "meetingresult"} do |f| %>
+
+
+    <%= hidden_field(:agenda, :addressed, :value => true) %>
+    <%= hidden_field(:agenda, :meeting_id, :value => @agenda.meeting.id) %>
+    <%= hidden_field(:agenda, :issue_id, :value => @agenda.issue.id) %>
+    <%= hidden_field(:agenda, :user_id, :value => current_user.id) %>
+
+
+
+
+        <div class="row">
+          <div class="col-sm-12 actionbox">
+
+
+            <div class="col-sm-3 radioin">
+              <%= radio_button(:agenda, :result, Result::RESOLVED, id: "checkresolve") %> Resolved<br>
+            </div>
+            <div class="col-sm-9">
+              <strong>Resolution Date</strong><br>
+              <div id="sandbox-container">
+                <div class="input-group date">
+                  <input  name="resolution_date" type="text" id="resolution_date" class="form-control" width="100">
+                  <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+                </div>
+              </div>
+
+              <strong>Resolution Type</strong><br>
+              <select name="resolutiontype" id="resolutiontype"><option value=""></option>
+                <option value="1">Resolved by Structure</option>
+                <option value="2">Resolved by the community</option>
+                <option value="3">Resolved with MLDL support</option>
+                <option value="4">Other</option></select>
+              <%#= f.collection_select(:resolutiontype_id, Resolutiontype.all, :id, :name, include_blank: true, html: {:id => rtype, :class => "form-control"}) %>
+
+              <strong>Resolution Description</strong><br>
+              Will save to Issue Record<br>
+
+              <textarea name="resolution", id ="resolution" class="notefield" rows="4"></textarea><br>
+
+
+
+            </div>
+
+          </div>
+          <div class="col-sm-12 actionbox">
+
+            <div class="col-sm-3 radioin">
+              <%= radio_button(:agenda, :result, Result::ONGOING, checked: true, id: "checkopen") %> Ongoing<br>
+            </div>
+            <div class="col-sm-9">
+
+            </div>
+
+          </div>
+          <div class="col-sm-12 actionbox">
+
+
+            <div class="col-sm-3 radioin">
+              <%= radio_button(:agenda, :result, Result::MEDIATION, id: "checkmediate") %> Send to Mediation<br>
+            </div>
+            <div class="col-sm-9">
+              <strong>Mediation Start Date</strong><br>
+              <div id="sandbox-container">
+                <div class="input-group date">
+
+                  <input  name="mediate_start" type="text" id="mediate_start" class="form-control" width="100">
+                  <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-sm-12 actionbox">
+
+
+
+            <div class="col-sm-3 radioin">
+              <%= radio_button(:agenda, :result, Result::ESCALATED, id: "checkrefer") %> Escalate Issue<br>
+            </div>
+            <div class="col-sm-9">
+              <strong>Referral Note</strong><br>
+              <textarea name="refernote", id ="refernote"  class="notefield" ></textarea><br>
+            </div>
+
+
+          </div>
+          <div class="col-sm-12 actionbox">
+
+
+            <div class="col-sm-3 radioin">
+              <%= radio_button(:agenda, :result, Result::CANCELLED, id: "checkcancel") %> Cancel Issue<br>
+            </div>
+            <div class="col-sm-9">
+              <strong>Cancellation Note</strong><br>
+              <textarea name="cancelnote", id ="cancelnote"  class="notefield" ></textarea><br>
+            </div>
+
+
+          </div>
+
+
+
+
+
+
+
+          <div class="pull-left"><%= f.submit 'Record Meeting Result', :class => "btn btn-primary" %></div>
+          <br><br>
+        </div>
+    <% end %>
+
+    <script>
+      $('#mediate_start').Zebra_DatePicker();
+      $('#resolution_date').Zebra_DatePicker();
+
+    </script>
+
+
+    <script>
+
+      $( "#meetingresult" ).validate({
+        rules: {
+            resolution: { required: "#checkresolve:checked" },
+            resolution_date: { required: "#checkresolve:checked" },
+            resolutiontype: { required: "#checkresolve:checked" },
+            mediate_start: { required: "#checkmediate:checked" },
+            refernote: { required: "#checkrefer:checked" },
+            cancelnote: { required: "#checkcancel:checked" }
+
+        }
+      });
+    </script>
+
+
+
+
+
+
+
+

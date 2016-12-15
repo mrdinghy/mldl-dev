@@ -10,8 +10,9 @@
 <%# Added Bootstrap classes, and help-block container for error messages %>
     <div class="field">
       <%= f.label 'Note:' %><br>
+
+      <%= f.text_area :actionbody,  cols: "120", rows: "12" %><br>
       This Note will be saved in the Issue history table.
-      <%= f.text_area :actionbody,  cols: "120", rows: "12" %>
     </div>
     <div class="actions">
       <%= f.submit 'Submit', :class => "btn-small btn-primary" %>

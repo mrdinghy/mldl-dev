@@ -1,14 +1,27 @@
 
 
 <style>
+
+    .actionbox {
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+    .radioin {
+        font-size: 16px;
+    }
+    .notefield {
+        width: 100%;
+    }
+
+
     #send_to_one{display:none;}
 </style>
 
 
 <% modal ||= false %>
 <% remote = modal ? true : false %>
-<%= form_for(@issueaction, multipart: true, remote: false, html: {role: :form, 'data-model' => 'issueaction', id: 'mediateresult_form'}) do |f| %>
-
+<%= form_for(@issueaction, html: {role: :form, 'data-model' => 'issueaction', id: 'mediationresult'}) do |f| %>
+    <%#= form_for (@agenda), html: {id: "meetingresult"} do |f| %>
     <%= hidden_field(:issueaction, :issue_id, :value => @mediation.issue_id) %>
     <%= hidden_field(:issueaction, :structure_id, :value => @mediation.issue.structure_id) %>
     <%= hidden_field_tag(:frommediation, true) %>
@@ -16,96 +29,136 @@
 
 <%# Added Bootstrap classes, and help-block container for error messages %>
 
-<div class="row">
-
-        <div class="col-sm-12">
-           <div class="field">
-            Mediation End Date<br> REQUIRED  <small> If Resolved will be Resolution Date</small><br>
-            <input type="text" name="mediate_end" id = "datepicker-mediateend" required="required">
-          </div>
 
 
-          <h4>Results Notes from Mediation for this Issue:</h4>
-          (saved in Issue history)<br>
-          <div class="field">
-          <%= f.text_area :actionbody, cols: "100", rows: "3" %>
-          </div>
+    <div class="row">
+      <div class="col-sm-12 actionbox">
+
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction, 'actiontype', Actiontype::RESOLVED, id: "checkresolve") %> Resolved<br>
+
         </div>
+        <div class="col-sm-9">
+          <strong>Resolution Date</strong><br>
+          <div id="sandbox-container">
+            <div class="input-group date">
+              <input  name="resolution_date" type="text" id="resolution_date" class="form-control" width="100">
+              <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+            </div>
+          </div>
 
-        <div class="col-sm-3">
-      <div style="font-size: 16px">
-        <h4>MediationResult</h4>
-        <%= radio_button(:issueaction, 'actiontype', Actiontype::RESOLVED) %> Resolved<br>
-        <%= radio_button(:issueaction,  'actiontype', Actiontype::ONGOING, checked: true) %> Ongoing<br>
-       <%= radio_button(:issueaction,  'actiontype', Actiontype::ESCALATED) %> Escalate Issue<br>
-        <%= radio_button(:issueaction,  'actiontype', Actiontype::CANCELLED) %> Cancel Issue<br>
+          <strong>Resolution Type</strong><br>
+          <select name="resolutiontype" id="resolutiontype"><option value=""></option>
+            <option value="1">Resolved by Structure</option>
+            <option value="2">Resolved by the community</option>
+            <option value="3">Resolved with MLDL support</option>
+            <option value="4">Other</option></select><br><br>
+          <%#= f.collection_select(:resolutiontype_id, Resolutiontype.all, :id, :name, include_blank: true, html: {:id => rtype, :class => "form-control"}) %>
 
-      </div>
-
-    </div>
-
-
-    <div class="col-sm-9">
-
-      <div class="row">
-        <div class="col-sm-12">
-          <h4>Resolution Description</h4>
+          <strong>Resolution Description</strong><br>
           Will save to Issue Record<br>
-          <%= text_area :issueresolved, cols: "100", rows: "40"  %><br>
+
+          <textarea name="resolution", id ="resolution" class="notefield" rows="4"></textarea><br>
+
+
 
         </div>
 
-        Resolution Type<br>
-        <%= f.collection_select(:resolutiontype_id, Resolutiontype.all, :id, :name, include_blank: true, :class => "form-control") %>
+      </div>
+      <div class="col-sm-12 actionbox">
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction,  'actiontype', Actiontype::ONGOING, checked: true, id: "checkopen") %> Ongoing<br>
+
+        </div>
+        <div class="col-sm-9">
+
+        </div>
+
+      </div>
+
+      <div class="col-sm-12 actionbox">
 
 
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction,  'actiontype', Actiontype::ESCALATED, id: "checkrefer") %> Escalate Issue<br>
+
+        </div>
+        <div class="col-sm-9">
+          <strong>Referral Note</strong><br>
+          <textarea name="refernote", id ="refernote"  class="notefield" ></textarea><br>
+        </div>
+
+
+      </div>
+      <div class="col-sm-12 actionbox">
+
+
+        <div class="col-sm-3 radioin">
+          <%= radio_button(:issueaction,  'actiontype', Actiontype::CANCELLED, id: "checkcancel") %> Cancel Issue<br>
+
+        </div>
+        <div class="col-sm-9">
+          <strong>Cancellation Note</strong><br>
+          <textarea name="cancelnote", id ="cancelnote"  class="notefield" ></textarea><br>
+        </div>
 
 
       </div>
 
 
-     </div>
+      <div class="col-sm-12 actionbox">
+
+
+        <div class="col-sm-3 radioin">
+
+        </div>
+        <div class="col-sm-9">
+          <strong>Mediation End Date</strong><br>
+          <input type="text" name="mediate_end" id = "mediate_end" class="form-control" width="100">
+        </div>
+
+
+      </div>
 
 
 
 
 
-    </div>
+      <div class="pull-left"><%= f.submit 'Record Mediation Result', :class => "btn btn-primary" %></div>
 
 
-
-
-
-
-    <div class="actions">
-      <%= f.submit 'Submit', :class => "btn-small btn-primary" %>
-    </div>
 <% end %>
 
+
 <script>
-    $('#sandbox-container input').datepicker({
+    $('#mediate_end').Zebra_DatePicker();
+    $('#resolution_date').Zebra_DatePicker();
+
+</script>
+
+
+<script>
+
+    $( "#mediationresult" ).validate({
+        rules: {
+            resolution: { required: "#checkresolve:checked" },
+            resolution_date: { required: "#checkresolve:checked" },
+            resolutiontype: { required: "#checkresolve:checked" },
+            refernote: { required: "#checkrefer:checked" },
+            mediate_end: { required: true },
+            cancelnote: { required: "#checkcancel:checked" }
+
+        }
     });
 </script>
-<script type="text/javascript">
-    $(document).ready(function(){
-
-        $("#send_to_one").hide();
-
-        $("input:radio[name='issueaction[actiontype]']").change(function(){
-
-            if(this.value == '<%= Actiontype::RESOLVED %>' && this.checked){
-                $("#send_to_one").show();
-            }else{
-                $("#send_to_one").hide();
-            }
-
-        });
-
-    });
-</script>
 
 
-<script type="text/javascript">
-       $('#datepicker-mediateend').Zebra_DatePicker();
-</script>
+
+
+
+
+
 

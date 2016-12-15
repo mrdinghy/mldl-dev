@@ -37,7 +37,7 @@
           <div class="form-group">
             <label class="col-sm-3">Parent Structure</label>
             <div class="col-sm-9">
-              <strong> <%= @parent.name if @structure.parent_id %></strong>
+              <strong> <%= link_to @parent.name, @parent if @structure.parent_id %></strong>
             </div>
           </div>
 

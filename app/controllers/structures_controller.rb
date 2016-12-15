@@ -90,12 +90,15 @@ end
     @summaryopenmediations = @structure.project.openmediations(0,@structure.id).count
 
 
+    if @structure.ismanager(current_user.id) or current_user.mldlrole == 1 or @structure.iscscmanager(current_user)
 
-
-
-    if @structure.ismanager(current_user.id) or current_user.mldlrole == 1
          @canedit = true
+    else
+         @canedit = false
     end
+
+
+
     @issues= Issue.where('structure_id = ?', @structure.id).order('created_at DESC')
     myissueids=@issues.pluck(:id)
 

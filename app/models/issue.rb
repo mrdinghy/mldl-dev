@@ -42,8 +42,8 @@ class Issue < ActiveRecord::Base
   def issuecode()
     short = self.structure.short
 
-    meetingid = (short + '-'  + self.id.to_s)
-    return meetingid
+    issueid = (short + '-'  + self.id.to_s)
+    return issueid
 
   end
 

@@ -65,6 +65,14 @@
 
   <div class="col-md-12">
 
+
+
+
+
+
+
+
+
     <%= link_to 'Return to Meetings', meetings_path %><br>
 
     <span class="pageheader"><span style="color: #999">Meeting: </span><%= @meeting.meetingid %></span>
@@ -199,7 +207,7 @@
                       <th>Issue</th>
 
                       <th>Meeting Results</th>
-                      <th>District</th>
+                      <th>User</th>
                       <th>Report</th>
 
                     </tr>
@@ -221,6 +229,7 @@
                           <td><%= link_to issue.issuecode, issue %></td>
                           <td><%= issue.name %></td>
                           <td>
+                            <%= agenda.addressed %>
                             <% if agenda.addressed == true %>
 
                                 <%= agenda.result_humanize %><br>
@@ -230,17 +239,28 @@
 
 
                           </td>
-                          <td><%#= agenda.issue.district.name if agenda.issue.district_id %></td>
+                          <td><%= agenda.user.name if agenda.user_id %></td>
                           <td>
                             <% if @meeting.meeting_held == true %>
 
                                 <button class="btn btn-default">Closed</button><br>
                            <% else %>
-                            <% if agenda.result.nil? %>
-                                <%= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %>
-                            <% else %>
-                                <%= link_to 'Revise',  modalid, 'data-toggle' => 'modal', :class => "btn btn-success" %>
-                            <% end %>
+
+                                <% if agenda.result.nil? %>
+                                    <%= link_to 'Report', edit_agenda_path(agenda), :class => "btn btn-primary" %>
+                                <% else %>
+                                    <%= link_to 'Revise',  edit_agenda_path(agenda), :class => "btn btn-success" %>
+                                <% end %>
+
+
+
+
+
+                            <%# if agenda.result.nil? %>
+                                <%#= link_to 'Report',  modalid, 'data-toggle' => 'modal', :class => "btn btn-primary" %>
+                            <%# else %>
+                                <%#= link_to 'Revise',  modalid, 'data-toggle' => 'modal', :class => "btn btn-success" %>
+                            <%# end %>
                           <% end %>
                           </td>
 
@@ -359,6 +379,34 @@
 
     <div class="col-sm-2">
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <div class="btn-group-vertical">
 
 
@@ -472,6 +520,24 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="modal fade" id="new_participant_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-addissue">
     <div class="modal-content">
@@ -577,10 +643,6 @@
 
 
 
-
-
-
-
 <% @myagendas.each do |agenda| %>
       <% modalid = 'meetingreport-' + agenda.id.to_s %>
       <div class="modal fade" id="<%= modalid %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -611,7 +673,16 @@
         </div>
       </div>
 
-    <% end %>
+
+
+
+
+
+
+
+
+
+<% end %>
 
 
 

@@ -32,11 +32,12 @@
 
     </div>
 
+</div>
 
 
 
 
-
+  <div class="row">
 
     <div class="col-sm-4">
       <div class="panel panel-info">
@@ -178,12 +179,7 @@
 
 
     </div>
-
-
-
-
-
-  <div class="col-sm-2">
+      <div class="col-sm-2">
 
     <div class="btn-group-vertical" role="group" aria-label="...">
 
@@ -196,23 +192,16 @@
 
           <% if @mediation.mediation_held != true %>
               <%= link_to 'Mediation Result', '#mediation_result_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
-            
+
              
           <% else %>
-              <%= link_to 'Reopen medation', '#reopen_mediation_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
+              <%= link_to 'Reopen medation', '#trymodal', 'data-toggle' => 'modal', :class => "btn btn-success" %><br><br>
           <% end %>
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
+
+
+
+
+
           
           
        
@@ -238,6 +227,25 @@
   </div>
 
 
+<div class="modal fade" id="trymodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-reopenmediation">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <small>Reopen MLDL Medation</small><br>
+        <h4 class="modal-title" id="myModalLabel"><%= @mediation.mediationcode %></h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'reopenmediation', modal: true %>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 
 <div class="modal fade" id="mediation_result_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -262,26 +270,6 @@
 </div>
 
 
-
-<div class="modal fade" id="reopen_mediation_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-reopenmediation">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <small>Reopen MLDL Medation</small><br>
-        <h4 class="modal-title" id="myModalLabel"><%= @mediation.mediationcode %></h4>
-      </div>
-      <div class="modal-body">
-        <%= render 'reopenmediation', modal: true %>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-
-    </div>
-  </div>
-</div>
 
 
 

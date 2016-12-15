@@ -227,6 +227,7 @@ class IssuesController < ApplicationController
 
   # GET /issues/1/edit
   def edit
+
     @project = Project.find(1)
   end
 

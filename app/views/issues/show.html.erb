@@ -2,10 +2,13 @@
 <style>
 
   .modal-comment, .modal-escalate, .modal-resolve, .modal-mediation, .modal-cancel, .modal-reopen, .modal-agenda {
-    width: 800px;
+    width: 1200px;
   }
 
+   .issuedesc {
+       font-size: 18px;
 
+   }
 </style>
 
 <% statusbox1 = 'btn btn-'+@issue.issuestatus(@issue.status) %>
@@ -48,7 +51,9 @@
 
         </div>
         <div class="panel-body">
+          <div class="issuedesc">
           <%= @issue.description %>
+          </div>
           </div>
         </div>
       </div>
@@ -83,7 +88,9 @@
             <div class="panel-heading">
 
               <% if @canedit %>
+                  <% if @issue.status == Status::ONGOING or @issue.status == Status::NEW %>
                   <%= link_to 'Edit', edit_issue_path(@issue), :class => "btn btn-primary pull-right" %>
+                  <% end %>
               <% end %>
             </div>
             <div class="panel-body">
@@ -383,7 +390,7 @@
                                 <% elsif action.mediation_id %>
                                     <% thismediation= Mediation.find(action.mediation_id) %>
                                     <strong>Resolved in Mediation!: </strong>  <br>
-                                    <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
+                                    <strong>Mediation: <%= link_to thismediation.mediate_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
                                 <% else %>
                                     <strong>Issue Resolved!: </strong>  <br>
                                 <% end %>
@@ -397,11 +404,11 @@
                                 <% if action.meeting_id %>
                                     <% thismeeting= Meeting.find(action.meeting_id) %>
                                     <strong>Cancelled in Meeting!: </strong>  <br>
-                                    <strong>Meeting: <%= link_to thismeeting.real_start.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
+                                    <strong>Meeting: <%= link_to thismeeting.meeting_on.strftime("%m/%d/%Y"), thismeeting  %></strong>  <br>
                                 <% elsif action.mediation_id %>
                                     <% thismediation= Mediation.find(action.mediation_id) %>
                                     <strong>Cancelled in Mediation!: </strong>  <br>
-                                    <strong>Mediation: <%= link_to thismediation.mediation_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
+                                    <strong>Mediation: <%= link_to thismediation.mediate_start.strftime("%m/%d/%Y"), thismediation  if action.mediation_id %></strong>  <br>
                                 <% else %>
                                     <strong>Issue Cancelled!: </strong>  <br>
                                 <% end %>
@@ -782,11 +789,7 @@
 
 
 
-
-
-
-
-            <% end %>
+      <% end %>
         <% end %>
 
         <%= link_to 'Download Issue PDF', issue_path(@issue, :format => "pdf"), :target => "_blank", :class => "btn btn-default" %><br><br>
@@ -885,6 +888,13 @@
       </div>
       <div class="modal-body">
         <%= render 'mediation', modal: true %>
+
+
+
+
+
+
+
       </div>
 
       <div class="modal-footer">
@@ -969,6 +979,102 @@
     </div>
   </div>
 </div>
+
+
+
+<div id="registerreg" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Register...</h4>
+      </div>
+      <div class="modal-body">
+
+        <form action="" method="POST" name="registration_form" id="registration_form" class="margin-bottom-0">
+
+          <div class="form-group">
+            <label>First Name:</label>
+            <input type="text" id="first" name="first" class="form-control input-lg" placeholder="First Name" required />
+          </div>
+          <div class="form-group">
+            <label>Last Name:</label>
+            <input type="text" id="last" name="last" class="form-control input-lg" placeholder="Last Name" required />
+          </div>
+
+
+
+          <div class="field">
+
+            <label><input type="checkbox" name="testchk" id="testchk" value="1">   <small>Or click here to add new person to MLDL</small></label><br>
+
+          </div>
+          <div id="check_details" style="display:none;">
+
+          this is the hideen part
+
+
+          </div>
+
+
+
+
+          <div class="form-group">
+            <label>Email:</label>
+            <input type="email" class="form-control input-lg" placeholder="Email Address" id="emailreg" name="emailreg" onkeyup="checkvalid()" data-parsley-trigger="change" required />
+            <div id="emailwarning" style="color:red;"></div>
+          </div>
+          <div class="form-group">
+            <label>Password: (At least 6 charactors with 1 number)</label>
+            <input type="password" id="passwordreg" name="passwordreg" class="form-control input-lg" placeholder="Password" data-parsley-minlength="6" data-parsley-pattern="/^[a-zA-Z0-9., ]*[0-9]+[a-zA-Z0-9., ]*$/" title="Passwords must be at least 6 characters long, contain at least one uppercase letter (A..Z), at least one lower case letter (a..z), and at least one number (0..9)"/>
+          </div>
+          <div class="form-group">
+            <label>Repeat Password:</label>
+            <input type="password"  name="confirmpwd"  id="confirmpwd" class="form-control input-lg" placeholder="Repeat Password" data-parsley-equalto="#passwordreg" data-parsley-error-message="The entered text does not match the password field."/>
+          </div>
+
+
+          <div class="form-group">
+            <%#= f.label 'Mediation Start', :class => "col-sm-2 control-label" %>
+            <div class="col-sm-10" id="sandbox-container">
+              <div class="input-group date">
+
+                <input  name="mediate_start" type="text" id="mediatestart" required >
+                <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
+              </div>
+
+            </div>
+
+
+
+
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" id="registerbutton" class="btn btn-primary" onclick="return regformhash(this.form, this.form.passwordreg);" value="Register" >
+      </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $('#registration_form').parsley();
+
+    var checkbox = document.getElementById('testchk');
+    var details_div = document.getElementById('check_details');
+    checkbox.onchange = function() {
+        if(this.checked) {
+            details_div.style['display'] = 'block';
+        } else {
+            details_div.style['display'] = 'none';
+        }
+    };
+</script>
 
 
 

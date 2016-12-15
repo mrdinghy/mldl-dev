@@ -12,8 +12,16 @@
 
 <p>
   <strong>Result:</strong>
-  <%= @agenda.result_id %>
+  <%= @agenda.result %>
 </p>
+
+<p>
+  <strong>Result:</strong>
+  <%= @agenda.addressed %>
+</p>
+
+
+
 
 <p>
   <strong>Agenda note:</strong>
@@ -23,3 +31,5 @@
 <%= link_to 'Edit', edit_agenda_path(@agenda) %> |
 <%= link_to 'Back', agendas_path %>
 <td><%= link_to 'Destroy', @agenda, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+
