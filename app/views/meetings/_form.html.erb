@@ -42,7 +42,12 @@
                   <div class="form-group">
                     <%= f.label 'Meeting On', :class => "col-sm-3 control-label" %>
                     <div class="col-sm-9">
-                      <%= f.text_field :meeting_on, :id => "datepicker-meeton" %>
+                      <% if @meeting.meeting_on.nil? %>
+                      <%= f.text_field :meeting_on, :id => "datepicker-meeton", value: Date.today.to_s(:db) %>
+                      <% else %>
+                          <%= f.text_field :meeting_on, :id => "datepicker-meeton" %>
+                    <% end %>
+
 
                         <%#= f.date_select :meeting_on, :default => Time.now.to_date %><br><br>
 
@@ -52,6 +57,7 @@
                   <div class="form-group">
                     <%= f.label 'Time Start', :class => "col-sm-3 control-label" %>
                     <div class="col-sm-9">
+
                         <%= f.time_select :starts_at, :ignore_date => true, :default => {:hour => '07', :minute => '00'} %><br><br>
                    </div>
                   </div>

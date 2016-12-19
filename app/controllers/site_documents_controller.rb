@@ -74,9 +74,27 @@ class SiteDocumentsController < ApplicationController
   # DELETE /site_documents/1
   # DELETE /site_documents/1.json
   def destroy
+
+    @site_document.destroy
+
+    dtype = @site_document.documentable_type
+    did = @site_document.documentable_id
+    if dtype == 'post'
+      d = Post.find(did)
+    elsif dtype == 'meeting'
+      d = Meeting.find(did)
+    elsif dtype == 'structure'
+      d = Structure.find(did)
+    elsif dtype == 'issue'
+      d = Issue.find(did)
+    elsif dtype == 'mediation'
+      d = Mediation.find(did)
+    end
+
+
     @site_document.destroy
     respond_to do |format|
-      format.html { redirect_to site_documents_url, notice: 'Site document was successfully destroyed.' }
+      format.html { redirect_to d, notice: 'Site document was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

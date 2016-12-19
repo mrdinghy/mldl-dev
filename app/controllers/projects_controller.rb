@@ -453,6 +453,19 @@ end
 
 
 
+  def clearsteve
+      d=Issueaction.where(:user_id => 2).delete_all
+      respond_to do |format|
+        format.html { redirect_to root_path, notice: 'Committe member removed from Issue.' }
+        format.json { head :no_content }
+      end
+  end
+
+
+
+
+
+
   # GET /projects/new
   def new
     @project = Project.new

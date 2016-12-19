@@ -229,7 +229,7 @@
                           <td><%= link_to issue.issuecode, issue %></td>
                           <td><%= issue.name %></td>
                           <td>
-                            <%= agenda.addressed %>
+
                             <% if agenda.addressed == true %>
 
                                 <%= agenda.result_humanize %><br>
@@ -348,6 +348,11 @@
                       </td>
                       <td>
                         <%= doc.document_updated_at %><br>
+                      </td>
+                      <td>
+                        <% if @canedit %>
+                            <%= link_to doc, method: :delete, data: { confirm: 'Are you sure you want to delete this document?' } do %><span class ="fa fa-minus-circle"></span><% end %>
+                        <% end %>
                       </td>
                     </tr>
 

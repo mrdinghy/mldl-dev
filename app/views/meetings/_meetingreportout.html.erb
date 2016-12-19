@@ -129,7 +129,7 @@
           <h4>Mediation Start</h4>
           <div id="sandbox-container">
             <div class="input-group date">
-              <input  name="mediate_start" type="text" id="<%= medstart %>" class="form-control" width="100">
+              <input  name="mediate_start" type="text" id="<%= medstart %>" class="form-control" width="100" value="<%= Date.today.to_s(:db) %>">
               <%# f.input :mediation_start, :class => "form-control", :width => "80" %>
             </div>
 
@@ -138,6 +138,10 @@
         </div>
 
       </div>
+
+
+
+
       <div class="col-sm-12 actionbox">
 
 

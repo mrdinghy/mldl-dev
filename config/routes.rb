@@ -80,7 +80,7 @@ Rails.application.routes.draw do
   get 'countyadminresults', to: 'projects#countyadminresults', as: 'countyadminresults'
 
   get 'newmldluser', to: 'users#newmldluser', as: 'newmldluser'
-  get 'createuser', to: 'users#createuser', as: 'createuser'
+  post 'createuser', to: 'users#createuser', as: 'createuser'
   get 'deletemanager', to: 'structures#deletemanager', as: 'deletemanager'
   get 'deletemediator', to: 'mediations#deletemediator', as: 'deletemediator'
   get 'deletemembership', to: 'structures#deletemembership', as: 'deletemembership'
@@ -99,6 +99,7 @@ Rails.application.routes.draw do
   post 'addmanager', to: 'structures#addmanager', as: 'addmanager'
   get 'seedpeeps', to: 'people#seedpeeps', as: 'seedpeeps'
   get 'seeder', to: 'issues#seeder', as: 'seeder'
+  get 'clearsteve', to: 'projects#clearsteve', as: 'clearsteve'
   get '/tests2', :to => redirect('/tests2.html')
   root 'visitors#index'
   #get "counties/:county_id/districts", to: "application#districts", as: "districts", format: :json

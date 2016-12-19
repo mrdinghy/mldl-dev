@@ -678,6 +678,12 @@
                       <td>
                         <%= doc.document_updated_at %><br>
                       </td>
+
+                      <td>
+                        <% if @canedit %>
+                        <%= link_to doc, method: :delete, data: { confirm: 'Are you sure you want to delete this document?' } do %><span class ="fa fa-minus-circle"></span><% end %>
+                        <% end %>
+                            </td>
                     </tr>
 
                 <% end %>
