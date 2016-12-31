@@ -32,23 +32,13 @@ class UsersController < ApplicationController
 
 
   def newmldluser
-    @user = User.new
+
     render 'addmldluser'
   end
   def createuser
-    @user = User.new(user_params)
-
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @district }
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
-
-
+    @user = User.new
+    @user.update_attributes(name: params[:name],email: params[:email],password: params[:password],mldlrole: params[:mldlrole])
+    render 'users/index'
   end
 
   # PATCH/PUT /resources/1

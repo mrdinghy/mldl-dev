@@ -85,8 +85,8 @@ end
   #grab all issues for one qtr (s1=0) or by structure (s1-n)
   def quarter_issues(d2,s1,cat,dist)
 
-    all = Issue.where('extract(year from created_at) = ?', self.qstart(d2).year)
-    number = all.where('extract(month from created_at) in (?)', self.qmonths(d2))
+    all = Issue.where('extract(year from raised_on) = ?', self.qstart(d2).year)
+    number = all.where('extract(month from raised_on) in (?)', self.qmonths(d2))
     if s1 != 0
       number = number.where('structure_id in (?)', s1)
     end
@@ -102,7 +102,7 @@ end
 
   def beginissues(d2,s1,cat,dist)
     #qset = quarter_issues(d2,s1)
-    qresult = Issue.where('created_at < ?', self.qstart(d2))
+    qresult = Issue.where('raised_on < ?', self.qstart(d2))
     qresult = qresult.where('resolution_date >= ? or resolution_date is null', d2)
     qresult = qresult.where('cancelled_at >= ? or cancelled_at is NULL', d2)
     if s1 != 0
@@ -151,7 +151,7 @@ end
   def cumulative_issues(d2,s1,cat,dist)
     qresult = Issue.all
     if d2 != 0
-      qresult = qresult.where('created_at < ?', self.qstart(d2))
+      qresult = qresult.where('raised_on < ?', self.qstart(d2))
 
     end
 
@@ -257,8 +257,8 @@ end
 
   def old_get_agendas(d2,s1,cat,dist)
 
-    qresult = AgendaMeeting.where('extract(year from created_at) = ?', self.qstart(d2).year)
-    qresult = qresult.where('extract(month from created_at) in (?)', self.qmonths(d2))
+    qresult = AgendaMeeting.where('extract(year from raised_on) = ?', self.qstart(d2).year)
+    qresult = qresult.where('extract(month from raised_on) in (?)', self.qmonths(d2))
 
     if s1 != 0
       qresult = qresult.where('structure_id in (?)', s1)
@@ -412,8 +412,8 @@ end
 def monthnew(monthstart,s1,sids)
   monthend = monthstart.end_of_month
   mresult = Issue.all
-  mresult = mresult.where('extract(year from created_at) = ?', monthstart.year)
-  mresult = mresult.where('extract(month from created_at) = ?',monthstart.month)
+  mresult = mresult.where('extract(year from raised_on) = ?', monthstart.year)
+  mresult = mresult.where('extract(month from raised_on) = ?',monthstart.month)
   if s1 != 0
     mresult = mresult.where(structure_id: s1)
   else
@@ -425,7 +425,7 @@ end
   def monthtotalbegin(monthstart,s1,sids,resolved)
     monthend = monthstart.end_of_month
     mresult = Issue.all
-    mresult = mresult.where('created_at < ?', monthstart)
+    mresult = mresult.where('raised_on < ?', monthstart)
     if resolved != 0
        mresult = mresult.where('resolution_date >= ? or resolution_date is null', monthstart)
     end

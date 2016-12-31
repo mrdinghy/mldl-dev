@@ -99,7 +99,7 @@
    def qissues(thisyear,thismonth,structure,district)
 
       all = Issue.all
-      all = all.where('extract(year from created_at) = ? and extract(month from created_at) = ?', thisyear, thismonth)     if thisyear != 0
+      all = all.where('extract(year from raised_on) = ? and extract(month from raised_on) = ?', thisyear, thismonth)     if thisyear != 0
       all = all.where('structure_id = ?', structure)     if structure > 0
       all = all.where('district_id = ?', district)     if district > 0
       return all
@@ -134,7 +134,7 @@
 
 
   def newpermonth(m,cat)
-    newissues = Issue.where('extract(month from created_at) = ?', m)
+    newissues = Issue.where('extract(month from raised_on) = ?', m)
     return newissues.count
 
 

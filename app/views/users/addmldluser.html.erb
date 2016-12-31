@@ -14,16 +14,16 @@
       <div class="panel panel-default">
 
         <div class="panel-body">
-          <%= form_tag createuser_path do |f| %>
+          <%= form_tag createuser_path do %>
               <h3>User</h3>
-              <p>Name: <%= f.text_field :name %></p>
-              <p>Email: <%= f.text_field :email %></p>
-              <p>Password: <%= f.text_field :password %></p>
+              <p>Name: <%= text_field_tag :name %></p>
+              <p>Email: <%= text_field_tag :email %></p>
+              <p>Password: <%= text_field_tag :password %></p>
               <table class="table">
-                <tr><td> <%= f.radio_button :mldlrole, 1 %>&nbsp;&nbsp;&nbsp;</td><td>Administrator</td><td>can change all STructures,Issues,Meetings,Mediations,Assign Managers</td></tr>
-                <tr><td> <%= f.radio_button :mldlrole, 2 %>&nbsp;&nbsp;&nbsp;</td><td>Structure Manager</td><td>can be assigned to manage one or more MDLD Stuctures (change all STructures,Issues,Meetings,Mediations,Assign Managers</td></tr>
-                <tr><td> <%= f.radio_button :mldlrole, 3 %>&nbsp;&nbsp;&nbsp;</td><td> View only</td><td>can see all content but cannot change or add data</td></tr>
-                <tr><td> <%= f.radio_button :mldlrole, 4 %>&nbsp;&nbsp;&nbsp;</td><td> Limited View </td><td>can only see specific Structure data</td></tr>
+                <tr><td> <%= radio_button_tag :mldlrole, 1 %>&nbsp;&nbsp;&nbsp;</td><td>Administrator</td><td>can change all STructures,Issues,Meetings,Mediations,Assign Managers</td></tr>
+                <tr><td> <%= radio_button_tag :mldlrole, 2 %>&nbsp;&nbsp;&nbsp;</td><td>Structure Manager</td><td>can be assigned to manage one or more MDLD Stuctures (change all STructures,Issues,Meetings,Mediations,Assign Managers</td></tr>
+                <tr><td> <%= radio_button_tag :mldlrole, 3 %>&nbsp;&nbsp;&nbsp;</td><td> View only</td><td>can see all content but cannot change or add data</td></tr>
+                <tr><td> <%= radio_button_tag :mldlrole, 4 %>&nbsp;&nbsp;&nbsp;</td><td> Limited View </td><td>can only see specific Structure data</td></tr>
 
 
               </table>
@@ -45,7 +45,7 @@
 
               <br><br><br><br><br><br>
               <div class="actions">
-                <%= f.submit :class => "btn btn-primary" %>
+                <%= submit_tag %>
               </div>
           <% end %>
         </div>

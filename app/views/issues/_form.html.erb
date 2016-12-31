@@ -54,6 +54,20 @@
 
 
   <div class="form-group">
+    <a href="#" title="<%= @project.infopoptitle('issue_raisedon') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_raisedon') %>">Info?</a>
+    <%= f.label :raised_on, :class => "col-sm-2 control-label" %>
+
+    <div class="col-sm-10">
+      <%= f.text_field :raised_on, :id => "datepicker-raisedon", :input_html => { :default => Date.today } %>
+
+    </div>
+  </div>
+
+
+
+
+
+  <div class="form-group">
     <a href="#" title="<%= @project.infopoptitle('issue_name') %>" data-toggle="popover" data-trigger="hover" data-content="<%= @project.infopopbody('issue_name') %>">Info?</a>
     <%= f.label 'Issue Name *', :class => "col-sm-2 control-label" %>
     <div class="col-sm-10">
@@ -286,6 +300,7 @@
 
 <script type="text/javascript">
     $('#datepicker-example1').Zebra_DatePicker();
+    $('#datepicker-raisedon').Zebra_DatePicker();
 </script>
 
 <script>

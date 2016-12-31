@@ -70,8 +70,6 @@ class ProjectsController < ApplicationController
   def monthlyresults
      @county = County.find(params[:county_id])
 
-
-
     @project = Project.find(1)
      @countystructures = Structure.where(county_id: params[:county_id])
      @sids = @countystructures.pluck(:id)
@@ -89,15 +87,64 @@ class ProjectsController < ApplicationController
 
   end
   def countyadminresults
-    @project = Project.find(1)
+
     @countystructures = Structure.where(county_id: params[:county_id])
-    @sids = @countystructures.pluck(:id)
-    c_issues=Issue.where(structure_id: @sids)
-    @newissues = c_issues.where(status: Status::NEW).order(:structure_id)
-    @openissues = c_issues.where(status: Status::ONGOING).order(:structure_id)
-    @inmediation = c_issues.where(status: Status::MEDIATION).order(:structure_id)
-    @openmeetings = Meeting.where(structure_id: @sids, meeting_held: false).order(:structure_id)
-    #@openmediations = Mediation.where(structure_id: @sids, mediation_held: false)
+    sids = @countystructures.pluck(:id)
+    @cissues=Issue.where(structure_id: sids)
+    cissueids = @cissues.pluck(:id)
+    @cmediations=Mediation.where(issue_id: cissueids)
+    @cmeetings = Meeting.where(structure_id: sids)
+
+
+
+    @project = Project.find(1)
+
+
+    @openissues = @cissues.where('status = ? or status = ?', Status::ONGOING, Status::NEW)
+    openissueids = @openissues.pluck(:id)
+    @closedissues = @cissues.where('status = ? or status = ?', Status::RESOLVED, Status::CANCELLED)
+    @mediationissues = @cissues.where(status: Status::MEDIATION)
+
+    closedissueids = @closedissues.pluck(:id)
+    mediationissueids = @mediationissues.pluck(:id)
+
+    closedmeetings = @cmeetings.where(meeting_held: :true)
+    closedmeetingids = closedmeetings.pluck(:id)
+    @unaddressed = Agenda.where(meeting_id: closedmeetingids, result: nil)
+    @openmeetings = @cmeetings.where(meeting_held: :false)
+    openmeetingids = @openmeetings.pluck(:id)
+
+    closedmediations = @cmediations.where(mediation_held: :true)
+    @closedmediation_noenddate = closedmediations.where(mediate_end: nil)
+    @enddate_notclosed = closedmediations.where.not(mediate_end: nil).where(mediation_held: nil)
+    @openmediations = @cmediations.where(mediation_held: nil)
+
+    puts @openmediations.count
+
+
+    openmeidationids = @openmediations.pluck(:id)
+
+
+
+
+
+    @openwithresolvedissues = @openmediations.where(issue_id: closedissueids)
+    #@openwithnomedationstatus = Issue.where()
+
+    inmediationissues = @cissues.where(status: Status::MEDIATION)
+    inmediationissueids = inmediationissues.pluck(:id)
+
+    @falseissuemediationstatus = @openmediations.where.not(issue_id: mediationissueids)
+    @resolved = Issue.where(status: Status::RESOLVED)
+    @emptyresolved = @resolved.where(resolution_date: nil)
+    old1 = 6.months.ago
+    old2 = old1.to_date
+    @openandold = @openissues.where('raised_on < ?', old2)
+puts @openandold.count
+    puts '*****************cutoff************************************'
+
+
+
 
     render 'projects/countyadminresults'
 

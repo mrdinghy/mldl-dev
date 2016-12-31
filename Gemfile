@@ -12,6 +12,7 @@ gem 'jquery-turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'simple_form'
 gem 'devise'
+gem 'devise_invitable', '~> 1.7.0'
 gem 'momentjs-rails', '>= 2.9.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem "paperclip", "3.5.4"

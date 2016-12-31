@@ -1,50 +1,178 @@
+
+
+<style>
+  .crow {
+      background-color: #58ceb1;
+      font-weight: bold;
+      font-size: 16px;
+      border: #fff 5px; solid
+  }
+
+
+</style>
+
+
 <h3>County Admin Report</h3>
+<table>
+  <tr><td class="crow">Open Issues over 6 Months</td><td class="crow"><%= @openandold.count %></td></tr>
+  <tr><td colspan="2">
+  <% if @openandold.count == 0 %>
+        No records
+        <% else %>
 
 
-<% if @newissues.count != 0 %>
-    <% @issues = @newissues %>
-    <h3>New Issues</h3>
+          <table class="table">
+          <% @openandold.each do |oo| %>
+            <tr><td><%= link_to oo.issuecode, oo %></td><td><%= oo.name %></td><td><%= oo.raised_on.strftime("%m/  %d/%Y") %></td></tr>
+          <% end %>
+          </table>
 
-            <%= render 'issues/issues_admintable' %>
-<% else %>
-    <h3>No New Issues</h3>
+<% end %>
+   </td></tr>
+
+
+
+
+        <tr><td  class="crow">Open Meetings</td><td class="crow"><%= @openandold.count %></td></tr>
+        <tr><td colspan="2">
+          <% if @openmeetings.count == 0 %>
+              No records
+          <% else %>
+
+          <table class="table">
+            <thead>
+            <tr>
+              <th>MeetingID</th>
+              <th>Date</th>
+              <th>Agendas Addressed</th>
+              <th>Unaddressed</th>
+
+            </tr>
+            </thead>
+            <% @openmeetings.each do |om| %>
+
+
+            <tr>
+              <td><%= link_to om.meetingid, om %></td>
+              <td><%= om.meeting_on %></td>
+              <td><%= om.addressedagendas %></td>
+              <td><%= om.unaddressedagendas %></td>
+            </tr>
+
+
+            <% end %>
+          </table>
 
 <% end %>
 
-<% if @openissues.count != 0 %>
-<% @issues = @openissues %>
-<h3>Open Issues</h3>
-    <%= render 'issues/issues_admintable' %>
+              </td>
+              </tr>
 
-<% else %>
-<h3>No new issues</h3>
+  <tr><td class="crow">Open Mediations</td><td class="crow"><%= @openmediations.count %></td></tr>
+  <tr><td colspan="2">
 
+    <% if @openandold.count == 0 %>
+        No records
+    <% else %>
+
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th>MediationID</th>
+        <th>Issue</th>
+        <th>Mediation Start</th>
+
+      </tr>
+      </thead>
+    <% @openmediations.each do |omd| %>
+          <tr>
+            <td><%= link_to omd.mediationcode, omd %></td>
+            <td><%= omd.issue.issuecode %></td>
+            <td><%= omd.mediate_start %></td>
+          </tr>
+    <% end %>
+    </table>
 <% end %>
+  </td>
+  </tr>
 
-<% if @inmediation.count != 0 %>
-<% @issues = @inmediation %>
+  <tr><td class="crow">Closed Mediations Requiring End Date</td><td class="crow"><%= @closedmediation_noenddate.count %></td></tr>
+  <tr><td colspan="2">
 
-    <h3>Open Mediations</h3>
+    <% if @closedmediation_noenddate.count == 0 %>
+        No records
+    <% else %>
 
-    <%= render 'issues/issues_admintable' %>
-
-<% else %>
-<h3>No Issues in Mediation</h3>
-
-<% end %>
-
-
-
-<% if @openmeetings.count != 0 %>
-<% @meetings = @openmeetings %>
-    <h3>Open Meetings</h3>
-
-    <%= render 'meetings/meetings_admintable' %>
-
-<% else %>
-<h3>No Open Meetings</h3>
-
-<% end %>
+        <% @closedmediation_noenddate.each do |mne| %>
+            <%= link_to mne.mediationcode, mne %><%= mne.mediation_start %><%= mne.issue.issuecode %><br>
+        <% end %>
+   <% end %>
+  </td>
+  </tr>
+  <tr><td class="crow">Open Mediations that have End Date</td><td class="crow"><%=  @enddate_notclosed.count %></td></tr>
+  <tr><td colspan="2">
+    <% if @enddate_notclosed.count == 0 %>
+        No records
+    <% else %>
 
 
 
+
+        <% @enddate_notclosed.each do |enc| %>
+            <%= link_to enc.mediationcode, enc %><%= enc.mediate_end %><br>
+        <% end %>
+        <% end %>
+        </td>
+  </tr>
+
+  <tr><td class="crow">Open Mediations Linked to Resolved Issues</td><td class="crow"><%=  @openwithresolvedissues.count %></td></tr>
+  <tr><td colspan="2">
+
+    <% if @openwithresolvedissues.count == 0 %>
+        No records
+    <% else %>
+
+
+  <% @openwithresolvedissues.each do |enc| %>
+        <%= link_to enc.mediationcode, enc %><%= enc.issue.issuecode %><br>
+    <% end %>
+
+        <% end %>
+  </td>
+  </tr>
+
+
+
+
+  <tr><td class="crow">Closed Meetings with Unaddressed (no Result) Agendas</td><td class="crow"><%= @unaddressed.count %></td></tr>
+  <tr><td colspan="2">
+    <% if @unaddressed.count == 0 %>
+        No records
+    <% else %>
+
+  <% @unaddressed.each do |ua| %>
+        <%= link_to ua.meeting.meetingid, ua.meeting %><%= ua.meeting.meeting_on %>  <%= link_to ua.issue.issuecode, ua.issue %><%= ua.issue.name %><br>
+    <% end %>
+
+        <% end %>
+  </td>
+  </tr>
+
+
+  <tr><td class="crow">Open Mediations where Issue is not in "Mediation" Status </td><td class="crow"><%= @falseissuemediationstatus.count %></td></tr>
+  <tr><td colspan="2">
+    <% if @falseissuemediationstatus.count == 0 %>
+        No records
+    <% else %>
+
+  <% @falseissuemediationstatus.each do |fmi| %>
+        <%= link_to fmi.mediation.mediationcode, fmi.mediation %> <%= link_to fmi.issue.issuecode, fmi.issue %><%= fmi.issue.name %><br>
+    <% end %>
+        <% end %>
+  </td>
+  </tr>
+
+
+
+</table>

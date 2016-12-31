@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161202221532) do
+ActiveRecord::Schema.define(version: 20161231023443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20161202221532) do
     t.boolean  "addressed"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "user_id"
   end
 
   create_table "appissues", force: :cascade do |t|
@@ -105,6 +106,13 @@ ActiveRecord::Schema.define(version: 20161202221532) do
   add_index "comments", ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type", using: :btree
   add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
+  create_table "committeemembers", force: :cascade do |t|
+    t.integer  "membership_id"
+    t.integer  "issue_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
   create_table "communities", force: :cascade do |t|
     t.string   "name"
     t.integer  "district_id"
@@ -130,6 +138,14 @@ ActiveRecord::Schema.define(version: 20161202221532) do
     t.integer  "county_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "infopopups", force: :cascade do |t|
+    t.string   "title"
+    t.text     "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "code"
   end
 
   create_table "issueactions", force: :cascade do |t|
@@ -177,6 +193,7 @@ ActiveRecord::Schema.define(version: 20161202221532) do
     t.string   "other_category"
     t.text     "originnote"
     t.string   "raisedby_structure"
+    t.date     "raised_on"
   end
 
   create_table "managers", force: :cascade do |t|
@@ -279,6 +296,7 @@ ActiveRecord::Schema.define(version: 20161202221532) do
     t.string   "suffix"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.boolean  "is_mediator"
   end
 
   create_table "permissions", force: :cascade do |t|
@@ -382,6 +400,16 @@ ActiveRecord::Schema.define(version: 20161202221532) do
     t.datetime "updated_at",       null: false
   end
 
+  create_table "userlogs", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "action"
+    t.string   "loggable_type"
+    t.integer  "loggable_id"
+    t.datetime "logdate"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
   create_table "userroles", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "structure_id"
@@ -411,27 +439,25 @@ ActiveRecord::Schema.define(version: 20161202221532) do
     t.boolean  "system_manager"
     t.integer  "mldlrole"
     t.boolean  "is_inactive"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer  "invitation_limit"
+    t.integer  "invited_by_id"
+    t.string   "invited_by_type"
+    t.integer  "invitations_count",      default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
+  add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
+  add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-
-  create_view :agenda_meetings,  sql_definition: <<-SQL
-      SELECT a.id,
-      a.meeting_id,
-      a.issue_id,
-      a.agenda_note,
-      a.result,
-      a.addressed,
-      a.created_at,
-      a.updated_at,
-      m.structure_id,
-      m.meeting_held
-     FROM agendas a,
-      meetings m
-    WHERE (a.meeting_id = m.id);
-  SQL
 
   create_view :mediation_issues,  sql_definition: <<-SQL
       SELECT m.id,
@@ -484,6 +510,23 @@ ActiveRecord::Schema.define(version: 20161202221532) do
       issues.structure_id
      FROM issues
     GROUP BY issues.structure_id;
+  SQL
+
+  create_view :agenda_meetings,  sql_definition: <<-SQL
+      SELECT a.id,
+      a.meeting_id,
+      a.issue_id,
+      a.agenda_note,
+      a.result,
+      a.addressed,
+      a.created_at,
+      a.updated_at,
+      m.structure_id,
+      m.meeting_on,
+      m.meeting_held
+     FROM agendas a,
+      meetings m
+    WHERE (a.meeting_id = m.id);
   SQL
 
 end

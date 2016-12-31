@@ -32,4 +32,17 @@ class Meeting < ActiveRecord::Base
       sname = 'Scheduled'
     end
   end
+
+  def addressedagendas
+    addressed = Agenda.where(meeting_id: self.id, addressed: :true)
+    return addressed.count
+  end
+
+  def unaddressedagendas
+    addressed = Agenda.where(meeting_id: self.id, addressed: nil)
+    return addressed.count
+  end
+
+
+
 end

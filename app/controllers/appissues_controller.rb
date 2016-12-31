@@ -58,9 +58,34 @@ def fixissues
 
 end
 
+
+  def raisedondata
+    issues = Issue.all
+    issues.each do |i|
+      i.raised_on = i.created_at.to_date
+      i.save
+    end
+
+
+
+  end
+
+
+
+def index
+  self.raisedondata
+end
+
+
+
+
+
+
+
+
     def xxxindex
-
-
+      self.raisedondata
+aaaaaaaaaaaaa
       Appissue.where('issueid in (?)', [501,363,176,177]).destroy_all
       @cleanissues2 = Appissue.order('id')
 

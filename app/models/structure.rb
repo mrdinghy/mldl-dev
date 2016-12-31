@@ -72,7 +72,7 @@ class Structure < ActiveRecord::Base
 
 
   def ourissues()
-    myissues= Issue.where(structure_id: self.id).order('created_at DESC')
+    myissues= Issue.where(structure_id: self.id).order('raised_on DESC')
     return myissues
   end
 
@@ -165,7 +165,7 @@ end
     qmonth1 = qstart.month
     qmonth2 = qmonth1 + 1
     qmonth3 = qmonth1 + 2
-    all = Issue.where('created_at < ?', qstart)
+    all = Issue.where('raised_on < ?', qstart)
     all2 = all.where('resolution_date >= ? or resolution_date is null', qstart)
     all3 = all2.where('cancelled_at >= ? or cancelled_at is NULL', qstart)
     if s1 != 0
@@ -203,7 +203,7 @@ end
   def qissues(thisyear,thismonth,structure,district)
 
     all = Issue.all
-    all = all.where('extract(year from created_at) = ? and extract(month from created_at) = ?', thisyear, thismonth)     if thisyear != 0
+    all = all.where('extract(year from raised_on) = ? and extract(month from raised_on) = ?', thisyear, thismonth)     if thisyear != 0
     all = all.where('structure_id = ?', structure)     if structure > 0
     all = all.where('district_id = ?', district)     if district > 0
     return all
@@ -242,7 +242,7 @@ end
 
 
   def preissues(thisyear,thismonth,structure,district)
-    alldata = Issue.where('(extract(year from created_at) = ? and  extract(month from created_at) < ?) OR extract(year from created_at) < ?', thisyear,thismonth,thisyear)
+    alldata = Issue.where('(extract(year from raised_on) = ? and  extract(month from raised_on) < ?) OR extract(year from raised_on) < ?', thisyear,thismonth,thisyear)
     alldata = alldata.where('resolution_date is NULL  OR (extract(year from resolution_date) = ? and extract(month from resolution_date) >= ?) OR extract(year from resolution_date) > ? ', thisyear, thismonth, thisyear)
     alldata = alldata.where('cancelled_at is NULL     OR (extract(year from cancelled_at) = ?    and extract(month from cancelled_at) >= ?)    OR extract(year from cancelled_at) > ? ', thisyear, thismonth, thisyear)
 
@@ -256,7 +256,7 @@ end
 
   def maindata(thisyear, thismonth,structure, district, action, result, mediate)
     alldata = Issueaction.all
-    alldata = alldata.where('extract(year from created_at) = ? and extract(month from created_at) = ?', thisyear, thismonth)  if thisyear !=0
+    alldata = alldata.where('extract(year from raised_on) = ? and extract(month from raised_on) = ?', thisyear, thismonth)  if thisyear !=0
     alldata = alldata.where('structure_id = ?', structure)    if structure != 0
     alldata = alldata.where('distrcit_id = ?', district)  if district != 0
     alldata = alldata.where('actiontype =?', action)   if action  != 0
