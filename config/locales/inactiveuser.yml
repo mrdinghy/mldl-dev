@@ -1,0 +1,5 @@
+# config/locales/*your-filename-here*.yml
+en:
+  devise:
+    failure:
+      deleted_account: "Your MLDL is incactive"

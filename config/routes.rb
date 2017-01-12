@@ -41,8 +41,8 @@ Rails.application.routes.draw do
 
   resources :site_images
   resources :site_documents
-
-  devise_for :users
+  devise_for :users, :controllers => { :registrations => 'users/registrations' }
+  #devise_for :users
   resources :posts
   resources  :people_structures
   resources :comments, :path_prefix => '/:commentable_type/:commentable_id'
@@ -98,6 +98,11 @@ Rails.application.routes.draw do
   post 'addmemember', to: 'structures#addmembership', as: 'addmember'
   post 'addmanager', to: 'structures#addmanager', as: 'addmanager'
   get 'seedpeeps', to: 'people#seedpeeps', as: 'seedpeeps'
+  get 'datacsv', to: 'issues#dumpfile', as: 'datacsv'
+  get 'issuedump', to: 'issues#issuedump', as: 'issuedump'
+  get 'basicdata', to: 'projects#basicdatasetup', as: 'basicdata'
+  get 'basictableoutput', to: 'projects#basictableoutput', as: 'basictableoutput'
+
   get 'seeder', to: 'issues#seeder', as: 'seeder'
   get 'clearsteve', to: 'projects#clearsteve', as: 'clearsteve'
   get '/tests2', :to => redirect('/tests2.html')

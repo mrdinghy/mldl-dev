@@ -8,14 +8,30 @@
         <td>Email</td>
         <td>Role</td>
         <td>Assignments</td>
-        <td></td>
+        <td>Inactive</td>
         </th></td>
         </thead>
         <tbody>
           <% @users.each do |user| %>
 
             <tr>
-              <%= render user %>
+              <% structures = Manager.where('user_id = ?', user.id) %>
+              <td><%= link_to user.name, user %></td>
+              <td><%= link_to user.email, user %></td>
+              <td><%= user.mldlrole_humanize %><br>
+
+              <td>
+                <% structures.each do |st| %>
+                    <%= st.structure.name %><br>
+                <% end %>
+              </td>
+              <td>
+                <% if !user.deleted_at.nil? %>
+                    <span style="color: red; font-weight: bold ">Inactive</span>
+                <% end %>
+              </td>
+              <td><%= link_to 'Edit Roles', adjustroles_path(:user_id => user.id) %></td>
+
             </tr>
           <% end %>
         </tbody>
