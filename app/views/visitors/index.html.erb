@@ -41,36 +41,7 @@
         <div class="panel-body">
 
 
-<table class="table">
-            <% @latestactivity.each do |act| %>
-        <tr>
-              <td><%= act.created_at.strftime("%F") %></td>
 
-          <td>
-            <%if act.comment? %>
-                <%= link_to act.issue.issuecode, act.issue  %> Comment<br>
-                <em><%= act.actionbody %></em>
-            <% else %>
-                <%= link_to act.issue.issuecode, act.issue  %>
-            <%= act.actiondesc(act.actiontype) %><br>
-                <% if !act.meeting_id.nil? %>
-                    Meeting: <%= link_to act.meeting.meetingid, act.meeting %>
-                <% end %>
-                <% if !act.mediation_id.nil? %>
-                    Mediation: <%= link_to act.mediation.mediationcode, act.mediation %>
-                <% end %>
-            <% end %>
-
-          </td>
-
-          <td>  <%= act.user.name if act.user_id %></td>
-
-
-
-
-        </tr>
-            <% end %>
-          </table>
 
 
 
