@@ -9,6 +9,7 @@ class Meeting < ActiveRecord::Base
   has_many :participations, :dependent => :destroy
   has_many :people, :through => :participations
 
+  has_many :issueactions, :dependent => :destroy
 
   has_many :site_documents
 

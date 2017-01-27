@@ -100,9 +100,10 @@ Rails.application.routes.draw do
   get 'seedpeeps', to: 'people#seedpeeps', as: 'seedpeeps'
   get 'datacsv', to: 'issues#dumpfile', as: 'datacsv'
   get 'issuedump', to: 'issues#issuedump', as: 'issuedump'
+  get 'meetingcheck', to: 'meetings#meetingchecker', as: 'meetingcheck'
   get 'basicdata', to: 'projects#basicdatasetup', as: 'basicdata'
   get 'basictableoutput', to: 'projects#basictableoutput', as: 'basictableoutput'
-
+  get 'downloadissues', to: 'issues#action_name', as: 'downloadissues'
   get 'seeder', to: 'issues#seeder', as: 'seeder'
   get 'clearsteve', to: 'projects#clearsteve', as: 'clearsteve'
   get '/tests2', :to => redirect('/tests2.html')

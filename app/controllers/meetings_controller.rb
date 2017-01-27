@@ -73,6 +73,19 @@ class MeetingsController < ApplicationController
 
 
 
+  def meetingchecker
+
+    getmeetingids = Meeting.pluck(:id)
+
+    badids = Issueaction.where(actiontype: 2).where.not(meeting_id: getmeetingids).destroy_all
+    puts
+    puts badids
+
+    num=Issueaction.where(actiontype: 2).where(meeting_id: nil).destroy_all
+
+    @cleanedout = num
+     render 'index'
+  end
 
 
 

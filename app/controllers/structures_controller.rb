@@ -248,10 +248,9 @@ end
   end
 
   def deletemanager
-
-    manager=Manager.find(params[:manager_id]).destroy
-    s = Structure.find(manager.structure_id)
-
+    manager=Manager.find(params[:manager_id])
+    s=Structure.find(manager.structure_id)
+    delmanager= Manager.find(params[:manager_id]).destroy
 
     respond_to do |format|
       format.html { redirect_to s, notice: 'Manager has been removed.' }
@@ -321,7 +320,6 @@ end
     end
 
   end
-
 
 
   def managersmap
