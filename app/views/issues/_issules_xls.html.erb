@@ -1,0 +1,60 @@
+
+<table id="issuestable"  class="table table-striped table-hover">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Code</th>
+    <th>Status</th>
+    <th>Name</th>
+    <th>Category</th>
+    <th>District</th>
+    <th>Community</th>
+    <th>Disputants</th>
+    <th>Origin</th>
+    <th>Raised On</th>
+    <th>Resolution Date</th>
+    <th>Resolution Type</th>
+    <th>Resolution</th>
+
+    <th>Cancelled</th>
+    <th>Created</th>
+    <th>Updated</th>
+
+
+  </tr>
+  </thead>
+  <tbody>
+  <% @issues.each do |issue| %>
+      <% statusbox1 = 'btn btn-'+issue.issuestatus(issue.status) %>
+      <% mydisputants = Disputant.where(:issue_id => issue.id) %>
+      <tr>
+        <td><%=issue.id %></td>
+        <td><%=issue.issuecode %></td>
+        <td><button class="tabstatusbox <%= statusbox1 %>"><%= issue.status_humanize %></button></td>
+   d     <td><%= issue.name %></td>
+
+        <td><%= issue.category.name if !issue.category_id.nil? %></td>
+        <td><%= issue.district.name if issue.district_id %></td>
+
+        <td><%= issue.community %></td>
+        <td><%= issue.disputant %>
+          <% mydisputants.each do |d| %>
+              <%= d.person.fullname %>
+          <% end %>
+
+        </td>
+        <td>
+         <%= issue.scope_humanize if issue.scope %>
+          <%= issue.orginnote %>
+        </td>
+         <td> <%= issue.raised_on.strftime("%m/  %d/%Y") %></td>
+        <td><%= issue.resolution_date.strftime("%m/  %d/%Y") %></td>
+        <td><%= issue.resolutiontype.name if issue.resolutiontype_id %></td>
+        <td><%= issue.resolution %></td>
+        <td><%= issue.cancelled_at.strftime("%m/  %d/%Y") %></td>
+        <td><%= issue.created_at.strftime("%m/  %d/%Y") %></td>
+        <td><%= issue.updaed_at.strftime("%m/  %d/%Y") %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

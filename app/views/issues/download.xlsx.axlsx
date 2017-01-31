@@ -1,0 +1,17 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Issues") do |sheet|
+    sheet.add_row ["ID", "Name","Structure","District"]
+    @issues.each do |issue|
+       @issues.each do |issue|sheet.add_row [
+                      issue.issuecode,
+                      issue.structure.name,
+                      issue.issue.name,
+                      issue.category.name,
+                      issue.district.name,
+                      issue.community,
+                      issue.status_humanize,
+                      issue.resolution_date,
+                      issue.raised_on,
+                      issue.created_at]
+    end
+end

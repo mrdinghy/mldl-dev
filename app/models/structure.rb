@@ -272,6 +272,46 @@ def listmanagers(structure_id)
   return q
 end
 
+def structurecolor(structuretype)
+  if structuretype == 1
+    cssbox='csccolor'
+  elsif structuretype == 2
+    cssbox='dsccolor'
+  elsif structuretype == 3
+    cssbox= 'csccolor'
+  else
+    cssbox= 'nsccolor'
+  end
+  return cssbox
+end
+  #e98000
+
+  def structurecolorcode(structuretype)
+    if structuretype == 1
+      css='#e98000'
+    elsif structuretype == 2
+      css='#49274a'
+    elsif structuretype == 3
+      css= '#e24342'
+    else
+      css= '#666666'
+    end
+    return css
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

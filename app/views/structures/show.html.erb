@@ -15,7 +15,14 @@ width: 800px;
 width: 800px;
 }
 
+ .panel-info > .panel-heading {
+   background-color: <%= @structure.structurecolorcode(@structure.structuretype) %> ;
+ }
+
+
+
 </style>
+
 
 
 
@@ -45,6 +52,7 @@ width: 800px;
             <%= link_to 'New Issue', new_issue_path(:structure_id => @structure.id), 'data-no-turbolink' => true, :class => "btn btn-success"  %>
             <%#= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
             <%= link_to "New Meeting", new_meeting_path(:structure_id => @structure.id), :class => "btn btn-success" %>
+            <%= link_to "Issue Dump XLS", structureissuedump_path(:structure_id => @structure.id), :class => "btn btn-default" %>
           </div>
       <% end %>
 

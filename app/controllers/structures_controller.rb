@@ -264,11 +264,22 @@ end
   end
 
 
+
+  def structureissuedump
+    structure=Structure.find(params[:structure_id])
+    @sheetname = "MLDL Issues - " + structure.name
+    @issues = Issue.where(structure_id: params[:structure_id])
+    render xlxs:'issues', template: 'issues/issuedump.xlsx.axlsx', filename: 'filename'
+  end
+
+
+
   def deletemembership
 
-    m=Membership.find(params[:membership_id]).destroy
-    s = Structure.find(m.structure_id)
+    m=Membership.find(params[:membership_id])
 
+    s = Structure.find(m.structure_id)
+    m.destroy!
 
     respond_to do |format|
       format.html { redirect_to s, notice: 'Manager has been removed.' }

@@ -7,6 +7,7 @@
     a.created_at,
     a.updated_at,
     m.structure_id,
+    m.meeting_on,
     m.meeting_held
    FROM agendas a,
     meetings m

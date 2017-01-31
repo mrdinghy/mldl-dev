@@ -100,6 +100,8 @@ Rails.application.routes.draw do
   get 'seedpeeps', to: 'people#seedpeeps', as: 'seedpeeps'
   get 'datacsv', to: 'issues#dumpfile', as: 'datacsv'
   get 'issuedump', to: 'issues#issuedump', as: 'issuedump'
+  get 'structureissuedump', to: 'structures#structureissuedump', as: 'structureissuedump'
+
   get 'meetingcheck', to: 'meetings#meetingchecker', as: 'meetingcheck'
   get 'basicdata', to: 'projects#basicdatasetup', as: 'basicdata'
   get 'basictableoutput', to: 'projects#basictableoutput', as: 'basictableoutput'

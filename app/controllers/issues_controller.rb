@@ -68,7 +68,11 @@ class IssuesController < ApplicationController
 
   end
 
-
+  def issuedump
+    @sheetname = "MLDL Issues - All Structures"
+    @issues = Issue.all
+    render xlsx:'issues', template: 'issues/issuedump.xlsx.axlsx', filename: "mldlissues.xlsx"
+  end
 
 
   def searchbyqtr
@@ -205,7 +209,6 @@ class IssuesController < ApplicationController
     @issues = searchresults
     render 'index'
   end
-
 
 
 

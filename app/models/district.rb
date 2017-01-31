@@ -2,9 +2,11 @@ class District < ActiveRecord::Base
 
   validates :name, presence: true
   has_many :issues
-  has_many :structures
+  #has_many :structures
   belongs_to :county
 
+  has_many :issues_districts, :dependent => :destroy
+  has_many :issues, :through => :issues_districts
 
 
 

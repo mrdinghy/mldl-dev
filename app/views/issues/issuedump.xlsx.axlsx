@@ -1,0 +1,44 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: @sheetname) do |sheet|
+  sheet.add_row ["IssueID", "Name", "Structure", "Category", "Status","District","Community","RaisedOn", "Resolution Date", "ResolutionType", "Source(Origin)"]
+  @issues.each do |issue|
+    s=Structure.find(issue.structure_id)
+   
+    if issue.category_id.nil?
+      cname=nil
+      
+    else
+      c=Category.find(issue.category_id)
+      cname=c.name
+    end
+    if issue.district_id.nil?
+      dname=nil
+     else
+      d=District.find(issue.district_id)
+      dname=d.name
+    end
+    if issue.scope_id.nil?
+      scopename=nil
+     else
+      scope=Scope.find(issue.scope_id)
+      scopename=d.name
+    end   
+  if issue.resolutiontype_id.nil?
+      rtname=nil
+   elsif issue.resolutiontype_id == 0
+       rtname=nil
+    else
+      rt=Resolutiontype.find(issue.resolutiontype_id)
+      rtname=rt.name
+    end      
+    
+    
+    
+    
+    
+    
+    
+    sheet.add_row [issue.issuecode, issue.name, s.name, cname, issue.status_humanize,dname, 
+    issue.community, issue.raised_on, issue.resolution_date,rtname, scopename, ]
+  end
+end

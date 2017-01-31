@@ -154,6 +154,29 @@ puts @openandold.count
 
 
 
+  def basicdatasetup
+    @cscs= County.where('id in (2,7,11,12)')
+
+    render 'projects/basictablesetup'
+
+  end
+
+
+
+
+  def basictableoutput
+    @cissues=Issue.all
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @products.to_csv }
+      format.xls # { send_data @products.to_csv(col_sep: "\t") }
+
+    end
+  end
+
+
+
 
 
 
@@ -500,7 +523,7 @@ end
 
 
 
-  def clearsteve
+  def xclearsteve
       d=Issueaction.where(:user_id => 2).delete_all
       respond_to do |format|
         format.html { redirect_to root_path, notice: 'Committe member removed from Issue.' }

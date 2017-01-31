@@ -6,6 +6,7 @@ class Mediation < ActiveRecord::Base
 
   has_many :mediatior, :dependent => :destroy
   has_many :people, :through => :mediatiors
+  has_many :issueactions, :dependent => :destroy
 
 
   extend EnumerateIt

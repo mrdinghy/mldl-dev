@@ -18,6 +18,11 @@ class Issue < ActiveRecord::Base
   has_enumeration_for :status
 
 
+  has_many :issues_districts, :dependent => :destroy
+  has_many :districts, :through => :issues_districts
+
+
+
   has_many :committeemembers, :dependent => :destroy
   has_many :memberships, :through => :committeemembers
 
@@ -87,6 +92,62 @@ class Issue < ActiveRecord::Base
       return mediationchk
 
   end
+
+=begin
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << column_names
+      all.each do |issue|
+        csv << issue.attributes.values_at(*column_names)
+      end
+    end
+  end
+=end
+
+  def xlscategory(categoryid)
+
+    if !categoryid.nil?
+      qresult = Category.find(categoryid)
+      return qresult.name
+    else
+      return 'na'
+    end
+  end
+
+  def xlsdistrict(districtid)
+    if !districtid.nil?
+      qresult = District.find(districtid)
+
+      return qresult.name
+    else
+      return 'na'
+    end
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
