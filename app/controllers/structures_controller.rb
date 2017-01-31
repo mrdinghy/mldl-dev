@@ -264,12 +264,11 @@ end
   end
 
 
-
   def structureissuedump
     structure=Structure.find(params[:structure_id])
     @sheetname = "MLDL Issues - " + structure.name
     @issues = Issue.where(structure_id: params[:structure_id])
-    render xlxs:'issues', template: 'issues/issuedump.xlsx.axlsx', filename: 'filename'
+    render xlsx:'issues', template: 'issues/issuedump.xlsx.axlsx', filename: 'mldlissues.xlsx'
   end
 
 
