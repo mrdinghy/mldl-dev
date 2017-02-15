@@ -68,9 +68,16 @@
           <li><%= link_to 'Quarterly Table', quarterlyreport_path %></li>
           <li><%= link_to 'Monthly Report', monthlyreport_path %></li>
           <li><%= link_to 'County Admin Report', countyadminreport_path %></li>
-          <li><%= link_to 'QPR Table - Monthly', qprreport_path(:repscope => 1) %></li>
-          <li><%= link_to 'QPR Table - Quarterly', qprreport_path(:repscope => 2) %></li>
-          <li><%= link_to 'QPR Table - Annual', qprreport_path(:repscope => 3) %></li>
+
+          <li><%= link_to 'Lofa', projectlofa_path %></li>
+          <li><%= link_to 'Bong', projectbong_path %></li>
+          <li><%= link_to 'Grand Gedeh', projectgrandgedeh_path %></li>
+          <li><%= link_to 'Nimba', projectnimba_path %></li>
+
+
+          <li><%#= link_to 'QPR Table - Monthly', qprreport_path(:repscope => 1) %></li>
+          <li><%#= link_to 'QPR Table - Quarterly', qprreport_path(:repscope => 2) %></li>
+          <li><%#= link_to 'QPR Table - Annual', qprreport_path(:repscope => 3) %></li>
 
           <li><%= form_tag(issuedump_path, method: :get) do %>
                 <%= submit_tag 'Download data', class: 'btn btn-sm btn-primary' %>
