@@ -52,7 +52,17 @@ width: 800px;
             <%= link_to 'New Issue', new_issue_path(:structure_id => @structure.id), 'data-no-turbolink' => true, :class => "btn btn-success"  %>
             <%#= link_to 'New Issue', '#new_issue_modal', 'data-toggle' => 'modal', :class => "btn btn-success" %>
             <%= link_to "New Meeting", new_meeting_path(:structure_id => @structure.id), :class => "btn btn-success" %>
-            <%= link_to "Issue Dump XLS", structureissuedump_path(:structure_id => @structure.id), :class => "btn btn-default" %>
+
+            <%= form_tag(issuedump_path, method: :get) do %>
+                  <% hidden_field_tag(:structure_id => @structure.id) %>
+                  <%= submit_tag 'Download data', class: 'btn btn-sm btn-primary' %>
+              <% end %>
+
+
+
+
+
+            <%#= link_to "Issue Dump XLS", structureissuedump_path(:structure_id => @structure.id), :class => "btn btn-default" %>
           </div>
       <% end %>
 

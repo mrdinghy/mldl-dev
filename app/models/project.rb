@@ -518,7 +518,7 @@ end
   def endmonthresolved(monthstart,s1,sids)
     monthend = monthstart.end_of_month
     mresult = Issue.where('resolution_date is not NULL')
-    mresult = Issue.where('resolution_date <= ?', monthend)
+    mresult = mresult.where('resolution_date <= ?', monthend)
       if s1 != 0
       mresult = mresult.where(structure_id: s1)
     else
