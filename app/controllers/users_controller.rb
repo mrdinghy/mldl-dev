@@ -7,14 +7,13 @@ class UsersController < ApplicationController
 
 
   def create
-    #if current_user.role == 1
+    if current_user.mldlrole == 1
       @user = User.new(user_params)
       @user.save!
       #UserMailer.new_user_email(@user, @temp_password).deliver_now
       #redirect_to home_admin_path, notice: "#{@user.name} was added"
-    #else
-      #super
-    #end
+
+    end
   end
   def newpassword
     @user= User.find(params[:user_id])
@@ -27,7 +26,7 @@ class UsersController < ApplicationController
   def password_reset
 
 
-    #if current_user.role == 1
+    if current_user.mldlrole == 1
       @user = User.find(params[:user][:id])
       #@user.password = ('0'..'z').to_a.shuffle.first(8).join
      @user.password = params[:user][:password]
@@ -36,9 +35,9 @@ class UsersController < ApplicationController
       #UserMailer.password_reset(@user, @temp_password).deliver_now
       #redirect_to users_path, notice: "#{@user.name} has had password reset and received a temporary password via email"
       redirect_to users_path
-    #else
-      #redirect_to root_path, alert: 'Unauthorized Action'
-    #end
+    else
+      redirect_to root_path, alert: 'Unauthorized Action'
+    end
 
   end
   def update
