@@ -1,0 +1,63 @@
+
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Code</th>
+    <th>Status</th>
+    <th>Name</th>
+    <th>Category</th>
+    <th>District</th>
+    <th>Community</th>
+    <th>Disputants</th>
+    <th>Origin</th>
+    <th>Raised On</th>
+    <th>Resolution Date</th>
+    <th>Resolution Type</th>
+    <th>Resolution</th>
+
+    <th>Cancelled</th>
+    <th>Created</th>
+    <th>Updated</th>
+
+
+  </tr>
+  </thead>
+  <tbody>
+  <% @cissues.each do |issue| %>
+      <% statusbox1 = 'btn btn-'+issue.issuestatus(issue.status) %>
+      <% mydisputants = Disputant.where(:issue_id => issue.id) %>
+      <tr>
+        <td><%=issue.id %></td>
+        <td><%=issue.issuecode %></td>
+        <td><%= issue.status_humanize %></td>
+        <td><%= issue.name %></td>
+
+        <td><%= issue.category.name if !issue.category_id.nil? %></td>
+        <td><%= issue.district.name if issue.district_id %></td>
+
+        <td><%= issue.community %></td>
+        <td><%= issue.disputant %>
+          <% mydisputants.each do |d| %>
+              <%= d.person.fullname %>
+          <% end %>
+
+        </td>
+        <td>
+          <%= issue.scope.name if issue.scope %>
+          <%= issue.originnote %>
+        </td>
+        <td> <%= issue.raised_on.strftime("%m/  %d/%Y") if !issue.raised_on.nil? %></td>
+        <td><%= issue.resolution_date.strftime("%m/  %d/%Y")  if issue.resolution_date %></td>
+        <td><% if issue.resolutiontype_id != 0 && !issue.resolutiontype_id.nil? %>
+              <%= issue.resolutiontype.name %>
+          <% end %>
+        </td>
+        <td><%= issue.resolution %></td>
+        <td><%= issue.cancelled_at.strftime("%m/  %d/%Y")  if issue.cancelled_at %></td>
+        <td><%= issue.created_at.strftime("%m/  %d/%Y") %></td>
+        <td><%= issue.updated_at.strftime("%m/  %d/%Y") %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

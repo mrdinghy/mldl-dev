@@ -1,0 +1,23 @@
+<h3>Basic Data Dump by County</h3>
+
+
+
+
+<%= form_tag basicdataview_path, :method => :get do %>
+
+
+    <div class="field">
+      <h4>Select County</h4>
+
+      <%= select_tag "county_id", options_from_collection_for_select(@cscs, "id", "name")  %>
+    </div>
+
+    <div class="actions">
+      <h4>&nbsp;</h4>
+      <%= submit_tag 'Search', :class => "btn btn-primary" %>
+    </div>
+
+
+<% end %>
+
+

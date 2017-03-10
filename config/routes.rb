@@ -13,6 +13,12 @@ Rails.application.routes.draw do
   resources :managers
   resources :assignments
   resources :roles
+
+  #match 'users_admin/', to: 'users#create', via: :post, as: 'admin_create_user'
+
+  #post 'admin_password_reset', to: 'users#password_reset', as: 'admin_password_reset'
+  match '/users_password_reset', to: 'users#password_reset', via: :patch, as: 'admin_password_reset'
+
   resources :scopes
   resources :memberships
   resources :userroles
@@ -41,12 +47,15 @@ Rails.application.routes.draw do
 
   resources :site_images
   resources :site_documents
-  devise_for :users, :controllers => { :registrations => 'users/registrations' }
-  #devise_for :users
+
+  #devise_for :users, :controllers => { :registrations => 'users/registrations' }
+  devise_for :users
+  resources :users, except: :create
+  post 'create_user' => 'users#create', as: :create_user
   resources :posts
   resources  :people_structures
   resources :comments, :path_prefix => '/:commentable_type/:commentable_id'
-
+  get 'resetpassword', :to => 'users#newpassword', as: 'resetpassword'
   get 'projectdashboard', :to => 'projects#dashboard', as: 'projectdashboard'
   get 'quarterlyreport', :to => 'projects#quarterlyreport', as: 'quarterlyreport'
   get 'structurereport', :to => 'projects#structurereport', as: 'structurereport'
@@ -73,9 +82,16 @@ Rails.application.routes.draw do
   get 'searchbyqtr', to: 'issues#searchbyqtr', as: 'searchbyqtr'
   get 'searchbyqtrresults', to: 'issues#searchbyqtrresults', as: 'searchbyqtrresults'
   get 'searchmeetings', to: 'meetings#searchmeetings', as: 'searchmeetings'
+  
   get 'meetingresults', to: 'meetings#meetingresults', as: 'meetingresults'
+  
   get 'monthlyreport', to: 'projects#monthlyreport', as: 'monthlyreport'
   get 'monthlyresults', to: 'projects#monthlyresults', as: 'monthlyresults'
+
+  get 'qprreport', to: 'projects#qprreport', as: 'qprreport'
+  get 'qprresults', to: 'projects#qprresults', as: 'qprresults'
+
+
   get 'countyadminreport', to: 'projects#countyadminreport', as: 'countyadminreport'
   get 'countyadminresults', to: 'projects#countyadminresults', as: 'countyadminresults'
 
@@ -112,6 +128,6 @@ Rails.application.routes.draw do
   root 'visitors#index'
   #get "counties/:county_id/districts", to: "application#districts", as: "districts", format: :json
 
-  resources :users
+
 
 end

@@ -3,50 +3,53 @@
 
 
   <%= link_to 'Back to Users', users_path %><br>
-  <h3>Edit Roles</h3>
+  <h3>New MLDL User</h3>
 
 
 
   <div class="row">
 
 
-    <div class="col-sm-10">
+    <div class="col-sm-6">
       <div class="panel panel-default">
 
         <div class="panel-body">
-          <%= form_tag createuser_path do %>
-              <h3>User</h3>
-              <p>Name: <%= text_field_tag :name %></p>
-              <p>Email: <%= text_field_tag :email %></p>
-              <p>Password: <%= text_field_tag :password %></p>
-              <table class="table">
-                <tr><td> <%= radio_button_tag :mldlrole, 1 %>&nbsp;&nbsp;&nbsp;</td><td>Administrator</td><td>can change all STructures,Issues,Meetings,Mediations,Assign Managers</td></tr>
-                <tr><td> <%= radio_button_tag :mldlrole, 2 %>&nbsp;&nbsp;&nbsp;</td><td>Structure Manager</td><td>can be assigned to manage one or more MDLD Stuctures (change all STructures,Issues,Meetings,Mediations,Assign Managers</td></tr>
-                <tr><td> <%= radio_button_tag :mldlrole, 3 %>&nbsp;&nbsp;&nbsp;</td><td> View only</td><td>can see all content but cannot change or add data</td></tr>
-                <tr><td> <%= radio_button_tag :mldlrole, 4 %>&nbsp;&nbsp;&nbsp;</td><td> Limited View </td><td>can only see specific Structure data</td></tr>
+          <h3>New User</h3>
 
-
-              </table>
-
-
-              <!---
-              <div class="col-sm-3 chkpanel">
-                <label class="label">Roles</label>
-                <div class="row">
-                  <%#= hidden_field_tag "user[role_ids][]", nil %>
-                  <%# @role_list.all.each do |role| %>
-                      <%#= check_box_tag "user[role_ids][]", role.id,
-                                        @user.role_ids.include?(role.id), id: dom_id(role) %>
-                      <%#= label_tag dom_id(role), role.name %><br>
-                  <%# end %>
-
-                </div>
--->
-
-              <br><br><br><br><br><br>
-              <div class="actions">
-                <%= submit_tag %>
+          <%= form_for User.new, :url => create_user_path, html: {class: 'form'} do |f| %>
+              <div class="form-group">
+                <%= f.label :name %>
+                <%= f.text_field :name, required: true, class: 'form-control'  %>
               </div>
+              <div class="form-group">
+                <%= f.label :email %>
+                <%= f.email_field :email, required: true,  class: 'form-control'  %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :password %>
+                <%= f.password_field :password, class: 'form-control' %>
+              </div>
+              <div class="form-group">
+                <%= f.label :password_confirmation %>
+                <%= f.password_field :password_confirmation, class: 'form-control' %>
+              </div>
+              <p>Admin will need to send new user their password until mailer is set up.</p>
+
+
+              <div class="form-group">
+
+                <table class="table">
+                  <tr><td> <%= f.radio_button :mldlrole, 1 %>&nbsp;&nbsp;&nbsp;</td><td>Administrator</td><td>can change all STructures,Issues,Meetings,Mediations,Assign Managers</td></tr>
+                  <tr><td> <%= f.radio_button :mldlrole, 2 %>&nbsp;&nbsp;&nbsp;</td><td>Structure Manager</td><td>can be assigned to manage one or more MDLD Stuctures (change all STructures,Issues,Meetings,Mediations,Assign Managers</td></tr>
+                  <tr><td> <%= f.radio_button :mldlrole, 3 %>&nbsp;&nbsp;&nbsp;</td><td> View only</td><td>can see all content but cannot change or add data</td></tr>
+                  <tr><td> <%= f.radio_button :mldlrole, 4 %>&nbsp;&nbsp;&nbsp;</td><td> Limited View </td><td>can only see specific Structure data</td></tr>
+
+
+                </table>
+
+              </div>
+              <%= f.submit "Add User" %>
           <% end %>
         </div>
       </div>
